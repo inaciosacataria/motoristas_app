@@ -69,8 +69,18 @@ class CandidatoController extends Controller
 
         $progress = 25 + $progressFormacao + $progressExperiencia + $progressConhecimento + $progressIdioma + $progressDocumento;
       //
-        return view('candidato.candidato', array('candidato' => $candidato, 'formacoes' => $formacoes, 'idiomas' => $idiomas,
-      'documentos' => $documentos, 'conhecimentos' => $conhecimentos, 'experiencias' => $experiencias, 'progress' => $progress));
+         $candidaturas = DB::table('users')
+                              ->where('users.id',Auth::user()->id)
+                              ->join('candidaturas_anuncios','candidaturas_anuncios.user_id','=','users.id')
+                              ->join('anuncios','anuncios.id','=','candidaturas_anuncios.anuncio_id')
+                              ->select('users.*','anuncios.titulo as titulo', 'anuncios.id as anuncio_path')
+                              ->orderBy('id', 'DESC')
+                              ->get();
+
+
+
+        return view('candidato.dashboard-modern', array('candidato' => $candidato, 'formacoes' => $formacoes, 'idiomas' => $idiomas,
+      'documentos' => $documentos, 'conhecimentos' => $conhecimentos, 'experiencias' => $experiencias, 'progress' => $progress, 'candidaturas' =>$candidaturas));
     //  'candidatura_anuncio' => $candidatura_anuncio));
 
     //  return view('candidato.candidato', array('candidato' => $candidato));
@@ -118,7 +128,7 @@ class CandidatoController extends Controller
 
         $progress = 40 + $progressExperiencia + $progressIdioma + $progressDocumento;
 
-        return view('candidato.perfil', array('candidato' => $candidato, 'idiomas' => $idiomas,
+        return view('candidato.perfil-modern', array('candidato' => $candidato, 'idiomas' => $idiomas,
       'documentos' => $documentos, 'experiencias' => $experiencias, 'progress' => $progress ));
 
       //  return view('candidato.perfil', compact('motorista'));
@@ -155,7 +165,7 @@ class CandidatoController extends Controller
 
         $progress = 40 + $progressExperiencia + $progressIdioma + $progressDocumento;
 
-        return view('candidato.meu-cv', array('candidato' => $candidato, 'idiomas' => $idiomas,
+        return view('candidato.meu-cv-modern', array('candidato' => $candidato, 'idiomas' => $idiomas,
       'documentos' => $documentos, 'experiencias' => $experiencias, 'progress' => $progress ));
       }
 
@@ -168,21 +178,21 @@ class CandidatoController extends Controller
         } else {
           return redirect()->back()->with('erro', 'Ocorreu erro, password diferente!');
         }
-        $email = $request->email;
-        if(empty($request->email)) {
-          $email = $request->celular . "motoristas.co.mz";
-        } else {
-          $email = $request->email;
-        }
+      
+        $email = $request->celular . "@motoristas.co.mz";  
 
         $user = new User;
         $user->name = $request->name;
         $user->email = $email;
+        $user->active= "Activo";
         $user->celular = $request->celular;
         $user->privilegio = $request->privilegio;
         $user->is_premium = "no";
         $user->password = Hash::make($password);
 
+
+
+        if(User::where('celular', '=', $user->celular)->count() <= 0){
         if ($user->save()) {
           if (Auth::attempt(['email' => $email, 'password' => $password])) {
               $candidato = new Candidatos;
@@ -205,32 +215,37 @@ class CandidatoController extends Controller
                 if ($candidato->save()) {
                     return redirect('/candidato')->with('success', 'Conta criada com sucesso!');
                 } else {
-                    return redirect()->back()->with('erro', 'Ocorreu erro, tenta novamente!');
+                    return redirect()->back()->with('error', 'Ocorreu erro, tenta novamente!');
                 }
 
               } else {
-                  return redirect()->back()->with('erro', 'Ocorreu erro, tenta novamente!');
+                  return redirect()->back()->with('error', 'Ocorreu erro, tenta novamente!');
               }
 
           } else {
               return redirect()->back()->with(array('loginErro' => 'Essas credenciais não correspondem aos nossos registros.!', 'loginFormModal' => 'ok'));
           }
 
+          }else{
+     return redirect()->route("error2");
+  }
+}
 
-
-      }
-
+public function error2(){
+    return view('empregador.celularexiste');
+  }
 
     public function candidaturaEspontanea(){
       $empregadores = DB::table('empregadors')
                   ->join('users', 'empregadors.user_id','=','users.id')
                   ->join('provincias', 'empregadors.provincia_id','=','provincias.id')
                   ->select('empregadors.*','users.name as name','users.foto_url as foto_url','provincias.name as provincia', 'users.email as email','users.celular as celular')
-                  ->orderBy('id', 'DESC')
-                  ->paginate(5);
+                  ->where('users.active', 'activo')
+                  ->orderBy('empregadors.id', 'DESC')
+                  ->paginate(12);
 
 
-     return view('admin.bd_empregadores_candidatura',compact('empregadores'));
+     return view('candidato.candidatura-espontanea-modern',compact('empregadores'));
     }
 
 

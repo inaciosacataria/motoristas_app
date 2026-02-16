@@ -48,19 +48,31 @@ public function verAnuncio($id){
 
   $categorias = DB::table('categorias')->get();
   $provincias = DB::table('provincias')->get();
-  $anuncios_provincias = DB::table('anuncios_provincias')->get();
+  $anuncios_provincias = DB::table('anuncios_provincias')->where('anuncio_id', $id)->get();
 
     $anuncio = DB::table('anuncios')
-              ->join('anuncios_provincias','anuncios.id', 'anuncios_provincias.anuncio_id')
-              ->join('provincias','anuncios_provincias.provincia_id','provincias.id')
-              ->join('empregadors', 'anuncios.user_id', '=', 'empregadors.user_id')
-              ->join('users', 'anuncios.user_id', '=', 'users.id')
-              ->join('categorias','anuncios.categoria_id','categorias.id')
+              ->leftJoin('empregadors', 'anuncios.user_id', '=', 'empregadors.user_id')
+              ->leftJoin('users', 'anuncios.user_id', '=', 'users.id')
+              ->leftJoin('categorias','anuncios.categoria_id','categorias.id')
               ->where('anuncios.id',$id)
-              ->select('anuncios.*','provincias.name as provincia','categorias.categoria as categoria',
-               'users.name as nome', 'users.email as email','users.foto_url as foto_url','empregadors.empresa as empresa')
+              ->select(
+                  'anuncios.*',
+                  'categorias.categoria as categoria',
+                  'users.name as nome', 
+                  'users.email as email',
+                  DB::raw('COALESCE(empregadors.logotipo, users.foto_url, "none") as foto_url'),
+                  DB::raw('COALESCE(empregadors.empresa, users.name, "Empresa") as empresa'),
+                  DB::raw('COALESCE(users.celular, "N/A") as celular'),
+                  'empregadors.logotipo as logotipo'
+              )
               ->first();
-    return view('anuncio', compact('anuncio','provincias' ,'categorias','anuncios_provincias'));
+
+    // Se o anúncio não existir, redirecionar para a home com mensagem
+    if (!$anuncio) {
+        return redirect('/')->with('erro', 'Anúncio não encontrado.');
+    }
+
+    return view('anuncio-modern', compact('anuncio','provincias' ,'categorias','anuncios_provincias'));
 
 }
 
@@ -119,8 +131,8 @@ public function search(Request $request){
 
       $anuncios = DB::table('anuncios')
               ->join('users', 'anuncios.user_id', '=', 'users.id')
-              ->join('empregadors', 'anuncios.user_id', '=', 'empregadors.user_id')
-              ->select('anuncios.*','users.name as nome','users.foto_url as foto_url', 'users.email as email','empregadors.empresa as empresa')
+              ->leftJoin('empregadors', 'anuncios.user_id', '=', 'empregadors.user_id')
+              ->select('anuncios.*','users.name as nome',DB::raw('COALESCE(empregadors.logotipo, users.foto_url, "none") as foto_url'), 'users.email as email','empregadors.empresa as empresa', 'empregadors.logotipo as logotipo')
               ->orderBy('created_at', 'DESC')
               ->paginate(10);
    } else if($request->keyword!="" && $request->categoria=="null"  && $request->provincia=="null"){//keyword
@@ -128,9 +140,9 @@ public function search(Request $request){
         $anuncios = DB::table('anuncios')
                 ->where('titulo', $request->keyword)
                 ->orWhere('titulo', 'like', '%' .$request->keyword . '%')
-                ->join('empregadors', 'anuncios.user_id', '=', 'empregadors.user_id')
+                ->leftJoin('empregadors', 'anuncios.user_id', '=', 'empregadors.user_id')
                 ->join('users', 'anuncios.user_id', '=', 'users.id')
-                ->select('anuncios.*','users.name as nome','users.foto_url as foto_url', 'users.email as email','empregadors.empresa as empresa')
+                ->select('anuncios.*','users.name as nome',DB::raw('COALESCE(empregadors.logotipo, users.foto_url, "none") as foto_url'), 'users.email as email','empregadors.empresa as empresa', 'empregadors.logotipo as logotipo')
                 ->orderBy('created_at', 'DESC')
                 ->paginate(10);
   }  else if ($request->keyword=="" && $request->categoria!="null"  && $request->provincia!="null") { //categoria e localizacao
@@ -140,38 +152,57 @@ public function search(Request $request){
                        ->where('categorias.id',$request->categoria)
                        ->join('anuncios_provincias','anuncios.id', 'anuncios_provincias.anuncio_id')
                        ->join('provincias','anuncios_provincias.provincia_id','provincias.id')
-                       ->join('empregadors', 'anuncios.user_id', '=', 'empregadors.user_id')
+                       ->leftJoin('empregadors', 'anuncios.user_id', '=', 'empregadors.user_id')
                        ->join('users', 'anuncios.user_id', '=', 'users.id')
                        ->where('provincias.id',$request->provincia)
-                       ->select('anuncios.*','provincias.name as provincia','users.foto_url as foto_url','users.name as nome', 'users.email as email','empregadors.empresa as empresa')
+                       ->select('anuncios.*','provincias.name as provincia',DB::raw('COALESCE(empregadors.logotipo, users.foto_url, "none") as foto_url'),'users.name as nome', 'users.email as email','empregadors.empresa as empresa', 'empregadors.logotipo as logotipo')
                        ->orderBy('created_at', 'DESC')
                        ->paginate(10);
 
-  } elseif ($request->keyword=="" && $request->categoria!="null"  && $request->provincia=="null") { //categoria
+  } 
+    else if ($request->keyword!="" && $request->categoria!="null"  && $request->provincia!="null") { //categoria e localizacao
+
+          $anuncios = DB::table('anuncios')
+                       ->where('titulo', $request->keyword)
+                       ->orWhere('titulo', 'like', '%' .$request->keyword . '%')
+                       ->join('categorias','anuncios.categoria_id','categorias.id')
+                       ->where('categorias.id',$request->categoria)
+                       ->join('anuncios_provincias','anuncios.id', 'anuncios_provincias.anuncio_id')
+                       ->join('provincias','anuncios_provincias.provincia_id','provincias.id')
+                       ->leftJoin('empregadors', 'anuncios.user_id', '=', 'empregadors.user_id')
+                       ->join('users', 'anuncios.user_id', '=', 'users.id')
+                       ->where('provincias.id',$request->provincia)
+                       ->select('anuncios.*','provincias.name as provincia',DB::raw('COALESCE(empregadors.logotipo, users.foto_url, "none") as foto_url'),'users.name as nome', 'users.email as email','empregadors.empresa as empresa', 'empregadors.logotipo as logotipo')
+                       ->orderBy('created_at', 'DESC')
+                       ->paginate(10);
+
+  } 
+  
+  elseif ($request->keyword=="" && $request->categoria!="null"  && $request->provincia=="null") { //categoria
 
     $anuncios = DB::table('anuncios')
                  ->join('categorias','anuncios.categoria_id','categorias.id')
                  ->where('categorias.id',$request->categoria)
-                 ->join('empregadors', 'anuncios.user_id', '=', 'empregadors.user_id')
+                 ->leftJoin('empregadors', 'anuncios.user_id', '=', 'empregadors.user_id')
                  ->join('users', 'anuncios.user_id', '=', 'users.id')
-                 ->select('anuncios.*','categorias.categoria as categoria','users.foto_url as foto_url','users.name as nome', 'users.email as email','empregadors.empresa as empresa')
+                 ->select('anuncios.*','categorias.categoria as categoria',DB::raw('COALESCE(empregadors.logotipo, users.foto_url, "none") as foto_url'),'users.name as nome', 'users.email as email','empregadors.empresa as empresa', 'empregadors.logotipo as logotipo')
                  ->orderBy('created_at', 'DESC')
                  ->paginate(10);
   } elseif ($request->keyword=="" && $request->categoria=="null"  && $request->provincia!="null") { // localizacao
          $anuncios = DB::table('anuncios')
                       ->join('anuncios_provincias','anuncios.id', 'anuncios_provincias.anuncio_id')
                       ->join('provincias','anuncios_provincias.provincia_id','provincias.id')
-                      ->join('empregadors', 'anuncios.user_id', '=', 'empregadors.user_id')
+                      ->leftJoin('empregadors', 'anuncios.user_id', '=', 'empregadors.user_id')
                       ->join('users', 'anuncios.user_id', '=', 'users.id')
                       ->where('provincias.id',$request->provincia)
-                      ->select('anuncios.*','provincias.name as provincia','users.foto_url as foto_url','users.name as nome', 'users.email as email','empregadors.empresa as empresa')
+                      ->select('anuncios.*','provincias.name as provincia',DB::raw('COALESCE(empregadors.logotipo, users.foto_url, "none") as foto_url'),'users.name as nome', 'users.email as email','empregadors.empresa as empresa', 'empregadors.logotipo as logotipo')
                       ->orderBy('created_at', 'DESC')
                       ->paginate(10);
 
   }
 
 
-    return view('index', compact('anuncios','provincias' ,'categorias','anuncios_provincias'));
+    return view('index-modern', compact('anuncios','provincias' ,'categorias','anuncios_provincias'));
   }
 
 }

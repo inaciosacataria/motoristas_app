@@ -1,10 +1,13 @@
 @extends('layouts.appmain')
+@section('title')
+Perfil |
+@endsection
 <html style="font-size: 16px;" lang="en"><head>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta charset="utf-8">
-    <meta name="keywords" content="Inscrição para formações">
+    <meta name="keywords" content="motoristas">
     <meta name="description" content="">
-    <title>Contact</title>
+    <title>Perfil</title>
     <link rel="stylesheet" href="{{asset('css/nicepage.css')}}" media="screen">
 <link rel="stylesheet" href="{{asset('css/empregador.css')}}" media="screen">
     <script class="u-script" type="text/javascript" src="jquery.js" defer=""></script>
@@ -40,15 +43,15 @@
                 <div class="u-container-layout u-container-layout-2">
                   <h5 class="u-align-center u-custom-font u-font-montserrat u-text u-text-default-lg u-text-default-md u-text-default-xl u-text-1">{{$empregador->nome}}</h5>
                   <p class="u-align-center u-hidden-xs u-text u-text-default u-text-2">Documents:</p>
-                  <p class="u-align-center u-text u-text-default u-text-3">Nuit:</p>
-                  <p class="u-align-center u-text u-text-default u-text-4">$empregador->nuit</p>
+                  <!-- <p class="u-align-center u-text u-text-default u-text-3">Nuit:</p>
+                  <p class="u-align-center u-text u-text-default u-text-4">$empregador->nuit</p> -->
                   <p class="u-align-center u-text u-text-default u-text-5">{{$empregador->sector_actividade}}</p>
                   <p class="u-align-center u-text u-text-default u-text-6">Ramo de Actividade:</p>
-                  <p class="u-align-center u-hidden-xs u-text u-text-custom-color-1 u-text-default u-text-7"><a href="http://127.0.0.1:8000/{{$empregador->documento_certidao}}">certidao de empresa.pdf</a></p>
+                  <p class="u-align-center u-hidden-xs u-text u-text-custom-color-1 u-text-default u-text-7"><a href="https://motoristas.co.mz/{{$empregador->documento_certidao}}">certidao de empresa.pdf</a></p>
                   <p class="u-align-center u-text u-text-default u-text-8">Website:</p>
                   <p class="u-align-center u-text u-text-default u-text-9">{{$empregador->website}}</p>
-                  <p class="u-align-center u-hidden-xs u-text u-text-custom-color-1 u-text-default u-text-10"><a href="http://127.0.0.1:8000/{{$empregador->documento_inicio_actividade}}">inicio de actividades.pdf</a></p>
-                  <p class="u-align-center u-hidden-xs u-text u-text-custom-color-1 u-text-default u-text-11"><a href="http://127.0.0.1:8000/{{$empregador->documento_nuit}}">nuit.pdf</a></p>
+                  <p class="u-align-center u-hidden-xs u-text u-text-custom-color-1 u-text-default u-text-10"><a href="https://motoristas.co.mz/{{$empregador->documento_inicio_actividade}}">inicio de actividades.pdf</a></p>
+                  <p class="u-align-center u-hidden-xs u-text u-text-custom-color-1 u-text-default u-text-11"><a href="https://motoristas.co.mz/{{$empregador->documento_nuit}}">nuit.pdf</a></p>
                   <p class="u-align-center u-text u-text-default u-text-12">{{$empregador->email}}</p>
                   <p class="u-align-center u-text u-text-default u-text-13">Email:</p>
                   <p class="u-align-center u-text u-text-default u-text-14">Contacto:</p>

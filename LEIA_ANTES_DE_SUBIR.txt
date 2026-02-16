@@ -1,0 +1,143 @@
+╔══════════════════════════════════════════════════════════════════════╗
+║                                                                      ║
+║          🚀 INSTRUÇÕES RÁPIDAS - DEPLOY NO CPANEL VIA ZIP           ║
+║                                                                      ║
+╚══════════════════════════════════════════════════════════════════════╝
+
+✅ OS ASSETS CSS/JS JÁ FORAM COMPILADOS E ESTÃO PRONTOS!
+
+📦 PASSO 1: CRIAR OS ZIPS
+═══════════════════════════════════════════════════════════════════════
+
+1. Fazer ZIP de TODA a pasta "motoristas"
+   Nome: motoristas-app.zip
+
+2. Entrar em motoristas/public/ e fazer ZIP de TUDO que está DENTRO
+   Nome: motoristas-public.zip
+
+
+📤 PASSO 2: SUBIR PARA O CPANEL
+═══════════════════════════════════════════════════════════════════════
+
+1. Entrar no cPanel → File Manager
+
+2. Ir para /home/seuusuario/
+   - Fazer upload de motoristas-app.zip
+   - Extrair (botão direito → Extract)
+   - Deletar o ZIP após extrair
+
+3. Ir para /home/seuusuario/public_html/
+   - DELETAR tudo que está lá dentro (fazer backup antes!)
+   - Fazer upload de motoristas-public.zip
+   - Extrair (botão direito → Extract)
+   - Deletar o ZIP após extrair
+
+
+⚙️ PASSO 3: EDITAR index.php
+═══════════════════════════════════════════════════════════════════════
+
+No File Manager, abrir: /home/seuusuario/public_html/index.php
+
+MUDAR estas 2 linhas:
+
+  DE:
+    require __DIR__.'/../vendor/autoload.php';
+    $app = require_once __DIR__.'/../bootstrap/app.php';
+
+  PARA:
+    require __DIR__.'/../motoristas/vendor/autoload.php';
+    $app = require_once __DIR__.'/../motoristas/bootstrap/app.php';
+
+SALVAR!
+
+(Ou substituir o arquivo pelo index.php.cpanel que está na pasta public)
+
+
+🔧 PASSO 4: CONFIGURAR .env
+═══════════════════════════════════════════════════════════════════════
+
+No File Manager, ir para: /home/seuusuario/motoristas/
+
+1. Copiar .env.example → renomear para .env
+2. Editar o .env com suas configurações:
+
+   APP_URL=https://seudominio.com
+   ASSET_URL=https://seudominio.com
+
+   DB_DATABASE=seu_banco
+   DB_USERNAME=seu_usuario
+   DB_PASSWORD=sua_senha
+
+3. SALVAR!
+
+
+🔑 PASSO 5: GERAR APP_KEY (se tiver SSH)
+═══════════════════════════════════════════════════════════════════════
+
+Via Terminal SSH:
+  cd /home/seuusuario/motoristas
+  php artisan key:generate
+
+Se NÃO tiver SSH:
+  - Gerar chave em: https://generate-random.org/laravel-key-generator
+  - Copiar e colar no .env na linha APP_KEY
+
+
+📁 PASSO 6: PERMISSÕES
+═══════════════════════════════════════════════════════════════════════
+
+No File Manager, em /home/seuusuario/motoristas/:
+
+1. Botão direito em "storage" → Change Permissions → 775
+   Marcar "Recurse into subdirectories"
+
+2. Botão direito em "bootstrap/cache" → Change Permissions → 775
+   Marcar "Recurse into subdirectories"
+
+
+🗄️ PASSO 7: CRIAR BANCO DE DADOS
+═══════════════════════════════════════════════════════════════════════
+
+No cPanel:
+1. MySQL Databases → Create Database
+2. MySQL Users → Create User
+3. Add User to Database → ALL PRIVILEGES
+4. Copiar as credenciais para o .env
+
+
+✅ CHECKLIST FINAL
+═══════════════════════════════════════════════════════════════════════
+
+Antes de testar, verificar se:
+
+  ✓ Pasta motoristas/ está em /home/seuusuario/motoristas/
+  ✓ Conteúdo de public/ está em /home/seuusuario/public_html/
+  ✓ Existe public_html/build/ com CSS/JS compilados
+  ✓ index.php foi editado
+  ✓ .env existe e está configurado
+  ✓ APP_KEY foi gerada
+  ✓ Banco de dados criado e configurado
+  ✓ Permissões 775 em storage/ e bootstrap/cache/
+
+
+🎯 TESTAR
+═══════════════════════════════════════════════════════════════════════
+
+Acessar: https://seudominio.com
+
+Se o CSS não carregar:
+  1. Verificar se existe: public_html/build/assets/app.f0ea36a4.css
+  2. Limpar cache do navegador (Ctrl+Shift+R)
+  3. Verificar APP_URL no .env
+
+
+📖 DOCUMENTAÇÃO COMPLETA
+═══════════════════════════════════════════════════════════════════════
+
+Ver arquivo: DEPLOY_ZIP_CPANEL.md (guia detalhado)
+
+
+═══════════════════════════════════════════════════════════════════════
+Dúvidas? Verificar os logs em: motoristas/storage/logs/laravel.log
+═══════════════════════════════════════════════════════════════════════
+

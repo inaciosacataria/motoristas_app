@@ -21,7 +21,7 @@ class AcountActivate extends Mailable
       $this->link=$link;
       $this->company=$company;
 
-      return $this->from('inaciosacataria@gmail.com')
+      return $this->from('vagas@motoristas.co.mz')
       ->subject('Mailtrap Confirmation')
       ->markdown('mails.acountActiveMail')
       ->with([
@@ -62,12 +62,12 @@ class AcountActivate extends Mailable
      */
     public function attachments()
     {
-      
+
     }
 
     public function build()
     {
-        return $this->from('inaciosacataria@gmail.com')
+        return $this->from('vagas@motoristas.co.mz')
         ->subject('Mailtrap Confirmation')
         ->markdown('mails.acountActiveMail')
         ->with([

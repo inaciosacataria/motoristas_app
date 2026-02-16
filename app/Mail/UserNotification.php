@@ -21,7 +21,7 @@ class UserNotification extends Mailable
 
       $this->nome = $nome;
 
-      return $this->from('inaciosacataria@gmail.com')
+      return $this->from('info@motoristas.co.mz')
       ->subject('Mailtrap Confirmation')
       ->markdown('mails.userNotificationAdmin')
       ->with([
@@ -66,7 +66,7 @@ class UserNotification extends Mailable
 
     public function build()
     {
-        return $this->from('example@example.com')
+        return $this->from('info@motoristas.co.mz')
         ->subject('Mailtrap Confirmation')
         ->markdown('mails.userNotificationAdmin')
         ->with([

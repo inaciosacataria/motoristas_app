@@ -4,8 +4,13 @@
     "src": "resources/js/app.js",
     "isEntry": true
   },
+  "resources/css/app.css": {
+    "file": "assets/app.f7742ff3.css",
+    "src": "resources/css/app.css",
+    "isEntry": true
+  },
   "resources/sass/app.scss": {
-    "file": "assets/app.5380b351.css",
+    "file": "assets/app.e91ab68a.css",
     "src": "resources/sass/app.scss",
     "isEntry": true
   }

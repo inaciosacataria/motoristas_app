@@ -17,9 +17,19 @@ Route::get('/home', function () {
 });
 
 Route::get('/command',function(){
-  $exitcode = Artisan::call('make:model Poxa');
+  $exitcode = Artisan::call('schedule:run');
+  $code = Artisan::call('npm run dev');
+
+
+  return "Comand runned";
 });
 
+Route::get('/teste33',function(){
+
+
+
+  return "ola rota";
+});
 
 
 
@@ -67,11 +77,14 @@ Route::get('/search', [App\Http\Controllers\AnunciosController::class, 'search']
 
 // @TODO empregador
 Route::post('/newempregador', [App\Http\Controllers\EmpregadorController::class, 'registarEmpregador'])->name('newempregador');
+Route::get('/error', [App\Http\Controllers\EmpregadorController::class, 'error'])->name('error');
+Route::get('/error2', [App\Http\Controllers\CandidatoController::class, 'error2'])->name('error2');
 Route::get('/empregador', [App\Http\Controllers\EmpregadorController::class, 'index'])->name('empregador')->middleware('empregador');
 Route::get('/empregador-perfil/{id}', [App\Http\Controllers\EmpregadorController::class, 'getEmpregador'])->name('empregador-perfil');
-Route::post('/logotipo', [App\Http\Controllers\DocumentosController::class, 'fotoPerfil'])->name('fotoPerfil')->middleware('empregador');
+Route::post('/logotipo', [App\Http\Controllers\DocumentosController::class, 'fotoPerfil'])->name('fotoPerfilEmpregador')->middleware('empregador');
 Route::get('/documents/{id}', [App\Http\Controllers\EmpregadorController::class, 'documents'])->name('documents');
-Route::post('/upload-documents', [App\Http\Controllers\DocumentosController::class, 'uploadAlldocuments'])->name('uploadAlldocuments');
+Route::post('/upload-documents', [App\Http\Controllers\DocumentosController::class, 'uploadAlldocuments'])->name('uploadAlldocuments')->middleware('empregador');
+Route::post('/update-document', [App\Http\Controllers\DocumentosController::class, 'updateDocument'])->name('updateDocument')->middleware('empregador');
 Route::get('/aguarde', [App\Http\Controllers\EmpregadorController::class, 'aguarde'])->name('aguarde');
 
 // @TODO empregador previlegios
@@ -79,8 +92,11 @@ Route::get('/procurar-motorista', [App\Http\Controllers\EmpregadorController::cl
 Route::get('/get-motorista', [App\Http\Controllers\EmpregadorController::class, 'getMotorista'])->name('getMotorista')->middleware('empregador');
 Route::post('/criarAnuncio', [App\Http\Controllers\AnunciosController::class, 'criarAnuncio'])->name('criarAnuncio')->middleware('empregador');
 Route::post('/editarAnuncio', [App\Http\Controllers\AnunciosController::class, 'editarAnuncio'])->name('editarAnuncio')->middleware('empregador');
-Route::post('/apagarAnuncio/{id}', [App\Http\Controllers\AnunciosController::class, 'apagarAnuncio'])->name('apagarAnuncio')->middleware('bothCanSee');
+Route::post('/apagarAnuncio/{id}', [App\Http\Controllers\AnunciosController::class, 'apagarAnuncio'])->name('apagarAnuncio');
 Route::get('/candidatos-anuncio/{anuncioId}', [App\Http\Controllers\CandidaturasAnunciosController::class, 'verCandidatosDeUmAnuncio'])->name('verCandidatosDeUmAnuncio')->middleware('empregador');
+Route::get('/gerar-pdf-candidatos/{anuncioId}', [App\Http\Controllers\CandidaturasAnunciosController::class, 'gerarPdfCandidatos'])->name('gerarPdfCandidatos')->middleware('empregador');
+Route::post('/editar-perfil-empregador', [App\Http\Controllers\EmpregadorController::class, 'editarPerfil'])->name('editarPerfilEmpregador')->middleware('empregador');
+Route::post('/upload-logotipo', [App\Http\Controllers\DocumentosController::class, 'uploadLogotipo'])->name('uploadLogotipo')->middleware('empregador');
 Route::post('/denunciarMotorista', [App\Http\Controllers\CentralDeRiscoController::class, 'create'])->name('denunciar')->middleware('empregador');
 
 
@@ -98,18 +114,22 @@ Route::post('/fotoPerfil', [App\Http\Controllers\DocumentosController::class, 'f
 Route::post('/add-experiencia', [App\Http\Controllers\ExperienciasController::class, 'create'])->name('addExperiencia')->middleware('candidato');
 Route::post('/candidatar', [App\Http\Controllers\CandidaturasAnunciosController::class, 'create'])->name('candidatar')->middleware('candidato');
 Route::get('/candidatura-espontanea', [App\Http\Controllers\CandidatoController::class, 'candidaturaEspontanea'])->name('candidatura-espontanea')->middleware('candidato');
+Route::get('/submeter-candidatura-espontanea/{id}', [App\Http\Controllers\CandidaturasAnunciosController::class, 'candidaturaExpontanea'])->name('submeter-candidatura-espontanea')->middleware('candidato');
+
 
 
 //@TODO Admin
 Route::get('/admin', [App\Http\Controllers\AdminController::class, 'index'])->name('admin')->middleware('admin');
 Route::get('/bd-motoristas', [App\Http\Controllers\AdminController::class, 'motoristas'])->name('bd-motoristas')->middleware('admin');
 Route::get('/bd-empregadores', [App\Http\Controllers\AdminController::class, 'empregadores'])->name('bd-empregadores')->middleware('admin');
-Route::get('/perfil/{id}', [App\Http\Controllers\CandidatoController::class, 'perfil'])->name('perfil')->middleware('bothCanSee');
+Route::get('/perfil/{id}', [App\Http\Controllers\CandidatoController::class, 'perfil'])->name('perfil');
 Route::post('/updateDenuncia', [App\Http\Controllers\CentralDeRiscoController::class, 'updateCentralDeRisco'])->name('updateDenuncia')->middleware('admin');
 Route::get('/activeUser/{id}', [App\Http\Controllers\AdminController::class, 'activeEmpregador'])->name('activeUser')->middleware('admin');
 Route::get('/desactiveUser/{id}', [App\Http\Controllers\AdminController::class, 'desativeEmpregador'])->name('desactiveUser')->middleware('admin');
+Route::get('/aprovar-empregador/{id}', [App\Http\Controllers\AdminController::class, 'aprovarEmpregador'])->name('aprovarEmpregador')->middleware('admin');
+Route::get('/rejeitar-empregador/{id}', [App\Http\Controllers\AdminController::class, 'rejeitarEmpregador'])->name('rejeitarEmpregador')->middleware('admin');
 Route::get('/sendAdminNotification/{id}', [App\Http\Controllers\AdminController::class, 'sendAdminNotification'])->name('sendAdminNotification');
-Route::get('/inscricao-seguro', [App\Http\Controllers\AdminController::class, 'sendAdminNotification'])->name('sendAdminNotification');
+
 
 //@TODO admin privilegios
 Route::get('/premium',[App\Http\Controllers\premiumController::class,'getUsers'])->name('premium')->middleware('admin');
@@ -126,11 +146,49 @@ Route::get('/searchDenuncias', [App\Http\Controllers\CentralDeRiscoController::c
 
 
 //@TODO cursos
-Route::get('/cursos', [App\Http\Controllers\CursosController::class, 'getCursos'])->name('cursos');
-Route::get('/cursoinfo', [App\Http\Controllers\CursosController::class, 'getCursoInfo'])->name('cursoinfo');
+Route::get('/formacao', [App\Http\Controllers\CursosController::class, 'getCursos'])->name('formacao');
+Route::get('/formacaoinfo', [App\Http\Controllers\CursosController::class, 'getCursoInfo'])->name('cursoinfo');
 Route::get('/inscricao', [App\Http\Controllers\CursosController::class, 'inscricaoForm'])->name('inscricao');
 Route::post('/submeter-inscricao', [App\Http\Controllers\CursosController::class, 'submeterInscricao'])->name('submeter-inscricao');
 
 Route::get('/seguro', [App\Http\Controllers\CursosController::class, 'getSegurosInfo'])->name('seguro');
 Route::get('/inscricaoSeguro', [App\Http\Controllers\CursosController::class, 'getSeguroForm'])->name('inscricaoSeguro');
 Route::post('/submeter-seguro', [App\Http\Controllers\CursosController::class, 'submeterInscricaoSeguro'])->name('submeter-seguro');
+
+
+
+Route::get('/formacao1', function (){
+  return view('cursos.formacao1');
+});
+
+Route::get('/formacao2', function (){
+  return view('cursos.formacao2');
+});
+
+Route::get('/formacao3', function (){
+  return view('cursos.formacao3');
+});
+
+Route::get('/formacao4', function (){
+  return view('cursos.formacao4');
+});
+
+Route::get('/formacao5', function (){
+  return view('cursos.formacao5');
+});
+
+Route::get('/formacao6', function (){
+  return view('cursos.formacao6');
+});
+
+Route::get('/formacao7', function (){
+  return view('cursos.formacao7');
+});
+
+Route::get('/formacao8', function (){
+  return view('cursos.formacao8');
+});
+
+Route::get('/formacao9', function (){
+  return view('cursos.formacao9');
+});

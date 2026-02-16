@@ -11,7 +11,7 @@ use Illuminate\Support\Facades\Mail;
 class CursosController extends Controller
 {
     function getCursos(){
-      return view('cursos.cursos');
+      return view('cursos.cursos-modern');
     }
 
     function getCursoInfo(){
@@ -20,7 +20,7 @@ class CursosController extends Controller
 
 
     function inscricaoForm(){
-       return view('cursos.inscricao');
+       return view('cursos.inscricao-modern');
     }
 
     function submeterInscricao(Request $request){
@@ -34,7 +34,7 @@ class CursosController extends Controller
       $footer = '© Copyright 2023 - motoristas.co.mz';
 
 
-      Mail::to('inaciosacataria@gmail.com')->send(new FormacaoMailNotification($plano, $nome,$contacto,$email,$curso, $numerodemotoristas,$observacoes,$footer));
+      Mail::to('domingosmachavaa@gmail.com')->send(new FormacaoMailNotification($plano, $nome,$contacto,$email,$curso, $numerodemotoristas,$observacoes,$footer));
       return redirect()->back()->with('success', 'A sua solicitação foi enviada, com sucesso!');
 
     }
@@ -42,11 +42,11 @@ class CursosController extends Controller
 
 
     function getSegurosInfo(){
-      return view('cursos.seguro');
+      return view('cursos.seguro-modern');
     }
 
     function getSeguroForm(){
-      return view('cursos.inscricaoSeguro');
+      return view('cursos.inscricaoSeguro-modern');
     }
 
     function submeterInscricaoSeguro(Request $request ){
@@ -61,7 +61,7 @@ class CursosController extends Controller
       $footer = '© Copyright 2023 - motoristas.co.mz';
 
 
-      Mail::to('inaciosacataria@gmail.com')->send(new SeguroMailNotification($plano, $nome,$contacto,$email,$seguro, $numerodemotoristas,$observacoes,$footer));
+      Mail::to('domingosmachavaa@gmail.com')->send(new SeguroMailNotification($plano, $nome,$contacto,$email,$seguro, $numerodemotoristas,$observacoes,$footer));
       return redirect()->back()->with('success', 'A sua solicitação foi enviada, com sucesso!');
     }
 

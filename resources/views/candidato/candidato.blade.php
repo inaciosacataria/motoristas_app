@@ -114,8 +114,10 @@
                     <h4 class="mt-0 header-title mb-4">Candidaturas</h4>
                     <div class="latest-massage minhas-candidaturas">
                       <ul>
-
-                        <li><a href="/anuncio/#">titulo candidatura</a></li>
+                      
+                        @foreach ($candidaturas as $candidatura)
+                          <li><a href="/anuncio/{{$candidatura->anuncio_path}}">{{$candidatura->titulo}}</a></li>
+                        @endforeach
 
                       </ul>
                     </div>

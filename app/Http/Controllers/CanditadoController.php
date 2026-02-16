@@ -125,6 +125,7 @@ class CanditadoController extends Controller
        $user->premium_count=0;
      $user->password = Hash::make($request->password);
 
+     
      if ($user->save()) {
 
          $candidato = new Candidato;
@@ -150,7 +151,9 @@ class CanditadoController extends Controller
            return redirect()->back()->with('erro', 'Ocorreu erro, tenta novamente!');
        }
 
- }
+ 
+}
+}
 
 
  public function deleteCandidato($id){

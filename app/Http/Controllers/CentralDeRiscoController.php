@@ -12,43 +12,34 @@ class CentralDeRiscoController extends Controller
 
   public function index(){
       $denuncias = DB::table('central_de_riscos')
+              ->orderBy('created_at', 'DESC')
               ->get();
 
-           return view('admin.central_risco',compact('denuncias'));
+           return view('admin.central_risco-modern',compact('denuncias'));
     }
 
 
     public function search(Request $request){
 
-        $denuncias;
-
         if($request->keyword!=""){
-
-
-
           $denuncias = DB::table('central_de_riscos')
                   ->where('central_de_riscos.nome_motorista', $request->keyword)
                   ->orWhere('central_de_riscos.nome_motorista', 'like', '%' .$request->keyword . '%')
+                  ->orderBy('created_at', 'DESC')
                   ->get();
-
-
      }elseif($request->numero_carta_conducao!=""){
-
           $denuncias = DB::table('central_de_riscos')
                   ->where('central_de_riscos.cartadeconducao_motorista', $request->numero_carta_conducao)
                   ->orWhere('central_de_riscos.cartadeconducao_motorista', 'like', '%' .$request->numero_carta_conducao . '%')
+                  ->orderBy('created_at', 'DESC')
                   ->get();
-
-
        }else{
-
          $denuncias = DB::table('central_de_riscos')
+                 ->orderBy('created_at', 'DESC')
                  ->get();
-
-
      }
 
-             return view('admin.central_risco',compact('denuncias'));
+        return view('admin.central_risco-modern',compact('denuncias'));
       }
 
 
@@ -138,10 +129,9 @@ class CentralDeRiscoController extends Controller
 
          return redirect()->back()->with('success', 'Denuncia actualizada!');
        }else{
+         
         return redirect()->back()->with('erro', 'Ocorreu erro, tenta novamente!');
+
         }
-
     }
-
-
 }

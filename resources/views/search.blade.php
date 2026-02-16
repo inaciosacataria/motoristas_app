@@ -82,12 +82,17 @@ Motoristas |
           <div class="col-md-12 mt-4 m_anunicios_home">
             <div class="row">
 
+             @if(sizeof($anuncios)!=0)
               @foreach ($anuncios as $anuncio)
               <div class="col-md-3">
                 <div class="card m-b-30">
                       <div class="card-body">
                         <div class="imagem">
-                          <img src="{{ asset('/assets/images/logoRectangle.png' )}}" class="img-fluid"/>
+                         @if($anuncio->foto_url!="none")
+                          <img src="{{ asset($anuncio->foto_url)}}" class="img-fluid" style="max-width:100px"/>
+                          @else
+                          <img src="assets/images/2.png" class="img-fluid" style="margin-top: 35px;" />
+                          @endif
                         </div>
                         <h4 class="mt-4"><a href="/anuncio/{{$anuncio->id}}">{{ $anuncio->titulo }}</a></h4>
                           <p>
@@ -122,9 +127,13 @@ Motoristas |
 
                     </div>
                 </div>
-              </div>
+              </div> 
               @endforeach
-
+              @endif
+              <h1>Resultados não encontrados</h1>
+              @if(sizeof($anuncios)==0)
+              <h1>Resultados não encontrados</h1>
+              @endif
             </div>
           </div>
           <!-- end anuncios section -->

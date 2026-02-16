@@ -23,6 +23,11 @@ class User extends Authenticatable
         'password',
         'privilegio',
         'celular',
+        'active',
+        'is_premium',
+        'premium_count',
+        'premium_date',
+        'foto_url',
     ];
 
     /**
@@ -42,5 +47,68 @@ class User extends Authenticatable
      */
     protected $casts = [
         'email_verified_at' => 'datetime',
+        'premium_date' => 'datetime',
     ];
+
+    /**
+     * Relacionamentos
+     */
+    public function candidato()
+    {
+        return $this->hasOne(Candidatos::class);
+    }
+
+    public function empregador()
+    {
+        return $this->hasOne(Empregador::class);
+    }
+
+    public function anuncios()
+    {
+        return $this->hasMany(Anuncios::class);
+    }
+
+    public function candidaturas()
+    {
+        return $this->hasMany(Candidaturas_anuncios::class);
+    }
+
+    /**
+     * Scopes para queries otimizadas
+     */
+    public function scopeActive($query)
+    {
+        return $query->where('active', 'Activo');
+    }
+
+    public function scopePremium($query)
+    {
+        return $query->where('is_premium', 'yes');
+    }
+
+    public function scopeCandidatos($query)
+    {
+        return $query->where('privilegio', 'candidato');
+    }
+
+    public function scopeEmpregadores($query)
+    {
+        return $query->where('privilegio', 'empregador');
+    }
+
+    /**
+     * Verifica se o usuário é premium
+     */
+    public function isPremium()
+    {
+        return $this->is_premium === 'yes';
+    }
+
+    /**
+     * Verifica se o usuário está ativo
+     */
+    public function isActive()
+    {
+        return $this->active === 'Activo';
+    }
 }

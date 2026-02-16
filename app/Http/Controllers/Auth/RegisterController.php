@@ -34,6 +34,16 @@ class RegisterController extends Controller
       protected $redirectTo = '/concluir'; // to redirect to canditato ou Empregador
 
     /**
+     * Show the application registration form.
+     *
+     * @return \Illuminate\View\View
+     */
+    public function showRegistrationForm()
+    {
+        return view('auth.register-modern');
+    }
+    
+    /**
      * Create a new controller instance.
      *
      * @return void

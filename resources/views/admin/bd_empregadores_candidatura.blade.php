@@ -79,7 +79,7 @@ Base de Dados de Motoristas |
 
                           <div class="col-md-4">
                             <div class="col-md-4">
-                               <button> candidatura expontania</button>
+                               <button><a href="{{route('submeter-candidatura-espontanea',$empregador->id)}}"> candidatura expontania<a/></button>
                             </div>
                           </div>
 

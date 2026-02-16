@@ -58,6 +58,9 @@ class premiumController extends Controller
 
         $users = DB::table('users')
                 ->join('empregadors', 'users.id','=','empregadors.user_id')
+                ->select('users.*', 'users.id as user_id', 'empregadors.empresa', 'empregadors.website')
+                ->orderBy('users.is_premium', 'DESC')
+                ->orderBy('users.name', 'ASC')
                 ->get();
 
         return view('admin.premium',compact('users'));
@@ -66,28 +69,24 @@ class premiumController extends Controller
 
     public function search(Request $request){
 
-        $users;
-
         if($request->keyword!=""){
-
-
-
           $users = DB::table('users')
                   ->where('users.name', $request->keyword)
                   ->orWhere('users.name', 'like', '%' .$request->keyword . '%')
                   ->join('empregadors', 'users.id','=','empregadors.user_id')
+                  ->select('users.*', 'users.id as user_id', 'empregadors.empresa', 'empregadors.website')
+                  ->orderBy('users.is_premium', 'DESC')
+                  ->orderBy('users.name', 'ASC')
                   ->get();
-
-
      }else{
-
          $users = DB::table('users')
                  ->join('empregadors', 'users.id','=','empregadors.user_id')
+                 ->select('users.*', 'users.id as user_id', 'empregadors.empresa', 'empregadors.website')
+                 ->orderBy('users.is_premium', 'DESC')
+                 ->orderBy('users.name', 'ASC')
                  ->get();
-
-
      }
 
-             return view('admin.premium',compact('users'));
+        return view('admin.premium',compact('users'));
       }
 }

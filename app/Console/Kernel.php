@@ -25,7 +25,7 @@ class Kernel extends ConsoleKernel
               $days = DatetimeHelper::premiumDays($user->premium_date);
               print_r($days);
               if( $user->is_premium="yes"){
-                 if($days>90){
+                 if($days>30){
                      $user->is_premium="no";
                  }
                 $user->premium_count=$days;
@@ -34,7 +34,7 @@ class Kernel extends ConsoleKernel
                 }}}
           }
 
-          )->everyMinute();
+          )->daily();
     }
 
     /**

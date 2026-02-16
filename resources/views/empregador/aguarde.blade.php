@@ -26,14 +26,15 @@
     <section class="u-align-center u-clearfix u-white u-section-1" id="sec-1a73">
       <div class="u-clearfix u-sheet u-sheet-1">
         <h1 class="u-text u-text-default u-text-1">Agua​rde</h1>
-        <p class="u-text u-text-default u-text-not-found-message u-text-2">A sua Conta sera Activada Brevemente</p>
-        <p class="u-text u-text-3">Por motivos de seguranca os adminsitradores do sistema, farão a revisão da sua conta.</p>
+        <p class="u-text u-text-default u-text-not-found-message u-text-2">A sua Conta foi Activada </p>
+        <p class="u-text u-text-3">Por motivos de seguranca os administradores do portal, farão a validação dos seu dados.</p>
+        <p class="u-text u-text-3">Em caso de duvidas contacte nos pelo email info@motoristas.co.mz</p>
         <a href="/" class="u-active-white u-border-2 u-border-active-black u-border-custom-color-1 u-border-hover-custom-color-1 u-btn u-button-style u-custom-color-1 u-hover-white u-text-active-white u-text-body-alt-color u-text-hover-custom-color-1 u-btn-1">Pagina Inicial</a>
-        <a href="mailto:inaciosacataria@gmail.com" class="u-active-white u-border-2 u-border-active-custom-color-1 u-border-custom-color-1 u-border-hover-custom-color-1 u-btn u-button-style u-hover-white u-text-active-custom-color-1 u-text-custom-color-1 u-text-hover-custom-color-1 u-white u-btn-2"> Contacte Nos</a>
+        <a href="mailto:info@motoristas.co.mz" class="u-active-white u-border-2 u-border-active-custom-color-1 u-border-custom-color-1 u-border-hover-custom-color-1 u-btn u-button-style u-hover-white u-text-active-custom-color-1 u-text-custom-color-1 u-text-hover-custom-color-1 u-white u-btn-2"> Contacte Nos</a>
       </div>
     </section>
 
     <footer class="u-align-center u-clearfix u-custom-color-1 u-footer u-footer" id="sec-d9ea"><div class="u-clearfix u-sheet u-sheet-1">
-        <p class="u-small-text u-text u-text-variant u-text-1"> © Copyright 2022 - motoristas.co.mz. Todos os Direitos Reservados</p>
+        <p class="u-small-text u-text u-text-variant u-text-1"> © Copyright 2024 - motoristas.co.mz. Todos os Direitos Reservados</p>
       </div></footer>
 </body></html>

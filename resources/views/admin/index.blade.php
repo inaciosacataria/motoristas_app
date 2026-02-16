@@ -198,9 +198,9 @@ Base de Dados de Motoristas |
                                     </div>
                                     <div class="message-time">
                                       @if($empregador->active == "desativado")
-                                      <span class="badge badge-warning mt-4 font-12">Activo</span>
-                                      @elseif($empregador->active != "desativado")
                                       <span class="badge badge-warning mt-4 font-12">Desativo</span>
+                                      @elseif($empregador->active != "desativado")
+                                      <span class="badge badge-warning mt-4 font-12">Activo</span>
                                       @endif
                                       @if($empregador->accounttype == "no")
                                       <span class="badge badge-warning mt-4 font-12">Free Plan</span>

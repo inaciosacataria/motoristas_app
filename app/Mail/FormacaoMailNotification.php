@@ -36,7 +36,7 @@ class FormacaoMailNotification extends Mailable
       $this->observacoes=$observacoes;
 
 
-      return $this->from('example@example.com')
+      return $this->from('info@motoristas.co.mz')
       ->subject('Mailtrap Confirmation')
       ->markdown('mails.cursoInscritoMail')
       ->with([
@@ -87,7 +87,7 @@ class FormacaoMailNotification extends Mailable
 
     public function build()
     {
-      return $this->from('example@example.com')
+      return $this->from('info@motoristas.co.mz')
       ->subject('Mailtrap Confirmation')
       ->markdown('mails.cursoInscritoMail')
       ->with([

@@ -4,8 +4,7 @@ Motoristas |
 @endsection
 @section('content')
 
-
-
+    <x-smart-ad-component slug="thecode"/>
 <div class="wrapper">
     <div class="container-fluid homepage">
       <div class="container">
@@ -111,8 +110,8 @@ Motoristas |
                 <div class="card m-b-30">
                       <div class="card-body">
                         <div class="imagem" >
-                          @if($anuncio->foto!="none")
-                          <img src="{{ $anuncio->foto }}" class="img-fluid" style="max-width:100px"/>
+                          @if($anuncio->foto_url!="none")
+                          <img src="{{ asset($anuncio->foto_url)}}" class="img-fluid" style="max-width:100px"/>
                           @else
                           <img src="assets/images/2.png" class="img-fluid" style="margin-top: 35px;" />
                           @endif
@@ -153,6 +152,10 @@ Motoristas |
                 </div>
               </div>
               @endforeach
+
+              @if(sizeof($anuncios)==0)
+              <h2>resultados não encontrados</h2>
+              @endif
 
             </div>
           </div>
