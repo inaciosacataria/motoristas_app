@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Storage;
 
 /*
 |--------------------------------------------------------------------------
@@ -192,3 +193,14 @@ Route::get('/formacao8', function (){
 Route::get('/formacao9', function (){
   return view('cursos.formacao9');
 });
+
+// Rota para servir banners de smart-ads quando o /storage não aponta para a pasta pública (ex: cPanel com root diferente)
+Route::get('/storage/smart-ads/{filename}', function ($filename) {
+    $path = 'smart-ads/' . $filename;
+
+    if (!Storage::disk('public')->exists($path)) {
+        abort(404);
+    }
+
+    return Storage::disk('public')->response($path);
+})->where('filename', '.*');
