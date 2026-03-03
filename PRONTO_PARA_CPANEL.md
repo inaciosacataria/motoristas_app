@@ -152,6 +152,15 @@ Após subir para o cPanel, testar:
 - Verificar index.php foi editado corretamente
 - Verificar paths apontam para ../motoristas/
 
+**"Class 'App\Models\Experiencias' not found" (ou outro Model)?**
+- No Linux/cPanel os nomes de ficheiros **diferenciam maiúsculas de minúsculas**.
+- O ficheiro tem de ser exatamente `Experiencias.php` (E maiúsculo), não `experiencias.php`.
+- No servidor, em `motoristas/app/Models/`:
+  1. Se existir `experiencias.php` (e minúsculo), renomear para `Experiencias.php`.
+  2. Corrigir o mesmo para outros Models se der erro (ex.: `Candidatos.php`, `Anuncios.php`, `Idiomas.php`).
+- Depois, no SSH (ou Terminal do cPanel): `cd motoristas && php composer.phar dump-autoload`
+- Se não tiver SSH, fazer upload do ficheiro com o nome correto por FTP/File Manager, garantindo que o nome fica com a capitalização certa.
+
 ---
 
 ## 📞 Checklist Antes de Fazer Upload
