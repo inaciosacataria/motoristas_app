@@ -48,24 +48,30 @@ class LoginController extends Controller
 
     /**
      * Login usando celular (para candidatos)
+     * Normaliza o celular (só dígitos) para evitar falha por espaços, traços ou formato diferente.
      */
     protected function loginWithCelular(Request $request)
     {
-        $celular = $request->input('number');
+        $celular = trim((string) $request->input('number'));
         $password = $request->input('password');
+        $celularDigits = preg_replace('/\D/', '', $celular);
 
-        // Buscar usuário pelo celular
+        // Buscar usuário pelo celular (valor exato ou só dígitos, para aceitar 84XXX, "84 XXX", etc.)
         $user = DB::table('users')
-            ->where('celular', $celular)
             ->where('privilegio', 'candidato')
+            ->where(function ($query) use ($celular, $celularDigits) {
+                $query->where('celular', $celular)
+                    ->orWhere('celular', $celularDigits);
+                // Também comparar celular na BD normalizado (só dígitos), se o valor guardado tiver espaços/traços
+                if ($celularDigits !== '') {
+                    $query->orWhereRaw("REPLACE(REPLACE(REPLACE(REPLACE(celular, ' ', ''), '-', ''), '+', ''), '\t', '') = ?", [$celularDigits]);
+                }
+            })
             ->first();
 
         if ($user && password_verify($password, $user->password)) {
-            // Fazer login do usuário
-            Auth::loginUsingId($user->id);
-            
+            Auth::loginUsingId($user->id, $request->boolean('remember'));
             $request->session()->regenerate();
-            
             return redirect()->intended($this->redirectPath());
         }
 

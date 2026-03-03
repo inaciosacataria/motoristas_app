@@ -16,15 +16,28 @@ class CandidaturasAnunciosController extends Controller
 
   public function create(Request $request)
   {
-    $candidatura = new Candidaturas_anuncios;
-    $candidatura->user_id = Auth::user()->id;
-    $candidatura->anuncio_id = $request->anuncio_id;
+    $userId = Auth::id();
+    $anuncioId = (int) $request->anuncio_id;
 
-      if ($candidatura->save()) {
-          return redirect()->back()->with('success', 'Candidatura enviada com sucesso!');
-      } else {
-          return redirect()->back()->with('erro', 'Ocorreu erro, tenta novamente!');
-      }
+    // Evitar candidatura duplicada (mesmo utilizador + mesma vaga)
+    $jaExiste = DB::table('candidaturas_anuncios')
+        ->where('user_id', $userId)
+        ->where('anuncio_id', $anuncioId)
+        ->exists();
+
+    if ($jaExiste) {
+        return redirect()->back()->with('erro', 'Já se candidatou a esta vaga. Não pode enviar mais de uma candidatura por vaga.');
+    }
+
+    $candidatura = new Candidaturas_anuncios;
+    $candidatura->user_id = $userId;
+    $candidatura->anuncio_id = $anuncioId;
+
+    if ($candidatura->save()) {
+        return redirect()->back()->with('success', 'Candidatura enviada com sucesso!');
+    }
+
+    return redirect()->back()->with('erro', 'Ocorreu erro, tenta novamente!');
   }
 
 

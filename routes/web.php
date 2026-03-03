@@ -40,6 +40,9 @@ Route::get('/logout', function () {
 });
 
 Route::get('/concluir', function () {
+     if (!Auth::check()) {
+         return redirect('/login');
+     }
      if(Auth::user()->privilegio == 'empregador'){
        if(Auth::user()->active == 'desativado'){
            return redirect('/aguarde');

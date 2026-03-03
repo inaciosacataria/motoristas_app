@@ -153,14 +153,23 @@
                         
                         @auth
                             @if(Auth::user()->privilegio === 'candidato')
-                                <form action="{{ route('candidatar') }}" method="POST">
-                                    @csrf
-                                    <input type="hidden" name="anuncio_id" value="{{ $anuncio->id }}">
-                                    <input type="hidden" name="user_id" value="{{ Auth::user()->id }}">
-                                    <button type="submit" class="w-full bg-white text-primary-600 hover:bg-gray-100 font-bold py-3 px-6 rounded-lg transition-all duration-200 shadow-lg hover:shadow-xl">
-                                        <i class="fas fa-paper-plane mr-2"></i> Candidatar-me
+                                @if(!empty($jaCandidatou))
+                                    <p class="text-primary-100 text-sm mb-2">
+                                        <i class="fas fa-check-circle mr-2"></i> Já se candidatou a esta vaga.
+                                    </p>
+                                    <button type="button" disabled class="w-full bg-white/50 text-primary-600 font-bold py-3 px-6 rounded-lg cursor-not-allowed opacity-75">
+                                        <i class="fas fa-paper-plane mr-2"></i> Candidatura enviada
                                     </button>
-                                </form>
+                                @else
+                                    <form action="{{ route('candidatar') }}" method="POST">
+                                        @csrf
+                                        <input type="hidden" name="anuncio_id" value="{{ $anuncio->id }}">
+                                        <input type="hidden" name="user_id" value="{{ Auth::user()->id }}">
+                                        <button type="submit" class="w-full bg-white text-primary-600 hover:bg-gray-100 font-bold py-3 px-6 rounded-lg transition-all duration-200 shadow-lg hover:shadow-xl">
+                                            <i class="fas fa-paper-plane mr-2"></i> Candidatar-me
+                                        </button>
+                                    </form>
+                                @endif
                             @else
                                 <p class="text-primary-100 text-sm">Apenas candidatos podem se candidatar a vagas.</p>
                             @endif

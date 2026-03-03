@@ -40,13 +40,17 @@
                                 <i class="fas fa-phone text-green-600 mr-2"></i>Número de Celular <span class="text-red-500">*</span>
                             </label>
                             <input 
-                                type="number" 
+                                type="tel" 
                                 name="number" 
                                 id="number"
-                                class="block w-full px-4 py-3 border border-gray-300 rounded-lg shadow-sm focus:ring-2 focus:ring-green-500 focus:border-green-500 text-lg transition duration-200" 
+                                class="block w-full px-4 py-3 border border-gray-300 rounded-lg shadow-sm focus:ring-2 focus:ring-green-500 focus:border-green-500 text-lg transition duration-200 @error('number') border-red-500 @enderror" 
                                 placeholder="84XXXXXXX"
+                                value="{{ old('number') }}"
                                 required
                             >
+                            @error('number')
+                                <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
+                            @enderror
                         </div>
                         
                         <div>

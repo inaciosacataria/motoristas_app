@@ -91,7 +91,16 @@ public function verAnuncio($slug){
         return redirect('/')->with('erro', 'Anúncio não encontrado.');
     }
 
-    return view('anuncio-modern', compact('anuncio','provincias' ,'categorias','anuncios_provincias'));
+    // Verificar se o candidato logado já se candidatou a esta vaga (para desativar o botão)
+    $jaCandidatou = false;
+    if (Auth::check() && Auth::user()->privilegio === 'candidato') {
+        $jaCandidatou = DB::table('candidaturas_anuncios')
+            ->where('user_id', Auth::id())
+            ->where('anuncio_id', $anuncio->id)
+            ->exists();
+    }
+
+    return view('anuncio-modern', compact('anuncio', 'provincias', 'categorias', 'anuncios_provincias', 'jaCandidatou'));
 
 }
 
