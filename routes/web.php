@@ -60,6 +60,16 @@ Route::get('/concluir', function () {
 
 //auth
 Auth::routes();
+
+// Notificações (utilizador autenticado)
+Route::middleware('auth')->group(function () {
+    Route::get('/notifications', [App\Http\Controllers\NotificationController::class, 'index'])->name('notifications.index');
+    Route::get('/notifications/count', [App\Http\Controllers\NotificationController::class, 'count'])->name('notifications.count');
+    Route::get('/notifications/json', [App\Http\Controllers\NotificationController::class, 'getUnread'])->name('notifications.getUnread');
+    Route::post('/notifications/{id}/read', [App\Http\Controllers\NotificationController::class, 'markAsRead'])->name('notifications.markAsRead');
+    Route::post('/notifications/read-all', [App\Http\Controllers\NotificationController::class, 'markAllAsRead'])->name('notifications.markAllAsRead');
+});
+
 Route::get('/test', function (){
   return view('test');
 });

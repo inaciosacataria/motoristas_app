@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Candidaturas_anuncios;
+use App\Models\Anuncios;
+use App\Services\NotificationService;
 use Illuminate\Support\Facades\DB;
 use App\Mail\AcountActivate;
 use App\Mail\CandidaturaEspontanea;
@@ -34,6 +36,19 @@ class CandidaturasAnunciosController extends Controller
     $candidatura->anuncio_id = $anuncioId;
 
     if ($candidatura->save()) {
+        // Notificar o empregador (dono do anúncio) sobre a nova candidatura
+        $anuncio = Anuncios::find($anuncioId);
+        if ($anuncio) {
+            try {
+                app(NotificationService::class)->notifyNewCandidatura(
+                    $anuncio->user_id,
+                    $anuncioId,
+                    Auth::user()->name ?? 'Um candidato'
+                );
+            } catch (\Throwable $e) {
+                \Log::warning('Falha ao criar notificação de candidatura: ' . $e->getMessage());
+            }
+        }
         return redirect()->back()->with('success', 'Candidatura enviada com sucesso!');
     }
 

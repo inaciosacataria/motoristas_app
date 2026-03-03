@@ -34,10 +34,19 @@ class NotificationController extends Controller
     {
         $notifications = $this->notificationService->getUnread(Auth::id());
         $count = $this->notificationService->countUnread(Auth::id());
+        $list = $notifications->map(function ($n) {
+            return [
+                'id' => $n->id,
+                'type' => $n->type,
+                'data' => $n->data,
+                'created_at' => $n->created_at?->toIso8601String(),
+                'created_at_human' => $n->created_at?->diffForHumans(),
+            ];
+        });
         
         return response()->json([
             'success' => true,
-            'notifications' => $notifications,
+            'notifications' => $list,
             'count' => $count,
         ]);
     }
@@ -47,7 +56,18 @@ class NotificationController extends Controller
      */
     public function markAsRead($id)
     {
-        $notification = $this->notificationService->markAsRead($id);
+        $notification = \App\Models\Notification::where('id', $id)
+            ->where('notifiable_id', Auth::id())
+            ->first();
+        
+        if (!$notification) {
+            if (request()->wantsJson()) {
+                return response()->json(['success' => false, 'message' => 'Notificação não encontrada'], 404);
+            }
+            return redirect()->back()->with('error', 'Notificação não encontrada');
+        }
+        
+        $this->notificationService->markAsRead($id);
         
         if (request()->wantsJson()) {
             return response()->json([

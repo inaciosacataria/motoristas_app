@@ -65,14 +65,6 @@
                             <i class="fas fa-check-circle text-green-600"></i>
                         </div>
                         <div class="flex items-center justify-between text-sm">
-                            <span class="text-gray-700"><i class="fas fa-graduation-cap mr-2"></i> Formações</span>
-                            @if(sizeof($formacoes) < 1)
-                                <i class="fas fa-times-circle text-red-500"></i>
-                            @else
-                                <i class="fas fa-check-circle text-green-600"></i>
-                            @endif
-                        </div>
-                        <div class="flex items-center justify-between text-sm">
                             <span class="text-gray-700"><i class="fas fa-briefcase mr-2"></i> Experiências</span>
                             @if(sizeof($experiencias) < 1)
                                 <i class="fas fa-times-circle text-red-500"></i>
@@ -105,10 +97,6 @@
                         </a>
                         <a href="/candidatura-espontanea" class="w-full bg-white border-2 border-green-600 text-green-600 hover:bg-green-50 font-bold py-2 px-4 rounded-lg transition duration-200 flex items-center justify-center">
                             <i class="fas fa-paper-plane mr-2"></i> Candidatura Espontânea
-                        </a>
-                        <!-- Central de Risco removido -->
-                        <a href="/formacao" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-lg transition duration-200 flex items-center justify-center">
-                            <i class="fas fa-graduation-cap mr-2"></i> Formações
                         </a>
                     </div>
                 </div>

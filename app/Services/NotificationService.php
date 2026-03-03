@@ -102,11 +102,7 @@ class NotificationService
             ->where('notifiable_type', User::class)
             ->whereNull('read_at')
             ->orderBy('created_at', 'desc')
-            ->get()
-            ->map(function($notification) {
-                $notification->data = json_decode($notification->data, true);
-                return $notification;
-            });
+            ->get();
     }
 
     /**
