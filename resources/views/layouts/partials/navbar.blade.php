@@ -107,7 +107,7 @@
                                 </a>
                             @elseif(Auth::user()->privilegio === 'empregador')
                                 <a href="/empregador" class="block px-4 py-2 text-gray-700 hover:bg-gray-100">
-                                    <i class="fas fa-building mr-2"></i> Dashboard
+                                    <i class="fas fa-tachometer-alt mr-2"></i> Dashboard
                                 </a>
                                 <a href="/empregador-perfil/{{ Auth::user()->id }}" class="block px-4 py-2 text-gray-700 hover:bg-gray-100">
                                     <i class="fas fa-building mr-2"></i> Perfil da Empresa
