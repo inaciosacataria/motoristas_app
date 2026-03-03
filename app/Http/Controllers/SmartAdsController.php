@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Storage;
 
 class SmartAdsController extends Controller
 {
@@ -21,25 +22,41 @@ class SmartAdsController extends Controller
     }
 
     /**
-     * Cria nova publicidade (HTML).
+     * Cria nova publicidade (Imagem ou HTML).
      */
     public function store(Request $request)
     {
         $data = $request->validate([
             'name' => ['required', 'string', 'max:255', 'unique:smart_ads,name'],
             'slug' => ['required', 'string', 'max:255'],
-            'body' => ['required', 'string'],
+            'adType' => ['required', 'in:IMAGE,HTML'],
+            'body' => ['nullable', 'string'],
+            'image' => ['nullable', 'image', 'max:4096'],
+            'imageUrl' => ['nullable', 'url'],
+            'imageAlt' => ['nullable', 'string', 'max:255'],
             'enabled' => ['nullable', 'boolean'],
         ]);
+
+        // Se for imagem, garantir que o ficheiro foi enviado
+        if ($data['adType'] === 'IMAGE' && !$request->hasFile('image')) {
+            return redirect()->back()
+                ->withInput()
+                ->with('erro', 'Selecione uma imagem para o banner.');
+        }
+
+        $imagePath = null;
+        if ($data['adType'] === 'IMAGE') {
+            $imagePath = $request->file('image')->store('smart-ads', 'public');
+        }
 
         DB::table('smart_ads')->insert([
             'name' => $data['name'],
             'slug' => $data['slug'],
-            'body' => $data['body'],
-            'adType' => 'HTML',
-            'image' => null,
-            'imageUrl' => null,
-            'imageAlt' => null,
+            'body' => $data['adType'] === 'HTML' ? ($data['body'] ?? '') : null,
+            'adType' => $data['adType'],
+            'image' => $imagePath,
+            'imageUrl' => $data['imageUrl'] ?? null,
+            'imageAlt' => $data['imageAlt'] ?? null,
             'views' => 0,
             'clicks' => 0,
             'enabled' => $request->boolean('enabled'),
@@ -53,7 +70,7 @@ class SmartAdsController extends Controller
     }
 
     /**
-     * Atualiza uma publicidade existente (nome, slug, body, enabled).
+     * Atualiza uma publicidade existente.
      */
     public function update($id, Request $request)
     {
@@ -65,7 +82,11 @@ class SmartAdsController extends Controller
         $data = $request->validate([
             'name' => ['required', 'string', 'max:255'],
             'slug' => ['required', 'string', 'max:255'],
-            'body' => ['required', 'string'],
+            'adType' => ['required', 'in:IMAGE,HTML'],
+            'body' => ['nullable', 'string'],
+            'image' => ['nullable', 'image', 'max:4096'],
+            'imageUrl' => ['nullable', 'url'],
+            'imageAlt' => ['nullable', 'string', 'max:255'],
             'enabled' => ['nullable', 'boolean'],
         ]);
 
@@ -80,10 +101,23 @@ class SmartAdsController extends Controller
                 ->with('erro', 'Já existe uma publicidade com esse nome.');
         }
 
+        $imagePath = $ad->image;
+        if ($data['adType'] === 'IMAGE' && $request->hasFile('image')) {
+            // Remover imagem antiga se existir
+            if ($imagePath && Storage::disk('public')->exists($imagePath)) {
+                Storage::disk('public')->delete($imagePath);
+            }
+            $imagePath = $request->file('image')->store('smart-ads', 'public');
+        }
+
         DB::table('smart_ads')->where('id', $id)->update([
             'name' => $data['name'],
             'slug' => $data['slug'],
-            'body' => $data['body'],
+            'body' => $data['adType'] === 'HTML' ? ($data['body'] ?? '') : null,
+            'adType' => $data['adType'],
+            'image' => $imagePath,
+            'imageUrl' => $data['imageUrl'] ?? null,
+            'imageAlt' => $data['imageAlt'] ?? null,
             'enabled' => $request->boolean('enabled'),
             'updated_at' => now(),
         ]);

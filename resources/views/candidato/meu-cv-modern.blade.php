@@ -94,13 +94,23 @@
                     @if($experiencias->count() > 0)
                         <div class="space-y-4">
                             @foreach($experiencias as $exp)
+                                @php
+                                    // Compatibilidade entre estrutura antiga (inicio/fim/actividades_exercidas)
+                                    // e a nova (data_inicio/data_fim/descricao)
+                                    $inicio = $exp->data_inicio ?? $exp->inicio ?? null;
+                                    $fim = $exp->data_fim ?? $exp->fim ?? null;
+                                    $descricao = $exp->descricao ?? $exp->actividades_exercidas ?? null;
+                                @endphp
                                 <div class="p-4 bg-gray-50 rounded-lg">
                                     <h4 class="font-semibold text-gray-900">{{ $exp->cargo ?? 'Motorista' }}</h4>
                                     <p class="text-gray-600">{{ $exp->empresa ?? 'Empresa' }}</p>
                                     <p class="text-sm text-gray-500 mt-1">
-                                        {{ $exp->data_inicio ? \Carbon\Carbon::parse($exp->data_inicio)->format('M Y') : 'N/A' }} - 
-                                        {{ $exp->data_fim ? \Carbon\Carbon::parse($exp->data_fim)->format('M Y') : 'Atual' }}
+                                        {{ $inicio ? \Carbon\Carbon::parse($inicio)->format('M Y') : 'N/A' }} -
+                                        {{ $fim ? \Carbon\Carbon::parse($fim)->format('M Y') : 'Atual' }}
                                     </p>
+                                    @if($descricao)
+                                        <p class="text-gray-700 mt-2 text-sm">{{ $descricao }}</p>
+                                    @endif
                                 </div>
                             @endforeach
                         </div>
@@ -165,12 +175,25 @@
                     @if($documentos->count() > 0)
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
                             @foreach($documentos as $doc)
-                                <div class="flex items-center gap-3 p-3 bg-gray-50 rounded-lg">
-                                    <i class="fas fa-file-pdf text-2xl text-red-600"></i>
-                                    <div class="flex-1 min-w-0">
-                                        <p class="font-medium text-gray-900 truncate">{{ $doc->tipo ?? 'Documento' }}</p>
+                                @php
+                                    // Campo correcto na BD é "ficheiro"; alguns registos antigos podem usar "documento"
+                                    $path = $doc->ficheiro ?? $doc->documento ?? null;
+                                @endphp
+                                @if($path)
+                                    <a href="{{ asset($path) }}" target="_blank" class="flex items-center gap-3 p-3 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors">
+                                        <i class="fas fa-file-pdf text-2xl text-red-600"></i>
+                                        <div class="flex-1 min-w-0">
+                                            <p class="font-medium text-gray-900 truncate">{{ $doc->tipo ?? 'Documento' }}</p>
+                                        </div>
+                                    </a>
+                                @else
+                                    <div class="flex items-center gap-3 p-3 bg-gray-50 rounded-lg opacity-60">
+                                        <i class="fas fa-file-pdf text-2xl text-red-600"></i>
+                                        <div class="flex-1 min-w-0">
+                                            <p class="font-medium text-gray-900 truncate">{{ $doc->tipo ?? 'Documento' }}</p>
+                                        </div>
                                     </div>
-                                </div>
+                                @endif
                             @endforeach
                         </div>
                     @else

@@ -5,15 +5,15 @@
 @section('content')
 <!-- Header -->
 <div class="bg-gradient-to-r from-green-600 to-green-700 text-white py-8">
-    <div class="container mx-auto px-4">
+    <div class="container-custom">
         <h1 class="text-3xl font-bold">Painel Administrativo</h1>
         <p class="text-green-100 mt-1">Gestão completa do sistema</p>
     </div>
 </div>
 
-<div class="container mx-auto px-4 py-8">
+<div class="container-custom py-8 space-y-8">
     <!-- Stats Grid -->
-    <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
+    <div class="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-6">
         <div class="bg-white shadow-md rounded-lg p-6">
             <div class="flex items-center justify-between">
                 <div>
@@ -49,12 +49,27 @@
                 </div>
             </div>
         </div>
-        
-        <!-- Central de Risco removido -->
+
+        <div class="bg-white shadow-md rounded-lg p-6">
+            <div class="flex items-center justify-between">
+                <div>
+                    <p class="text-gray-600 text-sm">Novos (últimos 30 dias)</p>
+                    <p class="text-3xl font-bold text-gray-900">
+                        {{ $last30motoristas + $last30empregador }}
+                    </p>
+                    <p class="text-xs text-gray-500 mt-1">
+                        {{ $last30motoristas }} motoristas · {{ $last30empregador }} empresas
+                    </p>
+                </div>
+                <div class="bg-purple-100 rounded-full p-3">
+                    <i class="fas fa-chart-line text-2xl text-purple-600"></i>
+                </div>
+            </div>
+        </div>
     </div>
 
     <!-- Quick Actions -->
-    <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-6">
         <a href="/bd-motoristas" class="bg-white shadow-md rounded-lg p-6 hover:shadow-lg transition-all hover:-translate-y-1">
             <div class="text-center">
                 <div class="inline-flex items-center justify-center w-16 h-16 bg-blue-100 rounded-full mb-4">
@@ -183,22 +198,7 @@
         </div>
     </div>
 
-    <!-- Statistics -->
-    <div class="mt-8 bg-white shadow-md rounded-lg p-6">
-        <h2 class="text-xl font-bold text-gray-900 mb-4">
-            <i class="fas fa-chart-bar text-green-600 mr-2"></i> Estatísticas dos Últimos 30 Dias
-        </h2>
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <div class="text-center">
-                <div class="text-2xl font-bold text-blue-600">{{ $last30motoristas }}</div>
-                <div class="text-sm text-gray-600">Novos Motoristas</div>
-            </div>
-            <div class="text-center">
-                <div class="text-2xl font-bold text-green-600">{{ $last30empregador }}</div>
-                <div class="text-sm text-gray-600">Novas Empresas</div>
-            </div>
-        </div>
-    </div>
+    <!-- Fim do conteúdo principal -->
 </div>
 @endsection
 

@@ -121,15 +121,21 @@
                                         <i class="fas fa-building text-primary-600"></i>
                                     </div>
                                     <div class="flex-1">
+                                        @php
+                                            // Compatibilidade: experiências antigas usam campos inicio/fim/actividades_exercidas
+                                            $inicio = $exp->data_inicio ?? $exp->inicio ?? null;
+                                            $fim = $exp->data_fim ?? $exp->fim ?? null;
+                                            $descricao = $exp->descricao ?? $exp->actividades_exercidas ?? null;
+                                        @endphp
                                         <h4 class="font-semibold text-gray-900">{{ $exp->cargo ?? 'Motorista' }}</h4>
                                         <p class="text-gray-600">{{ $exp->empresa ?? 'Empresa' }}</p>
                                         <p class="text-sm text-gray-500 mt-1">
                                             <i class="fas fa-calendar mr-1"></i>
-                                            {{ $exp->data_inicio ? \Carbon\Carbon::parse($exp->data_inicio)->format('Y') : 'N/A' }} - 
-                                            {{ $exp->data_fim ? \Carbon\Carbon::parse($exp->data_fim)->format('Y') : 'Presente' }}
+                                            {{ $inicio ? \Carbon\Carbon::parse($inicio)->format('Y') : 'N/A' }} -
+                                            {{ $fim ? \Carbon\Carbon::parse($fim)->format('Y') : 'Presente' }}
                                         </p>
-                                        @if($exp->descricao)
-                                            <p class="text-gray-700 mt-2 text-sm">{{ $exp->descricao }}</p>
+                                        @if($descricao)
+                                            <p class="text-gray-700 mt-2 text-sm">{{ $descricao }}</p>
                                         @endif
                                     </div>
                                 </div>

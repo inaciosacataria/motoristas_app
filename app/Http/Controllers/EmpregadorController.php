@@ -360,7 +360,7 @@ public function aguarde(){
           }
       } catch (\Exception $e) {
           \Log::error('Erro ao editar perfil do empregador: ' . $e->getMessage());
-          return redirect()->back()->with('erro', 'Ocorreu um erro ao atualizar o perfil. Tente novamente!');
+          return redirect()->back()->with('erro', 'Ocorreu um erro ao atualizar o perfil: ' . $e->getMessage());
       }
   }
 

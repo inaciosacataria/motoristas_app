@@ -14,7 +14,8 @@ class IdiomasController extends Controller
   {
     $idioma = new Idiomas;
     $idioma->idioma = $request->idioma;
-    $idioma->nivel = $request->nivel_idioma;
+    // Compatibilidade: formulário antigo envia nivel_idioma, o novo envia nivel
+    $idioma->nivel = $request->nivel_idioma ?? $request->nivel;
     $idioma->candidato_id = $request->candidato_id;
 
       if ($idioma->save()) {

@@ -33,6 +33,31 @@
     </div>
 </div>
 
+<!-- Home Banner / Publicidade -->
+@if(isset($publicidades) && $publicidades->count() > 0)
+    @foreach($publicidades->take(1) as $publicidade)
+        @if($publicidade->adType === 'IMAGE' && $publicidade->image)
+            <div class="bg-gray-50">
+                <div class="container-custom pt-6">
+                    <div class="rounded-lg overflow-hidden shadow-md mb-4">
+                        <a href="{{ $publicidade->imageUrl ?? '#' }}" target="_blank" rel="noopener noreferrer" onclick="trackAdClick('{{ $publicidade->slug }}')">
+                            <img src="{{ asset('storage/' . $publicidade->image) }}" alt="{{ $publicidade->imageAlt ?? 'Publicidade' }}" class="w-full h-auto object-cover" style="max-height: 180px;">
+                        </a>
+                    </div>
+                </div>
+            </div>
+        @elseif($publicidade->adType === 'HTML' && $publicidade->body)
+            <div class="bg-gray-50">
+                <div class="container-custom pt-6">
+                    <div class="mb-4">
+                        {!! $publicidade->body !!}
+                    </div>
+                </div>
+            </div>
+        @endif
+    @endforeach
+@endif
+
 <!-- Search Section -->
 <div class="bg-white shadow-md -mt-8 relative z-10">
     <div class="container-custom py-6">
@@ -168,10 +193,19 @@
                         </p>
                         
                         <!-- Footer -->
+                        @php
+                            $ehExpirado = isset($anuncio->validade) && \Carbon\Carbon::parse($anuncio->validade)->isPast();
+                        @endphp
                         <div class="flex items-center justify-between pt-4 border-t border-gray-100">
-                            <span class="badge badge-success">
-                                <i class="fas fa-clock mr-1"></i> Novo
-                            </span>
+                            @if($ehExpirado)
+                                <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold bg-gray-100 text-gray-700">
+                                    <i class="fas fa-hourglass-end mr-1"></i> Expirado
+                                </span>
+                            @else
+                                <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold bg-green-100 text-green-700">
+                                    <i class="fas fa-clock mr-1"></i> Ativo
+                                </span>
+                            @endif
                             <i class="fas fa-arrow-right text-primary-600"></i>
                         </div>
                     </div>
@@ -232,5 +266,25 @@
         overflow: hidden;
     }
 </style>
+@endpush
+
+@push('scripts')
+<script>
+    function trackAdClick(slug) {
+        fetch('/smart-banner-update-clicks', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Accept': 'application/json',
+                'X-Requested-With': 'XMLHttpRequest',
+                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+            },
+            credentials: 'same-origin',
+            body: JSON.stringify({ slug: slug })
+        }).catch(function (error) {
+            console.log('Erro ao rastrear clique:', error);
+        });
+    }
+</script>
 @endpush
 

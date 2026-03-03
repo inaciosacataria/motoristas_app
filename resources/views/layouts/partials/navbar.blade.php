@@ -29,9 +29,20 @@
                     
                     <!-- User Dropdown -->
                     <div class="relative" x-data="{ open: false }">
+                        @php
+                            $avatarUrl = null;
+                            if (Auth::user()->privilegio === 'empregador') {
+                                $avatarUrl = \App\Models\Empregador::where('user_id', Auth::id())->value('logotipo');
+                            }
+                            if (!$avatarUrl || $avatarUrl === 'none') {
+                                $avatarUrl = Auth::user()->foto_url && Auth::user()->foto_url !== 'none'
+                                    ? Auth::user()->foto_url
+                                    : null;
+                            }
+                        @endphp
                         <button @click="open = !open" class="flex items-center space-x-2 p-2 rounded-lg hover:bg-gray-100 transition-colors">
-                            @if(Auth::user()->foto_url && Auth::user()->foto_url !== 'none')
-                                <img src="{{ Auth::user()->foto_url }}" alt="{{ Auth::user()->name }}" class="avatar avatar-sm">
+                            @if($avatarUrl)
+                                <img src="{{ asset($avatarUrl) }}" alt="{{ Auth::user()->name }}" class="avatar avatar-sm object-cover">
                             @else
                                 <div class="avatar avatar-sm bg-primary-500 flex items-center justify-center text-white font-bold">
                                     {{ substr(Auth::user()->name, 0, 1) }}
@@ -53,8 +64,8 @@
                                 <a href="/empregador" class="block px-4 py-2 text-gray-700 hover:bg-gray-100">
                                     <i class="fas fa-building mr-2"></i> Dashboard
                                 </a>
-                                <a href="/procurar-motorista" class="block px-4 py-2 text-gray-700 hover:bg-gray-100">
-                                    <i class="fas fa-search mr-2"></i> Procurar Motoristas
+                                <a href="/empregador-perfil/{{ Auth::user()->id }}" class="block px-4 py-2 text-gray-700 hover:bg-gray-100">
+                                    <i class="fas fa-building mr-2"></i> Perfil da Empresa
                                 </a>
                             @elseif(Auth::user()->privilegio === 'admin')
                                 <a href="/admin" class="block px-4 py-2 text-gray-700 hover:bg-gray-100">

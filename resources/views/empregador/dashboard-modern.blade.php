@@ -109,9 +109,6 @@
                 <h2 class="text-xl font-bold text-gray-900">
                     <i class="fas fa-briefcase text-green-600 mr-2"></i> Minhas Vagas Publicadas
                 </h2>
-                <a href="/procurar-motorista" class="text-green-600 hover:text-green-700 text-sm font-medium">
-                    <i class="fas fa-search mr-1"></i> Procurar Motoristas
-                </a>
             </div>
         </div>
         <div class="p-6">
@@ -155,9 +152,11 @@
                                     <i class="fas fa-map-marker-alt text-green-600"></i>
                                     @php
                                         $locais = [];
+                                        $provinciaIds = [];
                                         if (isset($anuncios_provincias)) {
                                             foreach ($anuncios_provincias as $ap) {
                                                 if ($ap->anuncio_id == $anuncio->id) {
+                                                    $provinciaIds[] = $ap->provincia_id;
                                                     foreach ($provincias as $prov) {
                                                         if ($ap->provincia_id == $prov->id) {
                                                             $locais[] = $prov->name;
@@ -180,7 +179,7 @@
                                         <a href="{{ route('verAnuncio', $anuncio->slug ?? $anuncio->id) }}" target="_blank" class="text-green-600 hover:text-green-700" title="Ver vaga"><i class="fas fa-external-link-alt"></i></a>
                                         <a href="{{ route('verCandidatosDeUmAnuncio', $anuncio->slug ?? $anuncio->id) }}" class="text-blue-600 hover:text-blue-700" title="Candidatos"><i class="fas fa-users"></i></a>
                                         @if(isset($empregadorAprovado) && $empregadorAprovado)
-                                        <button type="button" onclick="editarVaga({{ json_encode($anuncio) }})" class="text-gray-600 hover:text-gray-800" title="Editar"><i class="fas fa-edit"></i></button>
+                                        <button type="button" onclick='editarVaga(@json($anuncio), @json($provinciaIds))' class="text-gray-600 hover:text-gray-800" title="Editar"><i class="fas fa-edit"></i></button>
                                         @endif
                                     </div>
                                 </div>
@@ -208,51 +207,14 @@
         </div>
     </div>
 
-    <!-- Área de Publicidade - Banner Horizontal Inferior -->
-    @if(isset($publicidades) && $publicidades->count() > 1)
-        @foreach($publicidades->skip(1)->take(1) as $publicidade)
-            @if($publicidade->adType == 'IMAGE' && $publicidade->image)
-                <div class="mb-6 rounded-lg overflow-hidden shadow-md">
-                    <a href="{{ $publicidade->imageUrl ?? '#' }}" target="_blank" rel="noopener noreferrer" onclick="trackAdClick('{{ $publicidade->slug }}')">
-                        <img src="{{ asset('storage/' . $publicidade->image) }}" alt="{{ $publicidade->imageAlt ?? 'Publicidade' }}" class="w-full h-auto object-cover" style="max-height: 120px;">
-                    </a>
-                </div>
-            @elseif($publicidade->adType == 'HTML' && $publicidade->body)
-                <div class="mb-6">
-                    {!! $publicidade->body !!}
-                </div>
-            @endif
-        @endforeach
-    @endif
-
     <!-- Quick Links -->
     <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-        <a href="/procurar-motorista" class="bg-white shadow-md rounded-lg p-6 hover:shadow-lg transition-shadow">
-            <div class="text-center">
-                <div class="inline-flex items-center justify-center w-16 h-16 bg-green-100 rounded-full mb-4">
-                    <i class="fas fa-search text-2xl text-green-600"></i>
-                </div>
-                <h3 class="font-bold text-gray-900 mb-2">Procurar Motoristas</h3>
-                <p class="text-gray-600 text-sm">Encontre motoristas qualificados</p>
-            </div>
-        </a>
-
         <!-- Central de Risco removido -->
-
-        <a href="/empregador-perfil/{{ Auth::user()->id }}" class="bg-white shadow-md rounded-lg p-6 hover:shadow-lg transition-shadow">
-            <div class="text-center">
-                <div class="inline-flex items-center justify-center w-16 h-16 bg-blue-100 rounded-full mb-4">
-                    <i class="fas fa-building text-2xl text-blue-600"></i>
-                </div>
-                <h3 class="font-bold text-gray-900 mb-2">Perfil da Empresa</h3>
-                <p class="text-gray-600 text-sm">Editar informações</p>
-            </div>
-        </a>
     </div>
 </div>
 
 <!-- Modal Criar Vaga -->
-<div id="criar-vaga-modal" class="fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full hidden">
+<div id="criar-vaga-modal" class="fixed inset-0 z-50 bg-gray-900 bg-opacity-60 overflow-y-auto h-full w-full hidden">
     <div class="relative top-20 mx-auto p-5 border w-11/12 max-w-2xl shadow-lg rounded-md bg-white">
         <div class="flex justify-between items-center pb-3">
             <h3 class="text-lg font-bold">Criar Nova Vaga</h3>
@@ -358,7 +320,7 @@
 @endsection
 
 <!-- Modal Editar Vaga -->
-<div id="editar-vaga-modal" class="fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full hidden">
+<div id="editar-vaga-modal" class="fixed inset-0 z-50 bg-gray-900 bg-opacity-60 overflow-y-auto h-full w-full hidden">
     <div class="relative top-20 mx-auto p-5 border w-11/12 max-w-2xl shadow-lg rounded-md bg-white">
         <div class="flex justify-between items-center pb-3">
             <h3 class="text-lg font-bold">Editar Vaga</h3>
@@ -488,7 +450,7 @@
         document.getElementById(modalId).classList.add('hidden');
     }
     
-    function editarVaga(anuncio) {
+    function editarVaga(anuncio, provinciasSelecionadas = []) {
         document.getElementById('edit-anuncio-id').value = anuncio.id;
         document.getElementById('edit-titulo').value = anuncio.titulo;
         document.getElementById('edit-validade').value = anuncio.validade ? anuncio.validade.split(' ')[0] : '';
@@ -500,6 +462,16 @@
         document.querySelectorAll('#edit-provincias-container input[type="checkbox"]').forEach(cb => {
             cb.checked = false;
         });
+        
+        // Marcar províncias já associadas à vaga
+        if (Array.isArray(provinciasSelecionadas)) {
+            provinciasSelecionadas.forEach(function (id) {
+                const cb = document.querySelector('#edit-provincias-container input[type="checkbox"][value="' + id + '"]');
+                if (cb) {
+                    cb.checked = true;
+                }
+            });
+        }
         
         openModal('editar-vaga-modal');
     }

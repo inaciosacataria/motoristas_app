@@ -18,6 +18,13 @@ class InicioController extends Controller
       // Total de empresas (empregadores) registadas
       $totalEmpresas = DB::table('empregadors')->count();
 
+      // Publicidades ativas para a home (por enquanto, os mesmos banners gerais)
+      $publicidades = DB::table('smart_ads')
+          ->where('enabled', 1)
+          ->orderBy('created_at', 'DESC')
+          ->limit(2)
+          ->get();
+
       $anuncios = DB::table('anuncios')
               ->leftJoin('empregadors', 'anuncios.user_id', '=', 'empregadors.user_id')
               ->leftJoin('users', 'anuncios.user_id', '=', 'users.id')
@@ -29,11 +36,11 @@ class InicioController extends Controller
                   'empregadors.logotipo as logotipo'
               )
               ->where('anuncios.estado_anuncio', 'Publicado')
-              ->where('anuncios.validade', '>=', now())
+              // Trazer todas as vagas publicadas (ativas e expiradas); o estado visual é tratado na view
               ->orderBy('anuncios.created_at', 'DESC')
               ->paginate(12);
 
-       return view('index-modern',  compact('provincias' ,'categorias', 'anuncios','anuncios_provincias', 'totalEmpresas'));
+       return view('index-modern',  compact('provincias' ,'categorias', 'anuncios','anuncios_provincias', 'totalEmpresas', 'publicidades'));
     }
 
 

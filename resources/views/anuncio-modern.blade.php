@@ -117,14 +117,22 @@
                 </div>
                 <div class="card-body">
                     <div class="flex flex-wrap gap-2">
+                        @php
+                            // Evitar localidades duplicadas (ex. Maputo repetido)
+                            $provinciasIndex = [];
+                            foreach ($provincias as $provincia) {
+                                $provinciasIndex[$provincia->id] = $provincia->name;
+                            }
+                            $printedProvIds = [];
+                        @endphp
+
                         @foreach($anuncios_provincias as $ap)
-                            @foreach($provincias as $provincia)
-                                @if($ap->provincia_id == $provincia->id)
-                                    <span class="inline-flex items-center px-4 py-2 bg-primary-50 text-primary-700 rounded-lg border border-primary-200">
-                                        <i class="fas fa-map-pin mr-2"></i> {{ $provincia->name }}
-                                    </span>
-                                @endif
-                            @endforeach
+                            @if(isset($provinciasIndex[$ap->provincia_id]) && !in_array($ap->provincia_id, $printedProvIds))
+                                @php $printedProvIds[] = $ap->provincia_id; @endphp
+                                <span class="inline-flex items-center px-4 py-2 bg-primary-50 text-primary-700 rounded-lg border border-primary-200">
+                                    <i class="fas fa-map-pin mr-2"></i> {{ $provinciasIndex[$ap->provincia_id] }}
+                                </span>
+                            @endif
                         @endforeach
                     </div>
                 </div>

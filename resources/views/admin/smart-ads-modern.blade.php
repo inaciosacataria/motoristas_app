@@ -4,7 +4,7 @@
 
 @section('content')
 <div class="bg-gradient-to-r from-green-600 to-green-700 text-white py-8">
-    <div class="container mx-auto px-4">
+    <div class="container-custom">
         <div class="flex items-center justify-between">
             <div>
                 <nav class="text-sm mb-2">
@@ -21,7 +21,7 @@
     </div>
 </div>
 
-<div class="container mx-auto px-4 py-8">
+<div class="container-custom py-8">
     @if(session('success'))
         <div class="mb-4 rounded-lg bg-green-50 border border-green-200 text-green-800 px-4 py-3">
             <span class="font-semibold">Sucesso:</span> {{ session('success') }}
@@ -38,9 +38,9 @@
         <div class="lg:col-span-1 bg-white shadow-md rounded-lg p-6">
             <h2 class="text-xl font-bold text-gray-900 mb-4">
                 <i class="fas fa-plus-circle text-green-600 mr-2"></i>
-                Nova Publicidade (HTML)
+                Nova Publicidade
             </h2>
-            <form action="{{ route('smart-ads.store') }}" method="POST" class="space-y-4">
+            <form action="{{ route('smart-ads.store') }}" method="POST" enctype="multipart/form-data" class="space-y-4">
                 @csrf
                 <div>
                     <label class="block text-sm font-semibold text-gray-700 mb-1">
@@ -64,14 +64,57 @@
                 </div>
                 <div>
                     <label class="block text-sm font-semibold text-gray-700 mb-1">
-                        HTML do Banner <span class="text-red-500">*</span>
+                        Tipo de Banner
                     </label>
-                    <textarea name="body" rows="6" class="input w-full" placeholder="<div>...html do banner...</div>" required>{{ old('body') }}</textarea>
+                    <select name="adType" id="adType" class="input w-full">
+                        <option value="IMAGE" selected>Imagem (recomendado)</option>
+                        <option value="HTML">HTML avançado</option>
+                    </select>
+                </div>
+                <!-- Campos para Imagem -->
+                <div id="imageFields" class="space-y-3">
+                    <div>
+                        <label class="block text-sm font-semibold text-gray-700 mb-1">
+                            Imagem do Banner <span class="text-red-500">*</span>
+                        </label>
+                        <input type="file" name="image" accept="image/*" class="input w-full">
+                        @error('image')
+                            <p class="text-xs text-red-600 mt-1">{{ $message }}</p>
+                        @enderror
+                        <p class="text-xs text-gray-500 mt-1">
+                            Formatos recomendados: JPG, PNG ou WEBP. Tamanho máximo 4MB.
+                        </p>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-semibold text-gray-700 mb-1">
+                            Link de destino (opcional)
+                        </label>
+                        <input type="url" name="imageUrl" value="{{ old('imageUrl') }}" class="input w-full" placeholder="https://exemplo.com">
+                        @error('imageUrl')
+                            <p class="text-xs text-red-600 mt-1">{{ $message }}</p>
+                        @enderror
+                    </div>
+                    <div>
+                        <label class="block text-sm font-semibold text-gray-700 mb-1">
+                            Texto alternativo (acessibilidade)
+                        </label>
+                        <input type="text" name="imageAlt" value="{{ old('imageAlt') }}" class="input w-full" placeholder="Descrição curta da imagem">
+                        @error('imageAlt')
+                            <p class="text-xs text-red-600 mt-1">{{ $message }}</p>
+                        @enderror
+                    </div>
+                </div>
+                <!-- Campos para HTML -->
+                <div id="htmlFields" class="space-y-2 hidden">
+                    <label class="block text-sm font-semibold text-gray-700 mb-1">
+                        HTML do Banner
+                    </label>
+                    <textarea name="body" rows="6" class="input w-full" placeholder="<div>...html do banner...</div>">{{ old('body') }}</textarea>
                     @error('body')
                         <p class="text-xs text-red-600 mt-1">{{ $message }}</p>
                     @enderror
                     <p class="text-xs text-gray-500 mt-1">
-                        Dica: pode colar aqui um bloco HTML com textos, botões, imagens (com URLs absolutas), etc.
+                        Para utilizadores avançados: pode colar um bloco HTML completo.
                     </p>
                 </div>
                 <div class="flex items-center">
@@ -122,9 +165,15 @@
                                     <span class="text-xs bg-gray-100 text-gray-700 px-2 py-1 rounded">{{ $ad->slug }}</span>
                                 </td>
                                 <td class="py-3 px-2 text-center">
-                                    <span class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
-                                        {{ $ad->adType }}
-                                    </span>
+                                    @if($ad->adType === 'IMAGE')
+                                        <span class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
+                                            <i class="fas fa-image mr-1"></i> Imagem
+                                        </span>
+                                    @else
+                                        <span class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
+                                            <i class="fas fa-code mr-1"></i> HTML
+                                        </span>
+                                    @endif
                                 </td>
                                 <td class="py-3 px-2 text-center">
                                     <form action="{{ route('smart-ads.toggle', $ad->id) }}" method="POST">
@@ -140,9 +189,8 @@
                                 </td>
                                 <td class="py-3 px-2 text-center">
                                     <div class="flex items-center justify-center gap-2">
-                                        <!-- Botão Editar: submit para update com campos simples inline -->
                                         <button type="button"
-                                                onclick="openEditModal({{ $ad->id }}, @js($ad->name), @js($ad->slug), @js($ad->body), {{ $ad->enabled ? 'true' : 'false' }})"
+                                                onclick="openEditModal({{ $ad->id }}, @js($ad->name), @js($ad->slug), @js($ad->body), '{{ $ad->adType }}', {{ $ad->enabled ? 'true' : 'false' }}, @js($ad->imageUrl), @js($ad->imageAlt))"
                                                 class="inline-flex items-center px-3 py-1.5 bg-blue-500 hover:bg-blue-600 text-white text-xs rounded-lg transition-colors">
                                             <i class="fas fa-edit mr-1"></i> Editar
                                         </button>
@@ -177,7 +225,7 @@
                 <i class="fas fa-times text-xl"></i>
             </button>
         </div>
-        <form id="editAdForm" method="POST" class="p-6 space-y-4">
+        <form id="editAdForm" method="POST" enctype="multipart/form-data" class="p-6 space-y-4">
             @csrf
             <input type="hidden" id="editAdId">
             <div>
@@ -194,9 +242,40 @@
             </div>
             <div>
                 <label class="block text-sm font-semibold text-gray-700 mb-1">
+                    Tipo de Banner
+                </label>
+                <select name="adType" id="editAdType" class="input w-full">
+                    <option value="IMAGE">Imagem</option>
+                    <option value="HTML">HTML avançado</option>
+                </select>
+            </div>
+            <!-- Campos imagem (editar) -->
+            <div id="editImageFields" class="space-y-3">
+                <div>
+                    <label class="block text-sm font-semibold text-gray-700 mb-1">
+                        Imagem do Banner (deixe em branco para manter a atual)
+                    </label>
+                    <input type="file" name="image" accept="image/*" class="input w-full">
+                </div>
+                <div>
+                    <label class="block text-sm font-semibold text-gray-700 mb-1">
+                        Link de destino (opcional)
+                    </label>
+                    <input type="url" id="editImageUrl" name="imageUrl" class="input w-full">
+                </div>
+                <div>
+                    <label class="block text-sm font-semibold text-gray-700 mb-1">
+                        Texto alternativo
+                    </label>
+                    <input type="text" id="editImageAlt" name="imageAlt" class="input w-full">
+                </div>
+            </div>
+            <!-- Campos HTML (editar) -->
+            <div id="editHtmlFields" class="space-y-2 hidden">
+                <label class="block text-sm font-semibold text-gray-700 mb-1">
                     HTML do Banner
                 </label>
-                <textarea id="editBody" name="body" rows="6" class="input w-full" required></textarea>
+                <textarea id="editBody" name="body" rows="6" class="input w-full"></textarea>
             </div>
             <div class="flex items-center">
                 <input type="checkbox" id="editEnabled" name="enabled" value="1" class="rounded text-green-600">
@@ -216,13 +295,45 @@
 
 @push('scripts')
 <script>
-    function openEditModal(id, name, slug, body, enabled) {
+    function toggleTypeFields(selectEl, imageWrapperId, htmlWrapperId) {
+        const type = selectEl.value;
+        const imageWrapper = document.getElementById(imageWrapperId);
+        const htmlWrapper = document.getElementById(htmlWrapperId);
+        if (type === 'IMAGE') {
+            imageWrapper.classList.remove('hidden');
+            htmlWrapper.classList.add('hidden');
+        } else {
+            imageWrapper.classList.add('hidden');
+            htmlWrapper.classList.remove('hidden');
+        }
+    }
+
+    // Toggle inicial no formulário de criação
+    document.addEventListener('DOMContentLoaded', function () {
+        const adTypeSelect = document.getElementById('adType');
+        if (adTypeSelect) {
+            toggleTypeFields(adTypeSelect, 'imageFields', 'htmlFields');
+            adTypeSelect.addEventListener('change', function () {
+                toggleTypeFields(this, 'imageFields', 'htmlFields');
+            });
+        }
+    });
+
+    function openEditModal(id, name, slug, body, adType, enabled, imageUrl, imageAlt) {
         const modal = document.getElementById('editAdModal');
         const form = document.getElementById('editAdForm');
         document.getElementById('editAdId').value = id;
         document.getElementById('editName').value = name;
         document.getElementById('editSlug').value = slug;
-        document.getElementById('editBody').value = body;
+        document.getElementById('editBody').value = body || '';
+        const typeSelect = document.getElementById('editAdType');
+        typeSelect.value = adType || 'IMAGE';
+        document.getElementById('editImageUrl').value = imageUrl || '';
+        document.getElementById('editImageAlt').value = imageAlt || '';
+        toggleTypeFields(typeSelect, 'editImageFields', 'editHtmlFields');
+        typeSelect.addEventListener('change', function () {
+            toggleTypeFields(this, 'editImageFields', 'editHtmlFields');
+        });
         document.getElementById('editEnabled').checked = !!enabled;
         form.action = '/smart-ads/' + id;
         modal.classList.remove('hidden');

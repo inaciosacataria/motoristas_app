@@ -1,10 +1,10 @@
 <footer class="bg-secondary-900 text-white mt-auto">
-    <div class="container-custom py-12">
-        <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
+    <div class="container-custom py-8">
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-6">
             <!-- About -->
             <div class="col-span-1 md:col-span-2">
-                <img src="{{ asset('assets/images/2.png') }}" alt="Logo Motoristas" class="h-12 mb-4 brightness-0 invert">
-                <p class="text-gray-400 mb-4">
+                <img src="{{ asset('assets/images/2.png') }}" alt="Logo Motoristas" class="h-10 mb-3 brightness-0 invert">
+                <p class="text-gray-400 mb-3 text-sm">
                     Plataforma líder em conexão entre motoristas profissionais e empregadores em Moçambique.
                 </p>
                 <div class="flex space-x-4">
@@ -23,20 +23,29 @@
                 </div>
             </div>
             
-            <!-- Links -->
+            <!-- Serviços -->
             <div>
-                <h3 class="font-semibold text-lg mb-4">Links Rápidos</h3>
-                <ul class="space-y-2">
-                    <li><a href="/" class="text-gray-400 hover:text-primary-500 transition-colors">Início</a></li>
-                    <li><a href="/formacao" class="text-gray-400 hover:text-primary-500 transition-colors">Formações</a></li>
-                    <li><a href="/sobre-nos" class="text-gray-400 hover:text-primary-500 transition-colors">Sobre Nós</a></li>
+                <h3 class="font-semibold text-lg mb-3">Solicite os nossos serviços</h3>
+                <ul class="space-y-1.5 text-gray-400 text-sm">
+                    <li>Recrutamento e selecção de motoristas</li>
+                    <li>Formação avançada de motoristas</li>
+                    <li>Terceirização de motoristas</li>
+                    <li>Serviços de delivery</li>
+                    <li>Legalização de empresas de transporte e logística</li>
+                    <li>Tramitação de licenças, alvarás e permits</li>
                 </ul>
+                <p class="mt-3 text-gray-400 text-sm">
+                    Através de 
+                    <a href="mailto:moz@motoristas.co.mz" class="text-primary-400 hover:text-primary-300 underline">
+                        moz@motoristas.co.mz
+                    </a>
+                </p>
             </div>
             
             <!-- Contact -->
             <div>
-                <h3 class="font-semibold text-lg mb-4">Contacto</h3>
-                <ul class="space-y-2 text-gray-400">
+                <h3 class="font-semibold text-lg mb-3">Contacto</h3>
+                <ul class="space-y-1.5 text-gray-400 text-sm">
                     <li><i class="fas fa-phone mr-2"></i> +258 84 123 4567</li>
                     <li><i class="fas fa-envelope mr-2"></i> info@motoristas.co.mz</li>
                     <li><i class="fas fa-map-marker-alt mr-2"></i> Maputo, Moçambique</li>
@@ -44,7 +53,7 @@
             </div>
         </div>
         
-        <div class="border-t border-gray-800 mt-8 pt-8 text-center text-gray-400">
+        <div class="border-t border-gray-800 mt-6 pt-4 text-center text-gray-500 text-xs">
             <p>&copy; {{ date('Y') }} Motoristas. Todos os direitos reservados.</p>
         </div>
     </div>
