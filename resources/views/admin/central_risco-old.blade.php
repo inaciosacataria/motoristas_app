@@ -68,7 +68,7 @@ Central de Risco de Motoristas |
                             <div class="row perfil">
                               <div class="col-md-8">
                                 <img src="{{asset('/assets/images/users/user.png')}}" class="rounded-circle"/>
-                                <span class="nome_motoritsa"><a href="{{route('denuncia', $denuncia->id )}}">{{ $denuncia->nome_motorista}}</a></span>
+                                <span class="nome_motoritsa">{{ $denuncia->nome_motorista}}</span>
                               </div>
                               <div class="col-md-4">
                                 @if($denuncia->estado_denuncia == 'Não confirmada')

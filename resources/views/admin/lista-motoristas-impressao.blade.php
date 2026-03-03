@@ -2,7 +2,7 @@
 <html>
 <head>
     <meta charset="utf-8">
-    <title>Lista de Candidatos - {{ $anuncio->titulo ?? 'Vaga' }}</title>
+    <title>Lista de Motoristas - Motoristas.co.mz</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -12,11 +12,11 @@
         .header {
             text-align: center;
             margin-bottom: 30px;
-            border-bottom: 2px solid #04c512;
+            border-bottom: 2px solid #059669;
             padding-bottom: 20px;
         }
         .header h1 {
-            color: #04c512;
+            color: #059669;
             margin: 0;
             font-size: 24px;
         }
@@ -30,7 +30,7 @@
             margin-top: 20px;
         }
         th {
-            background-color: #04c512;
+            background-color: #059669;
             color: white;
             padding: 10px;
             text-align: left;
@@ -58,12 +58,11 @@
 </head>
 <body>
     <div class="header">
-        <h1>Lista de Candidatos</h1>
-        <p><strong>Vaga:</strong> {{ $anuncio->titulo ?? 'N/A' }}</p>
+        <h1>Lista de Motoristas</h1>
         <p><strong>Data de Geração:</strong> {{ date('d/m/Y H:i') }}</p>
-        <p><strong>Total de Candidatos:</strong> {{ count($candidaturas) }}</p>
+        <p><strong>Total de Motoristas:</strong> {{ count($motoristas) }}</p>
         <p class="no-print" style="margin-top: 15px;">
-            <button onclick="window.print(); return false;" style="background:#04c512; color:white; border:none; padding:10px 20px; border-radius:6px; cursor:pointer; font-size:14px;">
+            <button onclick="window.print(); return false;" style="background:#059669; color:white; border:none; padding:10px 20px; border-radius:6px; cursor:pointer; font-size:14px;">
                 🖨️ Imprimir esta lista
             </button>
         </p>
@@ -74,25 +73,23 @@
             <tr>
                 <th>#</th>
                 <th>Nome</th>
-                <th>Contacto</th>
-                <th>Habilitação</th>
-                <th>Idade</th>
+                <th>Categoria / Habilitação</th>
+                <th>Grau Académico</th>
                 <th>Província</th>
-                <th>Grau Acadêmico</th>
-                <th>Data Candidatura</th>
+                <th>Contacto</th>
+                <th>Email</th>
             </tr>
         </thead>
         <tbody>
-            @foreach($candidaturas as $key => $candidato)
+            @foreach($motoristas as $index => $motorista)
             <tr>
-                <td>{{ $key + 1 }}</td>
-                <td>{{ $candidato->name }}</td>
-                <td>{{ $candidato->celular }}</td>
-                <td>{{ $candidato->categoria }}</td>
-                <td>{{ \Carbon\Carbon::parse($candidato->datanascimento)->age }} anos</td>
-                <td>{{ $candidato->provincia }}</td>
-                <td>{{ $candidato->grau_academico ?? 'N/A' }}</td>
-                <td>{{ \Carbon\Carbon::parse($candidato->created_at)->format('d/m/Y') }}</td>
+                <td>{{ $index + 1 }}</td>
+                <td>{{ $motorista->name ?? 'N/A' }}</td>
+                <td>{{ $motorista->categoria ?? 'N/A' }}</td>
+                <td>{{ $motorista->grau_academico ?? 'N/A' }}</td>
+                <td>{{ $motorista->provincia ?? 'N/A' }}</td>
+                <td>{{ $motorista->celular ?? 'N/A' }}</td>
+                <td>{{ $motorista->email ?? 'N/A' }}</td>
             </tr>
             @endforeach
         </tbody>

@@ -109,26 +109,7 @@
                             @endguest
                         </li>
 
-                        <li style="margin-right: 250px"
-                            class="list-inline-item dropdown notification-list nav-user nav-item">
-                            @guest
-                                <a class="nav-link" href="#" data-toggle="modal"
-                                    data-target=".bs-central-risco-modal-center">
-                                    <i class="bi bi-car-front"></i> Central de Risco
-                                </a>
-                            @else
-                                @if (Auth::user()->privilegio == 'admin' || Auth::user()->is_premium == 'yes')
-                                    <a class="nav-link" href="/centralRisco">
-                                        <i class="bi bi-sign-stop-fill"></i> Central de Risco
-                                    </a>
-                                @else
-                                    <a class="nav-link" href="#" data-toggle="modal"
-                                        data-target=".bs-central-risco-modal-center">
-                                        <i class="bi bi-car-front"></i> Central de Risco
-                                    </a>
-                                @endif
-                            @endguest
-                        </li>
+                        <!-- Central de Risco removido -->
 
                         <li class="list-inline-item dropdown notification-list nav-user nav-item">
                             @guest
@@ -143,25 +124,6 @@
                                 @else
                                     <a class="nav-link" href="/cursos">
                                         <i class="bi bi-car-front"></i> Formação de motoristas
-                                    </a>
-                                @endif
-
-                            @endguest
-                        </li>
-
-                        <li class="list-inline-item dropdown notification-list nav-user nav-item">
-                            @guest
-                                <a class="nav-link" href="/seguro">
-                                    <i class="bi bi-car-front"></i> Seguro de motoristas
-                                </a>
-                            @else
-                                @if (Auth::user()->privilegio == 'admin')
-                                    <a class="nav-link" href="/seguro">
-                                        <i class="bi bi-car-front"></i> Seguro de motoristas
-                                    </a>
-                                @else
-                                    <a class="nav-link" href="/seguro">
-                                        <i class="bi bi-car-front"></i> Seguro de motoristas
                                     </a>
                                 @endif
 

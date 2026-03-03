@@ -116,7 +116,7 @@
                       <ul>
                       
                         @foreach ($candidaturas as $candidatura)
-                          <li><a href="/anuncio/{{$candidatura->anuncio_path}}">{{$candidatura->titulo}}</a></li>
+                          <li><a href="{{ route('verAnuncio', $candidatura->anuncio_path) }}">{{$candidatura->titulo}}</a></li>
                         @endforeach
 
                       </ul>

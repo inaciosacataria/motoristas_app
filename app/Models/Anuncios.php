@@ -12,12 +12,23 @@ class Anuncios extends Model
     protected $fillable = [
         'user_id',
         'titulo',
+        'slug',
         'validade',
         'descricao',
         'estado_anuncio',
         'forma_de_candidatura',
         'categoria_id',
     ];
+
+    protected static function boot()
+    {
+        parent::boot();
+        static::creating(function ($model) {
+            if (empty($model->slug)) {
+                $model->slug = \Illuminate\Support\Str::random(16);
+            }
+        });
+    }
 
     protected $casts = [
         'validade' => 'date',

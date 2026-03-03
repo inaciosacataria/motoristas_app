@@ -169,10 +169,9 @@
                                     {{ substr($denuncia->nome_motorista, 0, 1) }}
                                 </div>
                                 <div>
-                                    <a href="{{ route('denuncia', $denuncia->id) }}" 
-                                       class="font-semibold text-gray-900 hover:text-red-600 transition-colors">
+                                    <span class="font-semibold text-gray-900">
                                         {{ $denuncia->nome_motorista }}
-                                    </a>
+                                    </span>
                                     @if($denuncia->celular_motorista)
                                         <p class="text-xs text-gray-500">{{ $denuncia->celular_motorista }}</p>
                                     @endif
@@ -230,12 +229,6 @@
                         </td>
                         <td class="py-4 px-2">
                             <div class="flex items-center justify-center gap-2">
-                                <a href="{{ route('denuncia', $denuncia->id) }}" 
-                                   class="inline-flex items-center px-3 py-1.5 bg-blue-500 hover:bg-blue-600 text-white text-sm rounded-lg transition-colors"
-                                   title="Ver Detalhes">
-                                    <i class="fas fa-eye"></i>
-                                </a>
-                                
                                 <button onclick="verDetalhesRapidos({{ json_encode($denuncia) }})"
                                         class="inline-flex items-center px-3 py-1.5 bg-red-500 hover:bg-red-600 text-white text-sm rounded-lg transition-colors"
                                         title="Informações Rápidas">

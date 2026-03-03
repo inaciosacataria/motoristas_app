@@ -21,13 +21,18 @@
                 <div class="flex-shrink-0 relative group">
                     @php
                         $fotoPerfil = null;
+                        // Usar data_get para evitar erros de propriedade indefinida em stdClass
+                        $logoCompleto = data_get($empregadorCompleto ?? null, 'logotipo');
+                        $logoEmpregador = data_get($empregador ?? null, 'logotipo');
+                        $fotoUser = data_get($empregador ?? null, 'foto');
+
                         // Prioridade: 1) logotipo do empregador completo, 2) logotipo do empregador, 3) foto do usuário
-                        if (isset($empregadorCompleto) && $empregadorCompleto->logotipo && $empregadorCompleto->logotipo != 'none') {
-                            $fotoPerfil = $empregadorCompleto->logotipo;
-                        } elseif (isset($empregador->logotipo) && $empregador->logotipo && $empregador->logotipo != 'none') {
-                            $fotoPerfil = $empregador->logotipo;
-                        } elseif (isset($empregador->foto) && $empregador->foto && $empregador->foto != 'none') {
-                            $fotoPerfil = $empregador->foto;
+                        if ($logoCompleto && $logoCompleto !== 'none') {
+                            $fotoPerfil = $logoCompleto;
+                        } elseif ($logoEmpregador && $logoEmpregador !== 'none') {
+                            $fotoPerfil = $logoEmpregador;
+                        } elseif ($fotoUser && $fotoUser !== 'none') {
+                            $fotoPerfil = $fotoUser;
                         }
                     @endphp
                     
@@ -278,9 +283,10 @@
                                         <div class="flex items-start mb-4">
                                             @php
                                                 $logoVaga = null;
-                                                // Verificar se há logotipo no empregador completo primeiro
-                                                if (isset($empregadorCompleto) && $empregadorCompleto->logotipo && $empregadorCompleto->logotipo != 'none') {
-                                                    $logoVaga = $empregadorCompleto->logotipo;
+                                                // Verificar se há logotipo no empregador completo primeiro (usar data_get para evitar erro de propriedade indefinida)
+                                                $logoCompletoVaga = data_get($empregadorCompleto ?? null, 'logotipo');
+                                                if ($logoCompletoVaga && $logoCompletoVaga !== 'none') {
+                                                    $logoVaga = $logoCompletoVaga;
                                                 } elseif (isset($anuncio->foto) && $anuncio->foto && $anuncio->foto != 'none') {
                                                     $logoVaga = $anuncio->foto;
                                                 }
@@ -298,7 +304,7 @@
                                             @endif
                                             <div class="flex-1">
                                                 <h3 class="text-lg font-bold text-gray-900 mb-2 line-clamp-2">
-                                                    <a href="/anuncio/{{ $anuncio->id }}" class="hover:text-green-600 transition">
+                                                    <a href="{{ route('verAnuncio', $anuncio->slug ?? $anuncio->id) }}" class="hover:text-green-600 transition">
                                                         {{ $anuncio->titulo }}
                                                     </a>
                                                 </h3>
@@ -342,7 +348,7 @@
                                         
                                         <!-- Botão Ver Detalhes -->
                                         <div class="mt-4">
-                                            <a href="/anuncio/{{ $anuncio->id }}" class="block w-full text-center bg-green-600 hover:bg-green-700 text-white font-semibold py-2 px-4 rounded-lg transition duration-200">
+                                            <a href="{{ route('verAnuncio', $anuncio->slug ?? $anuncio->id) }}" class="block w-full text-center bg-green-600 hover:bg-green-700 text-white font-semibold py-2 px-4 rounded-lg transition duration-200">
                                                 <i class="fas fa-eye mr-2"></i> Ver Detalhes
                                             </a>
                                         </div>

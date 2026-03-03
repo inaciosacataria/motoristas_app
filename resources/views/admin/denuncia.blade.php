@@ -39,7 +39,7 @@ Denuncia |
                           <section class="navega">
                           <div class="direita">
                             <span><a href="/admin" >Dashboard</a></span> |
-                            <span><a href="/centralRisco" >Central de Rsico de Motoristas</a></span> |
+                            <span>Central de Risco de Motoristas</span> |
                             <span><a href="#">{{ ucfirst($denuncia->nome_motorista) }}</a><span>
                            </div>
                           </section>

@@ -16,9 +16,6 @@
                 <a href="/formacao" class="nav-link nav-link-inactive">
                     <i class="fas fa-graduation-cap mr-1"></i> Formações
                 </a>
-                <a href="/seguro" class="nav-link nav-link-inactive">
-                    <i class="fas fa-shield-alt mr-1"></i> Seguros
-                </a>
             </div>
             
             <!-- User Menu -->
@@ -95,9 +92,6 @@
             </a>
             <a href="/formacao" class="block px-4 py-2 text-gray-700 hover:bg-gray-100">
                 <i class="fas fa-graduation-cap mr-2"></i> Formações
-            </a>
-            <a href="/seguro" class="block px-4 py-2 text-gray-700 hover:bg-gray-100">
-                <i class="fas fa-shield-alt mr-2"></i> Seguros
             </a>
         </div>
     </div>

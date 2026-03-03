@@ -135,11 +135,12 @@ class AnunciosSeeder extends Seeder
             ],
         ];
 
-        // Inserir os anúncios
+        // Inserir os anúncios (slug único para URL segura)
         foreach ($anuncios as $anuncio) {
             $anuncioId = DB::table('anuncios')->insertGetId([
                 'user_id' => $userId,
                 'titulo' => $anuncio['titulo'],
+                'slug' => \Illuminate\Support\Str::random(16),
                 'descricao' => $anuncio['descricao'],
                 'categoria_id' => $anuncio['categoria_id'],
                 'validade' => $anuncio['validade'],

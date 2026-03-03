@@ -14,6 +14,11 @@ class AnunciosController extends Controller
 {
   public function criarAnuncio(Request $request)
   {
+    $empregador = DB::table('empregadors')->where('user_id', Auth::id())->first();
+    if (!$empregador || $empregador->estado !== 'Aprovado') {
+      return redirect()->back()->with('erro', 'A sua conta de empregador ainda não foi aprovada. Só pode publicar vagas após aprovação pelo administrador.');
+    }
+
     if(empty($request->provincias)) {
       return redirect()->back()->with('erro', 'Ocorreu erro, Preenche todos campos obrigatorios!');
     }else {
@@ -29,6 +34,7 @@ class AnunciosController extends Controller
       $anuncio->estado_anuncio = 'Publicado';
 
        if ($anuncio->save()) {
+        // Slug é gerado no Model::creating
         foreach ($request->provincias as $key => $provincia) {
           $anuncio_provincia = new Anuncios_provincias;
           $anuncio_provincia->anuncio_id = $anuncio->id;
@@ -44,17 +50,30 @@ class AnunciosController extends Controller
 
 }
 
-public function verAnuncio($id){
+public function verAnuncio($slug){
 
   $categorias = DB::table('categorias')->get();
   $provincias = DB::table('provincias')->get();
-  $anuncios_provincias = DB::table('anuncios_provincias')->where('anuncio_id', $id)->get();
+
+  // Buscar anúncio por slug (URL segura). Fallback: se parecer ID numérico, tentar por id (links antigos)
+  $anuncioRecord = DB::table('anuncios')->where('slug', $slug)->first();
+  if (!$anuncioRecord && ctype_digit((string) $slug)) {
+      $anuncioRecord = DB::table('anuncios')->where('id', (int) $slug)->first();
+      if ($anuncioRecord) {
+          return redirect()->route('verAnuncio', $anuncioRecord->slug)->with('info', 'Atualize os seus favoritos para a nova ligação.');
+      }
+  }
+  if (!$anuncioRecord) {
+      return redirect('/')->with('erro', 'Anúncio não encontrado.');
+  }
+
+  $anuncios_provincias = DB::table('anuncios_provincias')->where('anuncio_id', $anuncioRecord->id)->get();
 
     $anuncio = DB::table('anuncios')
               ->leftJoin('empregadors', 'anuncios.user_id', '=', 'empregadors.user_id')
               ->leftJoin('users', 'anuncios.user_id', '=', 'users.id')
               ->leftJoin('categorias','anuncios.categoria_id','categorias.id')
-              ->where('anuncios.id',$id)
+              ->where('anuncios.slug', $slug)
               ->select(
                   'anuncios.*',
                   'categorias.categoria as categoria',
@@ -77,6 +96,10 @@ public function verAnuncio($id){
 }
 
 public function editarAnuncio(Request $request){
+  $empregador = DB::table('empregadors')->where('user_id', Auth::id())->first();
+  if (!$empregador || $empregador->estado !== 'Aprovado') {
+    return redirect()->back()->with('erro', 'A sua conta de empregador ainda não foi aprovada. Só pode editar vagas após aprovação pelo administrador.');
+  }
 
   if(empty($request->provincias)) {
     return redirect()->back()->with('erro', 'Ocorreu erro, Preenche todos campos obrigatorios!');
@@ -201,8 +224,10 @@ public function search(Request $request){
 
   }
 
+  // Total de empresas (empregadores) registadas para mostrar no herói da home
+  $totalEmpresas = \Illuminate\Support\Facades\DB::table('empregadors')->count();
 
-    return view('index-modern', compact('anuncios','provincias' ,'categorias','anuncios_provincias'));
+    return view('index-modern', compact('anuncios','provincias' ,'categorias','anuncios_provincias', 'totalEmpresas'));
   }
 
 }

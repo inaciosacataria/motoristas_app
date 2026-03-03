@@ -133,7 +133,15 @@
                     </h2>
                     <p class="text-sm text-gray-600 mt-1">Visualize e gerencie todos os motoristas cadastrados</p>
                 </div>
-                <div class="flex gap-2">
+                <div class="flex flex-wrap gap-2">
+                    <a href="{{ route('downloadMotoristasCsv') }}" class="inline-flex items-center px-4 py-2 bg-green-600 hover:bg-green-700 text-white rounded-lg transition-colors no-underline">
+                        <i class="fas fa-file-csv mr-2"></i>
+                        Descarregar CSV
+                    </a>
+                    <a href="{{ route('listaMotoristasImpressao') }}" target="_blank" class="inline-flex items-center px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition-colors no-underline">
+                        <i class="fas fa-print mr-2"></i>
+                        Imprimir / PDF
+                    </a>
                     <button onclick="window.location.reload()" class="inline-flex items-center px-4 py-2 bg-gray-100 hover:bg-gray-200 text-gray-700 rounded-lg transition-colors">
                         <i class="fas fa-sync-alt mr-2"></i>
                         Atualizar

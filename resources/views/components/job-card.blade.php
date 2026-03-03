@@ -1,6 +1,6 @@
 @props(['anuncio', 'provincias', 'anunciosProvincias'])
 
-<a href="/anuncio/{{ $anuncio->id }}" {{ $attributes->merge(['class' => 'job-card']) }}>
+<a href="{{ route('verAnuncio', $anuncio->slug ?? $anuncio->id) }}" {{ $attributes->merge(['class' => 'job-card']) }}>
     <div class="p-6">
         <!-- Company Logo -->
         <div class="flex justify-center mb-4">

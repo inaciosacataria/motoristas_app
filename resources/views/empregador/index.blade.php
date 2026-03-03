@@ -72,13 +72,13 @@
 
                                     @foreach ($anuncios as $key => $anuncio)
                                         <tr>
-                                            <td><a href="/anuncio/{{ $anuncio->id }}"
+                                            <td><a href="{{ route('verAnuncio', $anuncio->slug ?? $anuncio->id) }}"
                                                     target="_blank">{{ $anuncio->titulo }}</a></td>
                                             <td>{{ Carbon\Carbon::parse($anuncio->created_at)->format('d-M-Y') }}</td>
                                             <td>{{ Carbon\Carbon::parse($anuncio->validade)->format('d-M-Y') }}</td>
                                             <td>{{ $anuncio->estado_anuncio }}</td>
                                             <td class="text-center">
-                                                <a href="/candidatos-anuncio/{{ $anuncio->id }}"
+                                                <a href="{{ route('verCandidatosDeUmAnuncio', $anuncio->slug ?? $anuncio->id) }}"
                                                     class="btn btn-sm btn-success waves-effect waves-light"><i
                                                         class="fa fa-users"></i> Candidaturas recebidas</a>
 
@@ -352,31 +352,7 @@
                                             {{ $anuncios->count() }}</span></p>
                                 </div>
                                 <hr>
-                                <div class="col-md-12">
-                                    <button class="btn btn-danger btn-sm waves-effect waves-light" data-toggle="modal"
-                                        data-target="#denunciarMotorista">
-                                        <i class="dripicons-car"></i>&nbsp;
-                                        Denunciar Motorista Para Central de Risco
-                                    </button>
-
-                                    @if (Auth::user()->privilegio == 'admin' || Auth::user()->is_premium == 'yes')
-                                        <a href="/centralRisco">
-                                            <button class="btn btn-danger btn-sm waves-effect waves-light"
-                                                data-toggle="modal" data-target=".bs-central-risco-modal-center"
-                                                style="margin-top:8px">
-
-                                                <i class="bi bi-ev-front-fill"></i>&nbsp;
-                                                Ver Central de Risco de Motoristas
-                                            </button>
-                                        </a>
-                                    @else
-                                        <button class="btn btn-danger btn-sm waves-effect waves-light" data-toggle="modal"
-                                            data-target=".bs-central-risco-modal-center" style="margin-top:8px">
-                                            <i class="bi bi-ev-front-fill"></i>&nbsp;
-                                            Ver Central de Risco de Motoristas
-                                        </button>
-                                    @endif
-                                </div>
+                                <!-- Central de Risco removido -->
                             </div>
 
                         </div>
@@ -387,11 +363,11 @@
                 <!-- end col -->
             </div>
 
-            <!-- /inicio modal denunciar motorista -->
+            <!-- Central de Risco removido -->
             <!--  <div id="denunciarMotorista" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
                                                                       <div class="modal-dialog modal-lg">
                                                                           <div class="modal-content">
-                                                                            <form class="form-horizontal m-t-20" action="{{ route('denunciar') }}" method="post" id="denunciar_form">
+                                                                            <form class="form-horizontal m-t-20" action="#" method="post" id="denunciar_form">
                                                                               @csrf
                                                                               <div class="modal-header">
                                                                                   <h5 class="modal-title mt-0" id="myModalLabel">Denunciar Motorista</h5>
@@ -477,7 +453,7 @@
                 aria-labelledby="myModalLabel" aria-hidden="true">
                 <div class="modal-dialog modal-lg">
                     <div class="modal-content">
-                        <form class="form-horizontal m-t-20" action="{{ route('denunciar') }}" method="post"
+                        <form class="form-horizontal m-t-20" action="#" method="post"
                             id="denunciar_form">
                             @csrf
                             <div class="modal-header">
@@ -624,13 +600,6 @@
                             <div class="modal-footer">
                                 <button type="button" class="btn btn-secondary waves-effect"
                                     data-dismiss="modal">Cancelar</button>
-                                @if (Auth::user()->privilegio == 'admin' || Auth::user()->is_premium == 'yes')
-                                    <button type="submit" class="btn btn-primary waves-effect waves-light">Enviar para
-                                        Central de Risco</button>
-                                @else
-                                    <button class="btn btn-primary waves-effect waves-light" data-toggle="modal"
-                                        data-target=".bs-central-risco-modal-center">Enviar para Central de Risco</button>
-                                @endif
                             </div>
                         </form>
                     </div><!-- /.modal-content -->

@@ -96,20 +96,6 @@
         <div class="bg-white shadow-md rounded-lg p-6 hover:shadow-lg transition-shadow">
             <div class="flex items-center justify-between">
                 <div>
-                    <p class="text-gray-600 text-sm">Contas Premium</p>
-                    <p class="text-2xl font-bold text-gray-900">
-                        {{ $empregadores->where('accounttype', 'yes')->count() }}
-                    </p>
-                </div>
-                <div class="bg-yellow-100 rounded-full p-3">
-                    <i class="fas fa-crown text-2xl text-yellow-600"></i>
-                </div>
-            </div>
-        </div>
-        
-        <div class="bg-white shadow-md rounded-lg p-6 hover:shadow-lg transition-shadow">
-            <div class="flex items-center justify-between">
-                <div>
                     <p class="text-gray-600 text-sm">Total Geral</p>
                     <p class="text-2xl font-bold text-gray-900">
                         {{ $empregadores->total() }}
@@ -150,7 +136,6 @@
                         <th class="text-left">Email</th>
                         <th class="text-left">Contacto</th>
                         <th class="text-left">Website</th>
-                        <th class="text-center">Tipo de Conta</th>
                         <th class="text-center">Status</th>
                         <th class="text-center">Ações</th>
                     </tr>
@@ -198,19 +183,6 @@
                                 </a>
                             @else
                                 <span class="text-gray-400 text-sm">N/A</span>
-                            @endif
-                        </td>
-                        <td class="py-4 px-2 text-center">
-                            @if($empregador->accounttype == 'yes')
-                                <span class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-medium bg-yellow-100 text-yellow-800">
-                                    <i class="fas fa-crown mr-1"></i>
-                                    Premium
-                                </span>
-                            @else
-                                <span class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-medium bg-gray-100 text-gray-800">
-                                    <i class="fas fa-user mr-1"></i>
-                                    Básico
-                                </span>
                             @endif
                         </td>
                         <td class="py-4 px-2 text-center">
@@ -318,7 +290,6 @@ function verDetalhes(empregador) {
         <div class="text-center mb-6">
             ${logoHtml}
             <h4 class="text-2xl font-bold text-gray-900">${empregador.name || empregador.empresa}</h4>
-            ${empregador.accounttype === 'yes' ? '<span class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-yellow-100 text-yellow-800 mt-2"><i class="fas fa-crown mr-1"></i> Premium</span>' : ''}
         </div>
         
         <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -346,12 +317,6 @@ function verDetalhes(empregador) {
                 </p>
             </div>
             
-            ${empregador.accounttype === 'yes' && empregador.premium_count ? `
-            <div class="bg-gray-50 rounded-lg p-4">
-                <p class="text-sm text-gray-600 mb-1">Créditos Premium</p>
-                <p class="font-semibold text-gray-900">${empregador.premium_count}</p>
-            </div>
-            ` : ''}
         </div>
         
         ${empregador.sobre ? `

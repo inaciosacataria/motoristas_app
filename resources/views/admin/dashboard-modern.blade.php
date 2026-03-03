@@ -50,21 +50,11 @@
             </div>
         </div>
         
-        <div class="bg-white shadow-md rounded-lg p-6">
-            <div class="flex items-center justify-between">
-                <div>
-                    <p class="text-gray-600 text-sm">Central de Risco</p>
-                    <p class="text-3xl font-bold text-gray-900">{{ $countCentralRisco }}</p>
-                </div>
-                <div class="bg-red-100 rounded-full p-3">
-                    <i class="fas fa-exclamation-triangle text-2xl text-red-600"></i>
-                </div>
-            </div>
-        </div>
+        <!-- Central de Risco removido -->
     </div>
 
     <!-- Quick Actions -->
-    <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+    <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
         <a href="/bd-motoristas" class="bg-white shadow-md rounded-lg p-6 hover:shadow-lg transition-all hover:-translate-y-1">
             <div class="text-center">
                 <div class="inline-flex items-center justify-center w-16 h-16 bg-blue-100 rounded-full mb-4">
@@ -95,23 +85,13 @@
             </div>
         </a>
 
-        <a href="/premium" class="bg-white shadow-md rounded-lg p-6 hover:shadow-lg transition-all hover:-translate-y-1">
+        <a href="/smart-ads" class="bg-white shadow-md rounded-lg p-6 hover:shadow-lg transition-all hover:-translate-y-1">
             <div class="text-center">
                 <div class="inline-flex items-center justify-center w-16 h-16 bg-yellow-100 rounded-full mb-4">
-                    <i class="fas fa-crown text-2xl text-yellow-600"></i>
+                    <i class="fas fa-bullhorn text-2xl text-yellow-600"></i>
                 </div>
-                <h3 class="font-bold text-gray-900 mb-2">Contas Premium</h3>
-                <p class="text-gray-600 text-sm">Gerenciar assinaturas premium</p>
-            </div>
-        </a>
-
-        <a href="/centralRisco" class="bg-white shadow-md rounded-lg p-6 hover:shadow-lg transition-all hover:-translate-y-1">
-            <div class="text-center">
-                <div class="inline-flex items-center justify-center w-16 h-16 bg-red-100 rounded-full mb-4">
-                    <i class="fas fa-exclamation-triangle text-2xl text-red-600"></i>
-                </div>
-                <h3 class="font-bold text-gray-900 mb-2">Central de Risco</h3>
-                <p class="text-gray-600 text-sm">Ver denúncias e ocorrências</p>
+                <h3 class="font-bold text-gray-900 mb-2">Gestão de Publicidade</h3>
+                <p class="text-gray-600 text-sm">Gerenciar banners exibidos no portal</p>
             </div>
         </a>
 
@@ -208,7 +188,7 @@
         <h2 class="text-xl font-bold text-gray-900 mb-4">
             <i class="fas fa-chart-bar text-green-600 mr-2"></i> Estatísticas dos Últimos 30 Dias
         </h2>
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div class="text-center">
                 <div class="text-2xl font-bold text-blue-600">{{ $last30motoristas }}</div>
                 <div class="text-sm text-gray-600">Novos Motoristas</div>
@@ -216,10 +196,6 @@
             <div class="text-center">
                 <div class="text-2xl font-bold text-green-600">{{ $last30empregador }}</div>
                 <div class="text-sm text-gray-600">Novas Empresas</div>
-            </div>
-            <div class="text-center">
-                <div class="text-2xl font-bold text-red-600">{{ $last30denuncias }}</div>
-                <div class="text-sm text-gray-600">Denúncias</div>
             </div>
         </div>
     </div>

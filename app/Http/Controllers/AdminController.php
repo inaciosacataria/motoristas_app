@@ -36,11 +36,6 @@ class AdminController extends Controller
 
 
 
-    $denuncias = DB::table('central_de_riscos')
-                ->orderBy('id', 'DESC')
-                ->paginate(5);
-
-
     $last30motoristas = DB::table("users")
                 ->select('id')
                 ->where('privilegio', 'candidato')
@@ -52,25 +47,19 @@ class AdminController extends Controller
                       ->where('created_at', '>', now()->subDays(30)->endOfDay())
                       ->count();
 
-    $last30denuncias = DB::table("central_de_riscos")
-                      ->select('id')
-                      ->where('created_at', '>', now()->subDays(30)->endOfDay())
-                      ->count();
-
     $anunciosDentroDoPrazo = DB::table("anuncios")
                       ->select('id')
                       ->where('validade', '>', now())
                       ->count();
 
     $countMotoritas = DB::table('users')->where('privilegio', 'candidato')->count();
-    $countCentralRisco = DB::table('central_de_riscos')->count();
     $countEmpregador = DB::table('empregadors')->count();
     $countAnuncios = DB::table('anuncios')->count();
 
 
-   return view('admin.dashboard-modern',compact('motoristas','empregadores','denuncias',
-   'last30motoristas','last30empregador','last30denuncias','anunciosDentroDoPrazo',
-   'countMotoritas', 'countAnuncios', 'countEmpregador' , 'countCentralRisco'));
+   return view('admin.dashboard-modern',compact('motoristas','empregadores',
+   'last30motoristas','last30empregador','anunciosDentroDoPrazo',
+   'countMotoritas', 'countAnuncios', 'countEmpregador'));
 
   }
 
@@ -85,8 +74,67 @@ class AdminController extends Controller
                  ->get();
 
 
-   return view('admin.bd_motoristas',compact('motoristas'));
+   return view('admin.bd_motoristas', compact('motoristas'));
  }
+
+  /**
+   * Descarregar lista de motoristas em CSV
+   */
+  public function downloadMotoristasCsv()
+  {
+    $motoristas = DB::table('candidatos')
+                 ->join('users', 'candidatos.user_id', '=', 'users.id')
+                 ->join('categorias', 'candidatos.categoria_id', '=', 'categorias.id')
+                 ->join('provincias', 'candidatos.provincia_id', '=', 'provincias.id')
+                 ->select('candidatos.*', 'users.name as name', 'users.email as email', 'users.celular as celular',
+                 'categorias.categoria as categoria', 'provincias.name as provincia')
+                 ->orderBy('users.name', 'ASC')
+                 ->get();
+
+    $filename = 'lista-motoristas-' . date('Y-m-d-His') . '.csv';
+    $headers = [
+      'Content-Type' => 'text/csv; charset=UTF-8',
+      'Content-Disposition' => 'attachment; filename="' . $filename . '"',
+    ];
+
+    $callback = function () use ($motoristas) {
+      $file = fopen('php://output', 'w');
+      fprintf($file, chr(0xEF).chr(0xBB).chr(0xBF)); // UTF-8 BOM
+      fputcsv($file, ['Nome', 'Email', 'Contacto', 'Categoria / Habilitação', 'Grau Académico', 'Província', 'Nacionalidade', 'Data Nascimento'], ';');
+      foreach ($motoristas as $m) {
+        fputcsv($file, [
+          $m->name ?? '',
+          $m->email ?? '',
+          $m->celular ?? '',
+          $m->categoria ?? '',
+          $m->grau_academico ?? 'N/A',
+          $m->provincia ?? '',
+          $m->nacionalidade ?? 'N/A',
+          isset($m->datanascimento) ? \Carbon\Carbon::parse($m->datanascimento)->format('d/m/Y') : 'N/A',
+        ], ';');
+      }
+      fclose($file);
+    };
+
+    return response()->stream($callback, 200, $headers);
+  }
+
+  /**
+   * Página só com a lista de motoristas para imprimir ou guardar como PDF
+   */
+  public function listaMotoristasImpressao()
+  {
+    $motoristas = DB::table('candidatos')
+                 ->join('users', 'candidatos.user_id', '=', 'users.id')
+                 ->join('categorias', 'candidatos.categoria_id', '=', 'categorias.id')
+                 ->join('provincias', 'candidatos.provincia_id', '=', 'provincias.id')
+                 ->select('candidatos.*', 'users.name as name', 'users.email as email', 'users.celular as celular',
+                 'categorias.categoria as categoria', 'provincias.name as provincia')
+                 ->orderBy('users.name', 'ASC')
+                 ->get();
+
+    return view('admin.lista-motoristas-impressao', compact('motoristas'));
+  }
 
  public function anuncios(){
      $anuncios = DB::table('anuncios')
@@ -111,7 +159,7 @@ class AdminController extends Controller
                ->paginate(25);
 
 
-  return view('admin.bd_empregadores',compact('empregadores'));
+  return view('admin.bd_empregadores-modern', compact('empregadores'));
  }
 
 

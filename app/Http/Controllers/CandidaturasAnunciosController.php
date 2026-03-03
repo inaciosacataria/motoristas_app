@@ -28,11 +28,20 @@ class CandidaturasAnunciosController extends Controller
   }
 
 
-  public function verCandidatosDeUmAnuncio($anuncioId)
+  public function verCandidatosDeUmAnuncio($slug)
   {
     $anuncio = DB::table('anuncios')
-                  ->where('anuncios.id', $anuncioId)
+                  ->where(function ($q) use ($slug) {
+                      $q->where('anuncios.slug', $slug);
+                      if (is_numeric($slug)) {
+                          $q->orWhere('anuncios.id', (int) $slug);
+                      }
+                  })
                   ->first();
+    if (!$anuncio) {
+      abort(404);
+    }
+    $anuncioId = $anuncio->id;
 
     $candidaturas = DB::table('candidaturas_anuncios')
                   ->where('candidaturas_anuncios.anuncio_id',$anuncioId)
@@ -72,11 +81,20 @@ public function candidaturaExpontanea($id){
      
 }
 
-public function gerarPdfCandidatos($anuncioId)
+public function gerarPdfCandidatos($slug)
 {
     $anuncio = DB::table('anuncios')
-                  ->where('anuncios.id', $anuncioId)
+                  ->where(function ($q) use ($slug) {
+                      $q->where('anuncios.slug', $slug);
+                      if (is_numeric($slug)) {
+                          $q->orWhere('anuncios.id', (int) $slug);
+                      }
+                  })
                   ->first();
+    if (!$anuncio) {
+      abort(404);
+    }
+    $anuncioId = $anuncio->id;
 
     $candidaturas = DB::table('candidaturas_anuncios')
                   ->where('candidaturas_anuncios.anuncio_id',$anuncioId)

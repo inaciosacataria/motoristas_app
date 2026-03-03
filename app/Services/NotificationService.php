@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\Models\Anuncios;
 use App\Models\Notification;
 use App\Models\User;
 
@@ -25,12 +26,14 @@ class NotificationService
      */
     public function notifyNewCandidatura($empregadorId, $anuncioId, $candidatoNome)
     {
+        $anuncio = Anuncios::find($anuncioId);
+        $path = $anuncio && $anuncio->slug ? $anuncio->slug : (string) $anuncioId;
         return $this->create($empregadorId, 'nova_candidatura', [
             'title' => 'Nova Candidatura',
             'message' => "$candidatoNome candidatou-se a uma de suas vagas.",
             'anuncio_id' => $anuncioId,
             'icon' => 'fa-user-plus',
-            'url' => "/candidatos-anuncio/$anuncioId",
+            'url' => "/candidatos-anuncio/$path",
         ]);
     }
 
@@ -63,13 +66,16 @@ class NotificationService
         
         $candidatos = $query->get();
         
+        $slug = Anuncios::where('id', $anuncioId)->value('slug');
+        $url = $slug ? "/anuncio/$slug" : "/anuncio/$anuncioId";
+
         foreach ($candidatos as $candidato) {
             $this->create($candidato->id, 'novo_anuncio', [
                 'title' => 'Nova Vaga Disponível',
                 'message' => "Nova vaga disponível: $anuncioTitulo",
                 'anuncio_id' => $anuncioId,
                 'icon' => 'fa-briefcase',
-                'url' => "/anuncio/$anuncioId",
+                'url' => $url,
             ]);
         }
     }

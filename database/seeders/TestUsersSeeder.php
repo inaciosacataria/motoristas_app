@@ -72,11 +72,12 @@ class TestUsersSeeder extends Seeder
             $this->command->info('ℹ️  Usuário EMPREGADOR já existe.');
         }
 
-        // Criar usuário CANDIDATO
+        // Criar usuário CANDIDATO e perfil em candidatos (necessário para /meu-cv)
         $candidatoUser = DB::table('users')->where('email', '840000002@motoristas.co.mz')->first();
-        
+        $candidatoUserId = null;
+
         if (!$candidatoUser) {
-            DB::table('users')->insert([
+            $candidatoUserId = DB::table('users')->insertGetId([
                 'name' => 'João Motorista Teste',
                 'email' => '840000002@motoristas.co.mz',
                 'celular' => '840000002',
@@ -89,7 +90,36 @@ class TestUsersSeeder extends Seeder
             ]);
             $this->command->info('✅ Usuário CANDIDATO criado!');
         } else {
+            $candidatoUserId = $candidatoUser->id;
             $this->command->info('ℹ️  Usuário CANDIDATO já existe.');
+        }
+
+        // Garantir que existe registo em candidatos para este user (evita erro "id on null" em /meu-cv)
+        $perfilCandidato = DB::table('candidatos')->where('user_id', $candidatoUserId)->first();
+        if (!$perfilCandidato) {
+            $categoria = DB::table('categorias')->first();
+            $provincia = DB::table('provincias')->first();
+            DB::table('candidatos')->insert([
+                'user_id' => $candidatoUserId,
+                'datanascimento' => now()->subYears(30),
+                'telefone_alt' => null,
+                'endereco' => 'A preencher',
+                'provincia_id' => $provincia ? $provincia->id : 1,
+                'sexo' => 'Masculino',
+                'categoria_id' => $categoria ? $categoria->id : 1,
+                'numero_carta_conducao' => null,
+                'validade_conducao' => null,
+                'inibicao_anterior' => null,
+                'inibicao_motivo' => null,
+                'envolvimento_acidente' => null,
+                'acidente_descricao' => null,
+                'grau_academico' => null,
+                'nacionalidade' => 'Moçambicana',
+                'cv' => null,
+                'created_at' => now(),
+                'updated_at' => now(),
+            ]);
+            $this->command->info('✅ Perfil CANDIDATO (tabela candidatos) criado para 840000002!');
         }
 
         $this->command->info('');

@@ -138,13 +138,9 @@
                     <p class="text-sm text-gray-600 mt-1">Visualize todos os candidatos interessados nesta vaga</p>
                 </div>
                 <div class="flex gap-2">
-                    <button onclick="window.print()" class="inline-flex items-center px-4 py-2 bg-blue-500 hover:bg-blue-600 text-white rounded-lg transition-colors">
+                    <a href="{{ route('gerarPdfCandidatos', $anuncio->slug ?? $anuncio->id) }}" target="_blank" class="inline-flex items-center px-4 py-2 bg-blue-500 hover:bg-blue-600 text-white rounded-lg transition-colors no-underline">
                         <i class="fas fa-print mr-2"></i>
-                        Imprimir
-                    </button>
-                    <a href="{{ route('gerarPdfCandidatos', $anuncio->id) }}" class="inline-flex items-center px-4 py-2 bg-red-500 hover:bg-red-600 text-white rounded-lg transition-colors">
-                        <i class="fas fa-file-pdf mr-2"></i>
-                        Gerar PDF
+                        Imprimir / PDF
                     </a>
                     <button onclick="window.location.reload()" class="inline-flex items-center px-4 py-2 bg-gray-100 hover:bg-gray-200 text-gray-700 rounded-lg transition-colors">
                         <i class="fas fa-sync-alt mr-2"></i>

@@ -29,7 +29,6 @@
                 <ul class="space-y-2">
                     <li><a href="/" class="text-gray-400 hover:text-primary-500 transition-colors">Início</a></li>
                     <li><a href="/formacao" class="text-gray-400 hover:text-primary-500 transition-colors">Formações</a></li>
-                    <li><a href="/seguro" class="text-gray-400 hover:text-primary-500 transition-colors">Seguros</a></li>
                     <li><a href="/sobre-nos" class="text-gray-400 hover:text-primary-500 transition-colors">Sobre Nós</a></li>
                 </ul>
             </div>

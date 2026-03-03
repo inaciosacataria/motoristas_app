@@ -183,18 +183,22 @@
                         @if($anuncio->email)
                         <div>
                             <p class="text-sm text-gray-600">Email</p>
-                            <a href="mailto:{{ $anuncio->email }}" class="font-semibold text-primary-600 hover:text-primary-700">
-                                <i class="fas fa-envelope mr-1"></i> {{ $anuncio->email }}
-                            </a>
+                            <span class="inline-flex items-center font-semibold text-primary-600 select-none" style="filter: blur(5px); user-select: none; pointer-events: none;">
+                                <i class="fas fa-envelope mr-1" style="filter: blur(5px);"></i>
+                                <span style="filter: blur(5px);">{{ $anuncio->email }}</span>
+                            </span>
+                            <p class="text-xs text-gray-500 mt-1">Candidatando-se à vaga poderá aceder aos contactos.</p>
                         </div>
                         @endif
                         
                         @if($anuncio->celular && $anuncio->celular != 'N/A')
                         <div>
                             <p class="text-sm text-gray-600">Telefone</p>
-                            <a href="tel:{{ $anuncio->celular }}" class="font-semibold text-primary-600 hover:text-primary-700">
-                                <i class="fas fa-phone mr-1"></i> {{ $anuncio->celular }}
-                            </a>
+                            <span class="inline-flex items-center font-semibold text-primary-600 select-none" style="filter: blur(5px); user-select: none; pointer-events: none;">
+                                <i class="fas fa-phone mr-1" style="filter: blur(5px);"></i>
+                                <span style="filter: blur(5px);">{{ $anuncio->celular }}</span>
+                            </span>
+                            <p class="text-xs text-gray-500 mt-1">Candidatando-se à vaga poderá aceder aos contactos.</p>
                         </div>
                         @endif
                     </div>

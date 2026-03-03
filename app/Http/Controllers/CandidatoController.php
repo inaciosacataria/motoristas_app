@@ -73,7 +73,7 @@ class CandidatoController extends Controller
                               ->where('users.id',Auth::user()->id)
                               ->join('candidaturas_anuncios','candidaturas_anuncios.user_id','=','users.id')
                               ->join('anuncios','anuncios.id','=','candidaturas_anuncios.anuncio_id')
-                              ->select('users.*','anuncios.titulo as titulo', 'anuncios.id as anuncio_path')
+                              ->select('users.*','anuncios.titulo as titulo', 'anuncios.slug as anuncio_path')
                               ->orderBy('id', 'DESC')
                               ->get();
 
@@ -136,7 +136,6 @@ class CandidatoController extends Controller
 
       public function cv()
       {
-
         $candidato = DB::table('candidatos')
                 ->join('provincias', 'candidatos.provincia_id', '=', 'provincias.id')
                 ->join('categorias', 'candidatos.categoria_id', '=', 'categorias.id')
@@ -145,6 +144,30 @@ class CandidatoController extends Controller
                 ->select('candidatos.*', 'users.name as nome', 'users.foto_url as foto_url','users.email as email', 'users.privilegio as privilegio', 'provincias.name as provincia',
                 'categorias.categoria as categoria')
                 ->first();
+
+        if (!$candidato) {
+            $provinciaId = DB::table('provincias')->value('id') ?? 1;
+            $categoriaId = DB::table('categorias')->value('id') ?? 1;
+            $candidatoId = DB::table('candidatos')->insertGetId([
+                'user_id' => Auth::id(),
+                'datanascimento' => now()->subYears(30),
+                'endereco' => 'A preencher',
+                'provincia_id' => $provinciaId,
+                'categoria_id' => $categoriaId,
+                'sexo' => 'Não especificado',
+                'nacionalidade' => 'Moçambicana',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ]);
+            $candidato = DB::table('candidatos')
+                ->join('provincias', 'candidatos.provincia_id', '=', 'provincias.id')
+                ->join('categorias', 'candidatos.categoria_id', '=', 'categorias.id')
+                ->join('users', 'candidatos.user_id', '=', 'users.id')
+                ->where('candidatos.id', $candidatoId)
+                ->select('candidatos.*', 'users.name as nome', 'users.foto_url as foto_url','users.email as email', 'users.privilegio as privilegio', 'provincias.name as provincia',
+                'categorias.categoria as categoria')
+                ->first();
+        }
 
         $idiomas = DB::table('idiomas')
                 ->where('candidato_id', $candidato->id)

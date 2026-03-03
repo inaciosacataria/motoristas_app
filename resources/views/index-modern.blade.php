@@ -25,7 +25,7 @@
                     <i class="fas fa-building text-2xl"></i>
                     <div class="text-left">
                         <p class="text-sm text-primary-100">Empresas</p>
-                        <p class="text-2xl font-bold">150+</p>
+                        <p class="text-2xl font-bold">{{ $totalEmpresas ?? 0 }}</p>
                     </div>
                 </div>
             </div>
@@ -112,7 +112,7 @@
     @if($anuncios->count() > 0)
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
             @foreach ($anuncios as $anuncio)
-                <a href="/anuncio/{{ $anuncio->id }}" class="job-card">
+                <a href="{{ route('verAnuncio', $anuncio->slug ?? $anuncio->id) }}" class="job-card">
                     <div class="p-6">
                         <!-- Company Logo -->
                         <div class="flex justify-center mb-4">

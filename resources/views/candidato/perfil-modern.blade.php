@@ -213,7 +213,7 @@
 @auth
     @if(Auth::user()->privilegio === 'empregador')
         <x-modal id="denunciar-modal-{{ $candidato->candidato_id }}" title="Reportar Motorista" size="md">
-            <form action="{{ route('denunciar') }}" method="POST">
+            <form action="#" method="POST">
                 @csrf
                 <input type="hidden" name="candidato_id" value="{{ $candidato->candidato_id }}">
                 <input type="hidden" name="empregador_id" value="{{ Auth::user()->id }}">

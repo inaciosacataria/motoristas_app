@@ -120,7 +120,7 @@ Perfil |
                     <img src="{{asset('assets/images/2.png')}}" class="img-fluid" style="margin-top: 35px;" />
                     @endif
                   </div>
-                  <h4 class="mt-4"><a href="/anuncio/{{$anuncio->id}}">{{ $anuncio->titulo }}</a></h4>
+                  <h4 class="mt-4"><a href="{{ route('verAnuncio', $anuncio->slug ?? $anuncio->id) }}">{{ $anuncio->titulo }}</a></h4>
                     <p>{{$anuncio->empresa}}</>
                     <p>
 

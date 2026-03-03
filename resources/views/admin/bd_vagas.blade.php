@@ -171,7 +171,7 @@
                     <tr class="border-b border-gray-200 hover:bg-gray-50 transition-colors">
                         <td class="py-4 px-2">
                             <div>
-                                <a href="/anuncio/{{ $anuncio->id }}" 
+                                <a href="{{ route('verAnuncio', $anuncio->slug ?? $anuncio->id) }}" 
                                    class="font-semibold text-gray-900 hover:text-green-600 transition-colors">
                                     {{ $anuncio->titulo }}
                                 </a>
@@ -194,7 +194,7 @@
                             </a>
                         </td>
                         <td class="py-4 px-2 text-center">
-                            <a href="/candidatos-anuncio/{{ $anuncio->id }}" 
+                            <a href="{{ route('verCandidatosDeUmAnuncio', $anuncio->slug ?? $anuncio->id) }}" 
                                class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium
                                @if($count == 0) bg-gray-100 text-gray-800
                                @elseif($count < 5) bg-blue-100 text-blue-800
@@ -241,13 +241,13 @@
                         </td>
                         <td class="py-4 px-2">
                             <div class="flex items-center justify-center gap-2">
-                                <a href="/anuncio/{{ $anuncio->id }}" 
+                                <a href="{{ route('verAnuncio', $anuncio->slug ?? $anuncio->id) }}" 
                                    class="inline-flex items-center px-3 py-1.5 bg-blue-500 hover:bg-blue-600 text-white text-sm rounded-lg transition-colors"
                                    title="Ver Detalhes">
                                     <i class="fas fa-eye"></i>
                                 </a>
                                 
-                                <a href="/candidatos-anuncio/{{ $anuncio->id }}" 
+                                <a href="{{ route('verCandidatosDeUmAnuncio', $anuncio->slug ?? $anuncio->id) }}" 
                                    class="inline-flex items-center px-3 py-1.5 bg-green-500 hover:bg-green-600 text-white text-sm rounded-lg transition-colors"
                                    title="Ver Candidatos">
                                     <i class="fas fa-users"></i>

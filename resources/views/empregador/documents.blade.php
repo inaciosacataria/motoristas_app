@@ -1,197 +1,86 @@
-<!DOCTYPE html>
-<html style="font-size: 16px;" lang="en"><head>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta charset="utf-8">
-    <meta name="keywords" content="">
-    <meta name="description" content="">
-    <title>Home</title>
+@extends('layouts.modern')
 
-    <link href="{{asset('css/companydocuments2.css')}}" rel="stylesheet">
-    <link href="{{asset('css/companydocuments.css')}}" rel="stylesheet">
-    <link href="{{asset('assets/css/bootstrap.min.css')}}" rel="stylesheet" type="text/css" />
-    <link href="{{asset('assets/css/icons.css')}}" rel="stylesheet" type="text/css" />
-    <link href="{{asset('assets/css/style.css')}}" rel="stylesheet" type="text/css" />
-    <link href="{{asset('assets/css/searchbar.css')}}" rel="stylesheet" type="text/css" />
+@section('title', 'Envio de Documentos da Empresa')
 
-    <!-- DataTables -->
-    <link href="{{asset('plugins/datatables/dataTables.bootstrap4.min.css')}}" rel="stylesheet" type="text/css" />
-    <link href="{{asset('plugins/datatables/buttons.bootstrap4.min.css')}}" rel="stylesheet" type="text/css" />
-
-    <!-- Responsive datatable examples -->
-    <link href="{{asset('plugins/datatables/responsive.bootstrap4.min.css')}}" rel="stylesheet" type="text/css" />
-
-    <script class="u-script" type="text/javascript" src="jquery.js" defer=""></script>
-    <script class="u-script" type="text/javascript" src="nicepage.js" defer=""></script>
-    <meta name="generator" content="Nicepage 4.21.5, nicepage.com">
-    <link id="u-theme-google-font" rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:100,100i,300,300i,400,400i,500,500i,700,700i,900,900i|Open+Sans:300,300i,400,400i,500,500i,600,600i,700,700i,800,800i">
-
-
-    <script type="application/ld+json">{
-		"@context": "http://schema.org",
-		"@type": "Organization",
-		"name": ""
-}</script>
-    <meta name="theme-color" content="#478ac9">
-    <meta property="og:title" content="Home">
-    <meta property="og:type" content="website">
-  </head>
-  <body data-home-page="Home.html" data-home-page-title="Home" class="u-body u-xl-mode" data-lang="en"><header class="u-clearfix u-header u-header" id="sec-3ee6"><div class="u-clearfix u-sheet u-sheet-1"></div></header>
-    <section class="u-clearfix u-section-1" id="sec-6467">
-      <div class="u-clearfix u-sheet u-sheet-1">
-        <div class="u-border-2 u-border-custom-color-1 u-container-style u-expanded-width-xs u-group u-shape-rectangle u-group-1">
-          <div class="u-container-layout u-container-layout-1">
-            <img class="u-image u-image-default u-image-1" src="{{asset('assets/images/2.png')}}" alt="" data-image-width="6071" data-image-height="702">
-            <p class="u-align-center u-text u-text-1">Faça upload de documentos tais como nuit, certidão de empresa&nbsp;<br>e inicio de atividades para validar a sua conta
+@section('content')
+<div class="bg-gradient-to-r from-green-600 to-green-700 text-white py-10">
+    <div class="container mx-auto px-4">
+        <div class="max-w-3xl mx-auto text-center">
+            <h1 class="text-3xl md:text-4xl font-bold mb-2">Validação de Conta de Empregador</h1>
+            <p class="text-green-100 text-sm md:text-base">
+                Para ativar a sua conta, precisamos validar os documentos da sua empresa.
             </p>
-            <div class="u-form u-form-1">
-              <form  action="/upload-documents" method="post" enctype="multipart/form-data" class="u-clearfix u-form-spacing-15 u-form-vertical u-inner-form" style="padding: 15px;" source="email" name="form">
-                    @csrf
-                <div class="u-form-group u-form-name u-label-none u-form-group-1">
-
-                  <!--Modal-->
-                  <div class="modal-content">
-                      <input name="user_id" type="hidden" value="{{ $id }}">
-                      <div class="modal-body">
-                        <div class="form-group row">
-                            <label for="example-text-input" class="col-sm-3 col-form-label">Nuit</label>
-                            <div class="col-sm-9">
-                              <input class="form-control" name="documento_nuit" type="file" onchange="readURL(this);" accept="application/pdf" required>
-                            </div>
-                        </div>
-                      </div>
-                  </div><!-- /.modal-content -->
-                  <!--Modal-->
-
-                  <!--Modal-->
-                  <div class="modal-content">
-
-                      <div class="modal-body">
-                        <div class="form-group row">
-                            <label for="example-text-input" class="col-sm-3 col-form-label">Certidão de Empresa</label>
-                            <div class="col-sm-9">
-                              <input class="form-control" name="documento_certidao_empresa" type="file" onchange="readURL(this);" accept="application/pdf" required>
-                            </div>
-                        </div>
-
-                      </div>
-                  </div><!-- /.modal-content -->
-                  <!--Modal-->
-
-                  <!--Modal-->
-                  <div class="modal-content">
-
-                      <div class="modal-body">
-                        <div class="form-group row">
-                            <label for="example-text-input" class="col-sm-3 col-form-label">Inicio de Actividades</label>
-                            <div class="col-sm-9">
-                              <input class="form-control" name="documento_inicio_actividade" type="file" onchange="readURL(this);" accept="application/pdf" required>
-                            </div>
-                        </div>
-                      </div>
-                  </div><!-- /.modal-content -->
-                  <!--Modal-->
-                </div>
-
-
-                <div class="u-align-left u-form-group u-form-submit u-form-group-4">
-                  <button type="submit" >Concluir</button>
-                </div>
-              </form>
-            </div>
-          </div>
         </div>
-      </div>
-    </section>
+    </div>
+</div>
 
+<div class="container mx-auto px-4 py-8">
+    <div class="max-w-3xl mx-auto">
+        <div class="bg-white shadow-md rounded-lg p-6 md:p-8">
+            <div class="flex items-center gap-4 mb-6">
+                <div class="hidden md:flex items-center justify-center w-14 h-14 rounded-full bg-green-100">
+                    <i class="fas fa-file-upload text-green-600 text-2xl"></i>
+                </div>
+                <div>
+                    <h2 class="text-xl font-bold text-gray-900">Envie os documentos obrigatórios</h2>
+                    <p class="text-sm text-gray-600 mt-1">
+                        Envie os seguintes documentos em formato PDF. A equipa do portal irá validar os dados antes de ativar a sua conta.
+                    </p>
+                </div>
+            </div>
 
-         <div id="nuit" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-                <div class="modal-dialog">
-                    <div class="modal-content">
-                      <form class="form-horizontal m-t-20" action="/upload-documents" method="post" enctype="multipart/form-data">
-                        @csrf
-                        <input name="user_id" type="hidden" value="{{ $id }}">
-                        <div class="modal-header">
-                            <h5 class="modal-title mt-0" id="myModalLabel">Nuit</h5>
-                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                <span aria-hidden="true">&times;</span>
-                            </button>
-                        </div>
-                        <div class="modal-body">
-                          <div class="form-group row">
-                              <label for="example-text-input" class="col-sm-3 col-form-label">Nuit</label>
-                              <div class="col-sm-9">
-                                <input class="form-control" name="documento" type="file" onchange="readURL(this);" accept="application/pdf" required>
-                              </div>
-                          </div>
+            <form action="{{ route('uploadAlldocuments') }}" method="POST" enctype="multipart/form-data" class="space-y-5">
+                @csrf
+                <input type="hidden" name="user_id" value="{{ $userId }}">
 
-                        </div>
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-secondary waves-effect" data-dismiss="modal">Cancelar</button>
-                            <button type="submit" class="btn btn-primary waves-effect waves-light">Guardar</button>
-                        </div>
-                      </form>
-                    </div><!-- /.modal-content -->
-                </div><!-- /.modal-dialog -->
-            </div><!-- /.modal -->
+                <div>
+                    <label class="block text-sm font-semibold text-gray-700 mb-1">
+                        Nuit da Empresa <span class="text-red-500">*</span>
+                    </label>
+                    <input type="file"
+                           name="documento_nuit"
+                           accept="application/pdf"
+                           required
+                           class="block w-full text-sm text-gray-700 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-green-500">
+                    <p class="mt-1 text-xs text-gray-500">Apenas ficheiros PDF.</p>
+                </div>
 
-             <div id="certidaoempresa" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-                <div class="modal-dialog">
-                    <div class="modal-content">
-                      <form class="form-horizontal m-t-20" action="/upload-documents" method="post" enctype="multipart/form-data">
-                        @csrf
-                        <input name="user_id" type="hidden" value="{{ $id}}">
-                        <div class="modal-header">
-                            <h5 class="modal-title mt-0" id="myModalLabel">Nuit</h5>
-                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                <span aria-hidden="true">&times;</span>
-                            </button>
-                        </div>
-                        <div class="modal-body">
-                          <div class="form-group row">
-                              <label for="example-text-input" class="col-sm-3 col-form-label">Nuit</label>
-                              <div class="col-sm-9">
-                                <input class="form-control" name="documento" type="file" onchange="readURL(this);" accept="application/pdf" required>
-                              </div>
-                          </div>
+                <div>
+                    <label class="block text-sm font-semibold text-gray-700 mb-1">
+                        Certidão de Registo Comercial <span class="text-red-500">*</span>
+                    </label>
+                    <input type="file"
+                           name="documento_certidao_empresa"
+                           accept="application/pdf"
+                           required
+                           class="block w-full text-sm text-gray-700 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-green-500">
+                    <p class="mt-1 text-xs text-gray-500">Documento que comprova o registo da empresa.</p>
+                </div>
 
-                        </div>
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-secondary waves-effect" data-dismiss="modal">Cancelar</button>
-                            <button type="submit" class="btn btn-primary waves-effect waves-light">Guardar</button>
-                        </div>
-                      </form>
-                    </div><!-- /.modal-content -->
-                </div><!-- /.modal-dialog -->
-            </div><!-- /.modal -->
+                <div>
+                    <label class="block text-sm font-semibold text-gray-700 mb-1">
+                        Início de Actividades <span class="text-red-500">*</span>
+                    </label>
+                    <input type="file"
+                           name="documento_inicio_actividade"
+                           accept="application/pdf"
+                           required
+                           class="block w-full text-sm text-gray-700 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-green-500">
+                    <p class="mt-1 text-xs text-gray-500">Comprovativo de início de actividades emitido pelas Finanças.</p>
+                </div>
 
-             <div id="inicioactividades" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-                <div class="modal-dialog">
-                    <div class="modal-content">
-                      <form class="form-horizontal m-t-20" action="/upload-documents" method="post" enctype="multipart/form-data">
-                        @csrf
-                        <input name="user_id" type="hidden" value="{{$id }}">
-                        <div class="modal-header">
-                            <h5 class="modal-title mt-0" id="myModalLabel">Nuit</h5>
-                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                <span aria-hidden="true">&times;</span>
-                            </button>
-                        </div>
-                        <div class="modal-body">
-                          <div class="form-group row">
-                              <label for="example-text-input" class="col-sm-3 col-form-label">Nuit</label>
-                              <div class="col-sm-9">
-                                <input class="form-control" name="documento" type="file" onchange="readURL(this);" accept="application/pdf" required>
-                              </div>
-                          </div>
-
-                        </div>
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-secondary waves-effect" data-dismiss="modal">Cancelar</button>
-                            <button type="submit" class="btn btn-primary waves-effect waves-light">Guardar</button>
-                        </div>
-                      </form>
-                    </div><!-- /.modal-content -->
-                </div><!-- /.modal-dialog -->
-            </div><!-- /.modal -->
-
-</body></html>
+                <div class="pt-4 flex flex-col md:flex-row gap-3 md:items-center md:justify-between">
+                    <p class="text-xs text-gray-500">
+                        Depois de enviar, a equipa do portal irá rever os documentos. Será notificado por email quando a conta for aprovada.
+                    </p>
+                    <button type="submit"
+                            class="inline-flex items-center justify-center px-6 py-2.5 bg-green-600 hover:bg-green-700 text-white text-sm font-semibold rounded-lg transition-colors">
+                        <i class="fas fa-check mr-2"></i>
+                        Enviar Documentos
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+@endsection

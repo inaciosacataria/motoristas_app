@@ -15,6 +15,8 @@ class InicioController extends Controller
       $categorias = DB::table('categorias')->get();
       $provincias = DB::table('provincias')->get();
       $anuncios_provincias = DB::table('anuncios_provincias')->get();
+      // Total de empresas (empregadores) registadas
+      $totalEmpresas = DB::table('empregadors')->count();
 
       $anuncios = DB::table('anuncios')
               ->leftJoin('empregadors', 'anuncios.user_id', '=', 'empregadors.user_id')
@@ -31,7 +33,7 @@ class InicioController extends Controller
               ->orderBy('anuncios.created_at', 'DESC')
               ->paginate(12);
 
-       return view('index-modern',  compact('provincias' ,'categorias', 'anuncios','anuncios_provincias'));
+       return view('index-modern',  compact('provincias' ,'categorias', 'anuncios','anuncios_provincias', 'totalEmpresas'));
     }
 
 

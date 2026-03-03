@@ -73,14 +73,25 @@ class EmpregadorController extends Controller
            ->limit(2)
            ->get();
 
+       // Estado de aprovação do empregador (só pode publicar vagas se estado === 'Aprovado')
+       $empregador = DB::table('empregadors')->where('user_id', $user->id)->first();
+       $empregadorAprovado = $empregador && $empregador->estado === 'Aprovado';
+       $estadoEmpregador = $empregador ? ($empregador->estado ?? 'Pendente') : 'Pendente';
+
+       // Para disposição das vagas igual à home/perfil (localização por anúncio)
+       $anuncios_provincias = DB::table('anuncios_provincias')->get();
+
        return view('empregador.dashboard-modern', array( 
            'anuncios' => $anuncios, 
            'categorias' => $categorias, 
            'provincias' => $provincias,
+           'anuncios_provincias' => $anuncios_provincias,
            'totalCandidaturas' => $totalCandidaturas,
            'vagasAtivas' => $vagasAtivas,
            'vagasExpirando' => $vagasExpirando,
-           'publicidades' => $publicidades
+           'publicidades' => $publicidades,
+           'empregadorAprovado' => $empregadorAprovado,
+           'estadoEmpregador' => $estadoEmpregador
        ));
     }
   }
@@ -139,8 +150,9 @@ class EmpregadorController extends Controller
             ];
         } else {
             // Priorizar logotipo sobre foto_url, mas usar foto_url se logotipo não existir
-            if ($empregador->logotipo && $empregador->logotipo != 'none') {
-                $empregador->foto = $empregador->logotipo;
+            $logoEmpregador = data_get($empregador, 'logotipo');
+            if ($logoEmpregador && $logoEmpregador != 'none') {
+                $empregador->foto = $logoEmpregador;
             } elseif (!$empregador->foto || $empregador->foto == 'none') {
                 // Se não tem foto_url válida, deixar null para mostrar inicial
                 $empregador->foto = null;
@@ -216,6 +228,8 @@ public function registarEmpregador(Request $request)
             $empregador->empresa = $request->name;
 
          if ($empregador->save()) {
+            // Iniciar sessão automaticamente com o novo empregador
+            Auth::login($user);
             // Enviar email de confirmação de cadastro
             try {
                 Mail::to($user->email)->send(new EmpregadorCadastroEmail($user->name, $user->email));
@@ -223,7 +237,8 @@ public function registarEmpregador(Request $request)
                 \Log::error('Erro ao enviar email de cadastro: ' . $e->getMessage());
             }
 
-            return redirect()->route('documents',$empregador->id);
+            // Redirecionar para página de envio de documentos (usa Auth para obter o user atual)
+            return redirect()->route('documents');
 
           }else{
 
@@ -284,8 +299,10 @@ public function aguarde(){
   }
 
 
-  public function documents ($id){
-    return view('empregador.documents',['id'=>$id]);
+  public function documents (){
+    // Página simples para upload inicial de documentos do empregador (apenas para usuário logado)
+    $userId = Auth::id();
+    return view('empregador.documents', ['userId' => $userId]);
   }
 
   public function editarPerfil(Request $request)

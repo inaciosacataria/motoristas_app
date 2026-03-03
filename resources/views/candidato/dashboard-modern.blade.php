@@ -106,9 +106,7 @@
                         <a href="/candidatura-espontanea" class="w-full bg-white border-2 border-green-600 text-green-600 hover:bg-green-50 font-bold py-2 px-4 rounded-lg transition duration-200 flex items-center justify-center">
                             <i class="fas fa-paper-plane mr-2"></i> Candidatura Espontânea
                         </a>
-                        <a href="/centralRisco" class="w-full bg-red-600 hover:bg-red-700 text-white font-bold py-2 px-4 rounded-lg transition duration-200 flex items-center justify-center">
-                            <i class="fas fa-exclamation-triangle mr-2"></i> Central de Risco
-                        </a>
+                        <!-- Central de Risco removido -->
                         <a href="/formacao" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-lg transition duration-200 flex items-center justify-center">
                             <i class="fas fa-graduation-cap mr-2"></i> Formações
                         </a>
@@ -177,7 +175,7 @@
                             @foreach($candidaturas->take(5) as $candidatura)
                                 <div class="flex items-center justify-between p-4 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors">
                                     <div class="flex-1">
-                                        <a href="/anuncio/{{ $candidatura->anuncio_path }}" class="font-semibold text-gray-900 hover:text-green-600">
+                                        <a href="{{ route('verAnuncio', $candidatura->anuncio_path) }}" class="font-semibold text-gray-900 hover:text-green-600">
                                             {{ $candidatura->titulo }}
                                         </a>
                                         <p class="text-sm text-gray-600 mt-1">

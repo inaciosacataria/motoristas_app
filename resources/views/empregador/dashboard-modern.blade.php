@@ -11,14 +11,29 @@
                 <h1 class="text-3xl font-bold">Bem-vindo, {{ Auth::user()->name }}!</h1>
                 <p class="text-green-100 mt-1">Gerencie suas vagas e candidatos</p>
             </div>
+            @if(isset($empregadorAprovado) && $empregadorAprovado)
             <button onclick="openModal('criar-vaga-modal')" class="bg-white text-green-600 hover:bg-green-50 px-4 py-2 rounded-lg border border-white font-semibold transition duration-200">
                 <i class="fas fa-plus mr-2"></i> Criar Nova Vaga
             </button>
+            @else
+            <span class="bg-white/20 text-white px-4 py-2 rounded-lg border border-white/40 cursor-not-allowed" title="Aguarde a aprovação da sua conta pelo administrador para publicar vagas">
+                <i class="fas fa-hourglass-half mr-2"></i> Publicar vagas (conta em análise)
+            </span>
+            @endif
         </div>
     </div>
 </div>
 
 <div class="container mx-auto px-4 py-8">
+    @if(isset($empregadorAprovado) && !$empregadorAprovado)
+    <div class="mb-6 p-4 bg-amber-50 border border-amber-200 rounded-lg flex items-start gap-3">
+        <i class="fas fa-info-circle text-amber-600 text-xl mt-0.5"></i>
+        <div>
+            <p class="font-semibold text-amber-800">Conta em análise</p>
+            <p class="text-amber-700 text-sm">A sua conta de empregador ainda não foi aprovada. Só poderá criar e editar vagas após o administrador aprovar o seu registo. Estado actual: <strong>{{ $estadoEmpregador ?? 'Pendente' }}</strong>.</p>
+        </div>
+    </div>
+    @endif
     <!-- Área de Publicidade - Banner Horizontal Superior -->
     @if(isset($publicidades) && $publicidades->count() > 0)
         @foreach($publicidades->take(1) as $publicidade)
@@ -101,12 +116,12 @@
         </div>
         <div class="p-6">
             @if($anuncios && $anuncios->count() > 0)
-                <div class="space-y-4">
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
                     @foreach($anuncios as $anuncio)
-                        <div class="border border-gray-200 rounded-lg p-4 hover:shadow-md transition-shadow">
-                            <div class="flex items-start justify-between">
-                                <!-- Logo da Empresa -->
-                                <div class="flex-shrink-0 mr-4">
+                        <div class="job-card bg-white rounded-xl shadow-sm hover:shadow-lg transition-all duration-300 overflow-hidden border border-gray-100 cursor-default">
+                            <div class="p-6">
+                                <!-- Logo da Empresa (igual à home) -->
+                                <div class="flex justify-center mb-4">
                                     @php
                                         $logoVaga = null;
                                         if (isset($anuncio->logotipo) && $anuncio->logotipo && $anuncio->logotipo != 'none') {
@@ -115,49 +130,59 @@
                                             $logoVaga = $anuncio->foto;
                                         }
                                     @endphp
-                                    
                                     @if($logoVaga)
-                                        <img src="{{ asset($logoVaga) }}" alt="{{ $anuncio->empresa ?? 'Empresa' }}" class="w-16 h-16 rounded-lg object-contain border border-gray-200" onerror="this.onerror=null; this.style.display='none'; this.nextElementSibling.style.display='flex';">
-                                        <div class="w-16 h-16 rounded-lg bg-green-100 flex items-center justify-center text-green-600 text-xl font-bold border border-gray-200" style="display: none;">
-                                            {{ substr($anuncio->empresa ?? 'E', 0, 1) }}
+                                        <img src="{{ asset($logoVaga) }}" alt="{{ $anuncio->empresa ?? 'Empresa' }}" class="h-16 w-16 object-contain rounded-lg" onerror="this.onerror=null; this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                                        <div class="h-16 w-16 bg-gradient-to-br from-green-500 to-green-600 rounded-lg flex items-center justify-center" style="display: none;">
+                                            <span class="text-white text-xl font-bold">{{ substr($anuncio->empresa ?? 'E', 0, 1) }}</span>
                                         </div>
                                     @else
-                                        <div class="w-16 h-16 rounded-lg bg-green-100 flex items-center justify-center text-green-600 text-xl font-bold border border-gray-200">
-                                            {{ substr($anuncio->empresa ?? 'E', 0, 1) }}
+                                        <div class="h-16 w-16 bg-gradient-to-br from-green-500 to-green-600 rounded-lg flex items-center justify-center">
+                                            <span class="text-white text-xl font-bold">{{ substr($anuncio->empresa ?? 'E', 0, 1) }}</span>
                                         </div>
                                     @endif
                                 </div>
-                                
-                                <div class="flex-1">
-                                    <h3 class="text-lg font-semibold text-gray-900 mb-2">{{ $anuncio->titulo }}</h3>
-                                    <p class="text-gray-600 text-sm mb-3">{{ Str::limit($anuncio->descricao, 150) }}</p>
-                                    <div class="flex items-center space-x-4 text-sm text-gray-500">
-                                        <span class="flex items-center">
-                                            <i class="fas fa-calendar mr-1"></i>
-                                            Válido até: {{ \Carbon\Carbon::parse($anuncio->validade)->format('d/m/Y') }}
-                                        </span>
-                                        <span class="flex items-center">
-                                            <i class="fas fa-user mr-1"></i>
-                                            {{ $anuncio->recrutador }}
-                                        </span>
-                                        <span class="flex items-center">
-                                            <i class="fas fa-laptop mr-1"></i>
-                                            {{ ucfirst($anuncio->forma_de_candidatura) }}
-                                        </span>
-                                    </div>
-                                </div>
-                                <div class="flex items-center space-x-2 ml-4">
+                                <!-- Título -->
+                                <h3 class="font-semibold text-lg text-gray-900 mb-2 line-clamp-2">
+                                    <a href="{{ route('verAnuncio', $anuncio->slug ?? $anuncio->id) }}" target="_blank" class="hover:text-green-600 transition-colors">{{ $anuncio->titulo }}</a>
+                                </h3>
+                                <!-- Empresa -->
+                                <p class="text-gray-600 text-sm mb-3 flex items-center gap-2">
+                                    <i class="fas fa-building text-green-600"></i>
+                                    {{ $anuncio->empresa ?? $anuncio->recrutador ?? 'Empresa' }}
+                                </p>
+                                <!-- Localização (igual à home) -->
+                                <p class="text-gray-600 text-sm mb-4 flex items-center gap-2">
+                                    <i class="fas fa-map-marker-alt text-green-600"></i>
+                                    @php
+                                        $locais = [];
+                                        if (isset($anuncios_provincias)) {
+                                            foreach ($anuncios_provincias as $ap) {
+                                                if ($ap->anuncio_id == $anuncio->id) {
+                                                    foreach ($provincias as $prov) {
+                                                        if ($ap->provincia_id == $prov->id) {
+                                                            $locais[] = $prov->name;
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    @endphp
+                                    {{ count($locais) > 1 ? 'Vários locais' : ($locais[0] ?? 'Não especificado') }}
+                                </p>
+                                <!-- Footer: estado + acções (igual espírito home/perfil) -->
+                                <div class="flex items-center justify-between pt-4 border-t border-gray-100 flex-wrap gap-2">
                                     @if($anuncio->estado_anuncio === 'Publicado')
-                                        <span class="bg-green-100 text-green-800 text-xs font-semibold px-2.5 py-0.5 rounded-full">Ativo</span>
+                                        <span class="badge badge-success text-xs"><i class="fas fa-check-circle mr-1"></i> Ativo</span>
                                     @else
-                                        <span class="bg-gray-100 text-gray-800 text-xs font-semibold px-2.5 py-0.5 rounded-full">Inativo</span>
+                                        <span class="bg-gray-100 text-gray-800 text-xs font-semibold px-2 py-0.5 rounded-full">Inativo</span>
                                     @endif
-                                    <a href="/candidatos-anuncio/{{ $anuncio->id }}" class="text-green-600 hover:text-green-700 text-sm" title="Ver Candidatos">
-                                        <i class="fas fa-users"></i>
-                                    </a>
-                                    <button onclick="editarVaga({{ json_encode($anuncio) }})" class="text-blue-600 hover:text-blue-700 text-sm" title="Editar Vaga">
-                                        <i class="fas fa-edit"></i>
-                                    </button>
+                                    <div class="flex items-center gap-2">
+                                        <a href="{{ route('verAnuncio', $anuncio->slug ?? $anuncio->id) }}" target="_blank" class="text-green-600 hover:text-green-700" title="Ver vaga"><i class="fas fa-external-link-alt"></i></a>
+                                        <a href="{{ route('verCandidatosDeUmAnuncio', $anuncio->slug ?? $anuncio->id) }}" class="text-blue-600 hover:text-blue-700" title="Candidatos"><i class="fas fa-users"></i></a>
+                                        @if(isset($empregadorAprovado) && $empregadorAprovado)
+                                        <button type="button" onclick="editarVaga({{ json_encode($anuncio) }})" class="text-gray-600 hover:text-gray-800" title="Editar"><i class="fas fa-edit"></i></button>
+                                        @endif
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -172,10 +197,12 @@
                         <i class="fas fa-briefcase text-3xl text-gray-400"></i>
                     </div>
                     <h3 class="text-xl font-semibold text-gray-900 mb-2">Nenhuma vaga publicada ainda</h3>
-                    <p class="text-gray-600 mb-6">Comece publicando sua primeira vaga e encontre motoristas qualificados</p>
+                    <p class="text-gray-600 mb-6">@if(isset($empregadorAprovado) && $empregadorAprovado) Comece publicando sua primeira vaga e encontre motoristas qualificados @else Aguarde a aprovação da sua conta pelo administrador para poder publicar vagas. @endif</p>
+                    @if(isset($empregadorAprovado) && $empregadorAprovado)
                     <button onclick="openModal('criar-vaga-modal')" class="bg-green-600 hover:bg-green-700 text-white font-bold py-2 px-4 rounded-lg transition duration-200">
                         <i class="fas fa-plus mr-2"></i> Criar Primeira Vaga
                     </button>
+                    @endif
                 </div>
             @endif
         </div>
@@ -210,15 +237,7 @@
             </div>
         </a>
 
-        <a href="/centralRisco" class="bg-white shadow-md rounded-lg p-6 hover:shadow-lg transition-shadow">
-            <div class="text-center">
-                <div class="inline-flex items-center justify-center w-16 h-16 bg-red-100 rounded-full mb-4">
-                    <i class="fas fa-exclamation-triangle text-2xl text-red-600"></i>
-                </div>
-                <h3 class="font-bold text-gray-900 mb-2">Central de Risco</h3>
-                <p class="text-gray-600 text-sm">Consultar e registrar denúncias</p>
-            </div>
-        </a>
+        <!-- Central de Risco removido -->
 
         <a href="/empregador-perfil/{{ Auth::user()->id }}" class="bg-white shadow-md rounded-lg p-6 hover:shadow-lg transition-shadow">
             <div class="text-center">

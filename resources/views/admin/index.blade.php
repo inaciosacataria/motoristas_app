@@ -64,20 +64,7 @@ Base de Dados de Motoristas |
                 </div>
             </div>
 
-            <div class="col-xl-3 col-md-6">
-                <div class="card bg-pink mini-stat text-white">
-                    <div class="p-3 mini-stat-desc">
-                        <div class="clearfix">
-                            <h6 class="text-uppercase mt-0 float-left text-white-50">Central de Risco</h6>
-                            <h4 class="mb-3 mt-0 float-right">{{ $countCentralRisco }}</h4>
-                        </div>
-                        <div>
-                            <span class="badge badge-light text-info"> {{$last30denuncias}} </span>
-                             <span class="ml-2">Denúncias nos últimos 30 dias</span>
-                        </div>
-                    </div>
-                </div>
-            </div>
+            <!-- Central de Risco removido -->
             <div class="col-xl-3 col-md-6">
                 <div class="card  bg-info mini-stat text-white">
                     <div class="p-3 mini-stat-desc">
@@ -153,7 +140,7 @@ Base de Dados de Motoristas |
             <div class="col-xl-4">
                 <div class="card">
                     <div class="card-body">
-                        <h4 class="mt-0 header-title mb-4">Central de Risco</h4>
+                        <!-- Central de Risco removido -->
                         <div class="latest-massage">
 
                            @foreach($denuncias as $denuncia)
@@ -166,9 +153,7 @@ Base de Dados de Motoristas |
                                         <p class="m-0 text-muted">{{ $denuncia->estado_denuncia }}</p>
                                     </div>
                                     <div class="massage-desc">
-                                        <a href="{{route('denuncia', $denuncia->id )}}">
-                                          <h5 class="font-14 mt-0 text-dark">{{$denuncia->nome_motorista}}</h5>
-                                          </a>
+                                        <h5 class="font-14 mt-0 text-dark">{{$denuncia->nome_motorista}}</h5>
                                         <p class="text-muted">{{$denuncia->infracao}}</p>
                                     </div>
                                 </div>
@@ -176,9 +161,7 @@ Base de Dados de Motoristas |
                             @endforeach
                         </div>
                         <hr>
-                        <div class="text-center mt-3">
-                          <a href="/centralRisco">ver mais</a>
-                        </div>
+                        <!-- Link para Central de Risco removido -->
                     </div>
                 </div>
 
@@ -202,14 +185,6 @@ Base de Dados de Motoristas |
                                       @elseif($empregador->active != "desativado")
                                       <span class="badge badge-warning mt-4 font-12">Activo</span>
                                       @endif
-                                      @if($empregador->accounttype == "no")
-                                      <span class="badge badge-warning mt-4 font-12">Free Plan</span>
-                                      @else
-                                      @php
-                                        $days =30 - $empregador->premium_count;
-                                      @endphp
-                                      <span class="badge badge-success mt-4 font-12">  {{$days}} dias de Premium</span>
-                                      @endif
                                     </div>
                                     <div class="massage-desc">
                                         <h5 class="font-14 mt-0 text-dark">{{$empregador->empresa}}</h5>
@@ -223,7 +198,7 @@ Base de Dados de Motoristas |
                         </div>
                         <hr>
                         <div class="text-center mt-3">
-                          <a href="/premium">ver mais</a>
+                          <a href="/bd-empregadores">ver mais</a>
                         </div>
                     </div>
                 </div>
