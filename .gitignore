@@ -13,3 +13,10 @@ npm-debug.log
 yarn-error.log
 /.idea
 /.vscode
+uploads/
+backup_*/
+build/
+error_log
+composer
+composer-setup.php
+index.php.cpanel
