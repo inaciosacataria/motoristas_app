@@ -155,6 +155,16 @@
             <button type="button" onclick="document.getElementById('modal-base-dados').classList.remove('hidden')" class="w-full text-left block px-4 py-2 text-gray-700 hover:bg-gray-100 border-0 bg-transparent">
                 <i class="fas fa-database mr-2"></i> Base de Dados
             </button>
+
+            @guest
+                <hr class="my-1">
+                <a href="{{ route('login', 'candidato') }}" class="block px-4 py-2 text-gray-700 hover:bg-gray-100">
+                    <i class="fas fa-user mr-2"></i> Sou Candidato
+                </a>
+                <a href="{{ route('login', 'recrutador') }}" class="block px-4 py-2 text-gray-700 hover:bg-gray-100">
+                    <i class="fas fa-building mr-2"></i> Sou Empregador
+                </a>
+            @endguest
         </div>
     </div>
 </nav>
