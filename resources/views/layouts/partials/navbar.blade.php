@@ -181,7 +181,7 @@
                 <h3 class="text-lg font-semibold text-gray-900">Base de Dados</h3>
             </div>
             <p class="text-gray-600 mb-6">
-                Para ter acesso à base de dados contacte <a href="mailto:info@motoristas.co.mz" class="text-primary-600 hover:underline font-medium">info@motoristas.co.mz</a> ou ligue para <a href="tel:+258871220022" class="text-primary-600 hover:underline font-medium">+258 87 12 200 22</a>.
+                A Base de dados de motoristas é uma rede de mais 2600+ motoristas profissionais que actuam em diferentes empresas e organizações, incluindo motoristas em busca de emprego, as empresas e organizações afins, parceiras deste portal podem os contactar para efeitos de contratação. Para ter acesso à base de dados contacte <a href="mailto:info@motoristas.co.mz" class="text-primary-600 hover:underline font-medium">info@motoristas.co.mz</a> ou ligue para <a href="tel:+258871220022" class="text-primary-600 hover:underline font-medium">+258 87 12 200 22</a>.
             </p>
             <button type="button" onclick="document.getElementById('modal-base-dados').classList.add('hidden')" class="w-full btn-primary">
                 Fechar
