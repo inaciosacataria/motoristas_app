@@ -19,6 +19,9 @@
                 <button type="button" onclick="document.getElementById('modal-base-dados').classList.remove('hidden')" class="nav-link nav-link-inactive border-0 bg-transparent cursor-pointer p-0">
                     <i class="fas fa-database mr-1"></i> Base de Dados
                 </button>
+                <button type="button" onclick="document.getElementById('modal-central-risco').classList.remove('hidden')" class="nav-link nav-link-inactive border-0 bg-transparent cursor-pointer p-0">
+                    <i class="fas fa-exclamation-triangle mr-1"></i> Central de Risco
+                </button>
             </div>
             
             <!-- User Menu -->
@@ -155,6 +158,9 @@
             <button type="button" onclick="document.getElementById('modal-base-dados').classList.remove('hidden')" class="w-full text-left block px-4 py-2 text-gray-700 hover:bg-gray-100 border-0 bg-transparent">
                 <i class="fas fa-database mr-2"></i> Base de Dados
             </button>
+            <button type="button" onclick="document.getElementById('modal-central-risco').classList.remove('hidden')" class="w-full text-left block px-4 py-2 text-gray-700 hover:bg-gray-100 border-0 bg-transparent">
+                <i class="fas fa-exclamation-triangle mr-2"></i> Central de Risco
+            </button>
 
             @guest
                 <hr class="my-1">
@@ -184,6 +190,31 @@
                 A Base de dados de motoristas é uma rede de mais 2600+ motoristas profissionais que actuam em diferentes empresas e organizações, incluindo motoristas em busca de emprego, as empresas e organizações afins, parceiras deste portal podem os contactar para efeitos de contratação. Para ter acesso à base de dados contacte <a href="mailto:info@motoristas.co.mz" class="text-primary-600 hover:underline font-medium">info@motoristas.co.mz</a> ou ligue para <a href="tel:+258871220022" class="text-primary-600 hover:underline font-medium">+258 87 12 200 22</a>.
             </p>
             <button type="button" onclick="document.getElementById('modal-base-dados').classList.add('hidden')" class="w-full btn-primary">
+                Fechar
+            </button>
+        </div>
+    </div>
+</div>
+
+<!-- Modal Central de Risco -->
+<div id="modal-central-risco" class="hidden fixed inset-0 z-50 overflow-y-auto" aria-modal="true" role="dialog">
+    <div class="flex min-h-full items-start justify-center p-4 pt-24">
+        <div class="fixed inset-0 bg-black/50" onclick="document.getElementById('modal-central-risco').classList.add('hidden')"></div>
+        <div class="relative bg-white rounded-xl shadow-xl max-w-md w-full p-6">
+            <div class="flex items-center gap-3 mb-4">
+                <span class="flex items-center justify-center w-12 h-12 rounded-full bg-red-100 text-red-600">
+                    <i class="fas fa-exclamation-triangle text-xl"></i>
+                </span>
+                <h3 class="text-lg font-semibold text-gray-900">Central de Risco</h3>
+            </div>
+            <p class="text-gray-600 mb-6">
+                A Central de risco de motoristas é uma lista de motoristas que cometeram faltas graves, como desvio de carga,
+                furto de combustível, condução danosa e outras ações que lesaram o patronato. Apenas empresas e organizações
+                credíveis, parceiras da plataforma, podem cadastrar e consultar motoristas na central de risco. Para ter acesso
+                à Central de Risco contacte <a href="mailto:info@motoristas.co.mz" class="text-primary-600 hover:underline font-medium">info@motoristas.co.mz</a>
+                ou ligue para <a href="tel:+258871220022" class="text-primary-600 hover:underline font-medium">+258 87 12 200 22</a>.
+            </p>
+            <button type="button" onclick="document.getElementById('modal-central-risco').classList.add('hidden')" class="w-full btn-primary">
                 Fechar
             </button>
         </div>

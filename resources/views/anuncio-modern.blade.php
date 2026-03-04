@@ -211,45 +211,22 @@
                         @if($anuncio->email)
                         <div>
                             <p class="text-sm text-gray-600">Email</p>
-                            @if($anuncio->forma_de_candidatura === 'online')
-                                <span class="inline-flex items-center font-semibold text-primary-600 select-none" style="filter: blur(5px); user-select: none; pointer-events: none;">
-                                    <i class="fas fa-envelope mr-1" style="filter: blur(5px);"></i>
-                                    <span style="filter: blur(5px);">{{ $anuncio->email }}</span>
-                                </span>
-                                <p class="text-xs text-gray-500 mt-1">Candidatando-se à vaga poderá aceder aos contactos.</p>
-                            @else
-                                <a href="mailto:{{ $anuncio->email }}" class="inline-flex items-center font-semibold text-primary-600 hover:text-primary-700">
-                                    <i class="fas fa-envelope mr-1"></i>
-                                    <span>{{ $anuncio->email }}</span>
-                                </a>
-                                <p class="text-xs text-gray-500 mt-1">
-                                    Utilize este email para enviar a sua candidatura.
-                                </p>
-                            @endif
+                            <span class="inline-flex items-center font-semibold text-primary-600 select-none" style="filter: blur(5px); user-select: none; pointer-events: none;">
+                                <i class="fas fa-envelope mr-1" style="filter: blur(5px);"></i>
+                                <span style="filter: blur(5px);">{{ $anuncio->email }}</span>
+                            </span>
+                            <p class="text-xs text-gray-500 mt-1">Candidatando-se à vaga poderá aceder aos contactos.</p>
                         </div>
                         @endif
                         
                         @if($anuncio->celular && $anuncio->celular != 'N/A')
                         <div>
                             <p class="text-sm text-gray-600">Telefone</p>
-                            @if($anuncio->forma_de_candidatura === 'online')
-                                <span class="inline-flex items-center font-semibold text-primary-600 select-none" style="filter: blur(5px); user-select: none; pointer-events: none;">
-                                    <i class="fas fa-phone mr-1" style="filter: blur(5px);"></i>
-                                    <span style="filter: blur(5px);">{{ $anuncio->celular }}</span>
-                                </span>
-                                <p class="text-xs text-gray-500 mt-1">Candidatando-se à vaga poderá aceder aos contactos.</p>
-                            @else
-                                @php
-                                    $foneLimpo = preg_replace('/\D+/', '', $anuncio->celular);
-                                @endphp
-                                <a href="tel:{{ $foneLimpo ?: $anuncio->celular }}" class="inline-flex items-center font-semibold text-primary-600 hover:text-primary-700">
-                                    <i class="fas fa-phone mr-1"></i>
-                                    <span>{{ $anuncio->celular }}</span>
-                                </a>
-                                <p class="text-xs text-gray-500 mt-1">
-                                    Utilize este telefone para combinar a candidatura.
-                                </p>
-                            @endif
+                            <span class="inline-flex items-center font-semibold text-primary-600 select-none" style="filter: blur(5px); user-select: none; pointer-events: none;">
+                                <i class="fas fa-phone mr-1" style="filter: blur(5px);"></i>
+                                <span style="filter: blur(5px);">{{ $anuncio->celular }}</span>
+                            </span>
+                            <p class="text-xs text-gray-500 mt-1">Candidatando-se à vaga poderá aceder aos contactos.</p>
                         </div>
                         @endif
                     </div>
