@@ -46,7 +46,7 @@
             <div>
                 <h3 class="font-semibold text-lg mb-3">Contacto</h3>
                 <ul class="space-y-1.5 text-gray-400 text-sm">
-                    <li><i class="fas fa-phone mr-2"></i> +258 84 123 4567</li>
+                    <li><i class="fas fa-phone mr-2"></i> +258 87 12 200 22</li>
                     <li><i class="fas fa-envelope mr-2"></i> info@motoristas.co.mz</li>
                     <li><i class="fas fa-map-marker-alt mr-2"></i> Maputo, Moçambique</li>
                 </ul>

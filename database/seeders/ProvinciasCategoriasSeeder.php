@@ -48,11 +48,12 @@ class ProvinciasCategoriasSeeder extends Seeder
         }
 
         $categorias = [
-            ['categoria' => 'A-Motociclo', 'url' => 'a-motociclo'],
-            ['categoria' => 'B-Ligeiro', 'url' => 'b-ligeiro'],
-            ['categoria' => 'C-Pesado', 'url' => 'c-pesado'],
-            ['categoria' => 'D-Transporte de passageiros', 'url' => 'd-passageiros'],
-            ['categoria' => 'C+E-Reboque', 'url' => 'c-e-reboque'],
+            ['categoria' => 'A-Motociclo',           'url' => 'a-motociclo'],
+            ['categoria' => 'B-Ligeiro',             'url' => 'b-ligeiro'],
+            ['categoria' => 'C-Pesado',              'url' => 'c-pesado'],
+            ['categoria' => 'G-Profissional',        'url' => 'g-profissional'],
+            ['categoria' => 'D-Carga perigosa',      'url' => 'd-carga-perigosa'],
+            ['categoria' => 'P-Serviços públicos',   'url' => 'p-servicos-publicos'],
         ];
 
         foreach ($categorias as $cat) {

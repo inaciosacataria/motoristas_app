@@ -625,7 +625,7 @@
                                 danosa, substituição de peças e acessórios, entre outras acções negativas graves e
                                 criminais. Só as empresas e organizações afins credíveis e parceiras da plataforma, podem
                                 cadastrar e consultar motoristas na central de risco.</p>
-                            <p>Para ter o acesso contacte, +258 87 12 20011 ou por email info@motoristas.co.mz</p>
+                            <p>Para ter o acesso contacte, +258 87 12 200 22 ou por email info@motoristas.co.mz</p>
                             {{-- <a href="tel:+258875474495" class="mt-4 btn btn-primary waves-effect waves-light">Ligar
                                 Agora</a> --}}
                         </div>

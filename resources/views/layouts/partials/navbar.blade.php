@@ -16,6 +16,9 @@
                 <a href="/formacao" class="nav-link nav-link-inactive">
                     <i class="fas fa-graduation-cap mr-1"></i> Formações
                 </a>
+                <button type="button" onclick="document.getElementById('modal-base-dados').classList.remove('hidden')" class="nav-link nav-link-inactive border-0 bg-transparent cursor-pointer p-0">
+                    <i class="fas fa-database mr-1"></i> Base de Dados
+                </button>
             </div>
             
             <!-- User Menu -->
@@ -149,9 +152,33 @@
             <a href="/formacao" class="block px-4 py-2 text-gray-700 hover:bg-gray-100">
                 <i class="fas fa-graduation-cap mr-2"></i> Formações
             </a>
+            <button type="button" onclick="document.getElementById('modal-base-dados').classList.remove('hidden')" class="w-full text-left block px-4 py-2 text-gray-700 hover:bg-gray-100 border-0 bg-transparent">
+                <i class="fas fa-database mr-2"></i> Base de Dados
+            </button>
         </div>
     </div>
 </nav>
+
+<!-- Modal Base de Dados -->
+<div id="modal-base-dados" class="hidden fixed inset-0 z-50 overflow-y-auto" aria-modal="true" role="dialog">
+    <div class="flex min-h-full items-start justify-center p-4 pt-24">
+        <div class="fixed inset-0 bg-black/50" onclick="document.getElementById('modal-base-dados').classList.add('hidden')"></div>
+        <div class="relative bg-white rounded-xl shadow-xl max-w-md w-full p-6">
+            <div class="flex items-center gap-3 mb-4">
+                <span class="flex items-center justify-center w-12 h-12 rounded-full bg-primary-100 text-primary-600">
+                    <i class="fas fa-database text-xl"></i>
+                </span>
+                <h3 class="text-lg font-semibold text-gray-900">Base de Dados</h3>
+            </div>
+            <p class="text-gray-600 mb-6">
+                Para ter acesso à base de dados contacte <a href="mailto:info@motoristas.co.mz" class="text-primary-600 hover:underline font-medium">info@motoristas.co.mz</a> ou ligue para <a href="tel:+258871220022" class="text-primary-600 hover:underline font-medium">+258 87 12 200 22</a>.
+            </p>
+            <button type="button" onclick="document.getElementById('modal-base-dados').classList.add('hidden')" class="w-full btn-primary">
+                Fechar
+            </button>
+        </div>
+    </div>
+</div>
 
 <!-- Alpine.js for dropdowns -->
 <script src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js" defer></script>

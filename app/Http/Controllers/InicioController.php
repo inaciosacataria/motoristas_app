@@ -36,7 +36,8 @@ class InicioController extends Controller
                   'empregadors.logotipo as logotipo'
               )
               ->where('anuncios.estado_anuncio', 'Publicado')
-              // Trazer todas as vagas publicadas (ativas e expiradas); o estado visual é tratado na view
+              // Trazer todas as vagas publicadas (ativas e expiradas); ativas no topo, expiradas em baixo
+              ->orderByRaw('(anuncios.validade >= CURDATE()) DESC')
               ->orderBy('anuncios.created_at', 'DESC')
               ->paginate(12);
 

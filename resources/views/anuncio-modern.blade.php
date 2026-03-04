@@ -102,8 +102,17 @@
                         <i class="fas fa-file-alt text-primary-600 mr-2"></i> Descrição da Vaga
                     </h2>
                 </div>
-                <div class="card-body prose max-w-none">
+                <div class="card-body prose max-w-none space-y-4">
                     <p class="text-gray-700 leading-relaxed whitespace-pre-line">{{ $anuncio->descricao }}</p>
+
+                    @if($anuncio->forma_de_candidatura === 'online')
+                        <div class="mt-2 p-4 bg-primary-50 border border-primary-100 rounded-lg text-sm text-primary-800">
+                            <p class="font-semibold mb-1">Como candidatar-se</p>
+                            <p>
+                                Candidatura através da conta no portal: aceda à sua conta de candidato ou cadastre-se para enviar a candidatura online.
+                            </p>
+                        </div>
+                    @endif
                 </div>
             </div>
 
@@ -143,46 +152,48 @@
         <!-- Sidebar -->
         <div class="lg:col-span-1">
             <div class="sticky top-4 space-y-6">
-                <!-- Apply Card -->
-                <div class="card bg-gradient-to-br from-primary-600 to-primary-700 text-white">
-                    <div class="card-body">
-                        <h3 class="text-xl font-bold mb-4">Candidatar-se</h3>
-                        <p class="text-primary-100 mb-6">
-                            Interessado nesta oportunidade? Candidate-se agora!
-                        </p>
-                        
-                        @auth
-                            @if(Auth::user()->privilegio === 'candidato')
-                                @if(!empty($jaCandidatou))
-                                    <p class="text-primary-100 text-sm mb-2">
-                                        <i class="fas fa-check-circle mr-2"></i> Já se candidatou a esta vaga.
-                                    </p>
-                                    <button type="button" disabled class="w-full bg-white/50 text-primary-600 font-bold py-3 px-6 rounded-lg cursor-not-allowed opacity-75">
-                                        <i class="fas fa-paper-plane mr-2"></i> Candidatura enviada
-                                    </button>
-                                @else
-                                    <form action="{{ route('candidatar') }}" method="POST">
-                                        @csrf
-                                        <input type="hidden" name="anuncio_id" value="{{ $anuncio->id }}">
-                                        <input type="hidden" name="user_id" value="{{ Auth::user()->id }}">
-                                        <button type="submit" class="w-full bg-white text-primary-600 hover:bg-gray-100 font-bold py-3 px-6 rounded-lg transition-all duration-200 shadow-lg hover:shadow-xl">
-                                            <i class="fas fa-paper-plane mr-2"></i> Candidatar-me
+                @if($anuncio->forma_de_candidatura === 'online')
+                    <!-- Apply Card (apenas para candidaturas online pelo sistema) -->
+                    <div class="card bg-gradient-to-br from-primary-600 to-primary-700 text-white">
+                        <div class="card-body">
+                            <h3 class="text-xl font-bold mb-4">Candidatar-se</h3>
+                            <p class="text-primary-100 mb-6">
+                                Interessado nesta oportunidade? Candidate-se agora pelo portal.
+                            </p>
+                            
+                            @auth
+                                @if(Auth::user()->privilegio === 'candidato')
+                                    @if(!empty($jaCandidatou))
+                                        <p class="text-primary-100 text-sm mb-2">
+                                            <i class="fas fa-check-circle mr-2"></i> Já se candidatou a esta vaga.
+                                        </p>
+                                        <button type="button" disabled class="w-full bg-white/50 text-primary-600 font-bold py-3 px-6 rounded-lg cursor-not-allowed opacity-75">
+                                            <i class="fas fa-paper-plane mr-2"></i> Candidatura enviada
                                         </button>
-                                    </form>
+                                    @else
+                                        <form action="{{ route('candidatar') }}" method="POST">
+                                            @csrf
+                                            <input type="hidden" name="anuncio_id" value="{{ $anuncio->id }}">
+                                            <input type="hidden" name="user_id" value="{{ Auth::user()->id }}">
+                                            <button type="submit" class="w-full bg-white text-primary-600 hover:bg-gray-100 font-bold py-3 px-6 rounded-lg transition-all duration-200 shadow-lg hover:shadow-xl">
+                                                <i class="fas fa-paper-plane mr-2"></i> Candidatar-me
+                                            </button>
+                                        </form>
+                                    @endif
+                                @else
+                                    <p class="text-primary-100 text-sm">Apenas candidatos podem se candidatar a vagas.</p>
                                 @endif
                             @else
-                                <p class="text-primary-100 text-sm">Apenas candidatos podem se candidatar a vagas.</p>
-                            @endif
-                        @else
-                            <a href="{{ route('login', 'candidato') }}" class="block w-full bg-white text-primary-600 hover:bg-gray-100 font-bold py-3 px-6 rounded-lg transition-all duration-200 shadow-lg hover:shadow-xl text-center">
-                                <i class="fas fa-sign-in-alt mr-2"></i> Entrar para Candidatar
-                            </a>
-                            <p class="text-primary-100 text-sm mt-3 text-center">
-                                Não tem conta? <a href="{{ route('register') }}?candidato=1" class="text-white underline font-semibold">Criar conta</a>
-                            </p>
-                        @endauth
+                                <a href="{{ route('login', 'candidato') }}" class="block w-full bg-white text-primary-600 hover:bg-gray-100 font-bold py-3 px-6 rounded-lg transition-all duration-200 shadow-lg hover:shadow-xl text-center">
+                                    <i class="fas fa-sign-in-alt mr-2"></i> Entrar para Candidatar
+                                </a>
+                                <p class="text-primary-100 text-sm mt-3 text-center">
+                                    Não tem conta? <a href="{{ route('register') }}?candidato=1" class="text-white underline font-semibold">Criar conta</a>
+                                </p>
+                            @endauth
+                        </div>
                     </div>
-                </div>
+                @endif
 
                 <!-- Company Info -->
                 <div class="card">
@@ -200,22 +211,45 @@
                         @if($anuncio->email)
                         <div>
                             <p class="text-sm text-gray-600">Email</p>
-                            <span class="inline-flex items-center font-semibold text-primary-600 select-none" style="filter: blur(5px); user-select: none; pointer-events: none;">
-                                <i class="fas fa-envelope mr-1" style="filter: blur(5px);"></i>
-                                <span style="filter: blur(5px);">{{ $anuncio->email }}</span>
-                            </span>
-                            <p class="text-xs text-gray-500 mt-1">Candidatando-se à vaga poderá aceder aos contactos.</p>
+                            @if($anuncio->forma_de_candidatura === 'online')
+                                <span class="inline-flex items-center font-semibold text-primary-600 select-none" style="filter: blur(5px); user-select: none; pointer-events: none;">
+                                    <i class="fas fa-envelope mr-1" style="filter: blur(5px);"></i>
+                                    <span style="filter: blur(5px);">{{ $anuncio->email }}</span>
+                                </span>
+                                <p class="text-xs text-gray-500 mt-1">Candidatando-se à vaga poderá aceder aos contactos.</p>
+                            @else
+                                <a href="mailto:{{ $anuncio->email }}" class="inline-flex items-center font-semibold text-primary-600 hover:text-primary-700">
+                                    <i class="fas fa-envelope mr-1"></i>
+                                    <span>{{ $anuncio->email }}</span>
+                                </a>
+                                <p class="text-xs text-gray-500 mt-1">
+                                    Utilize este email para enviar a sua candidatura.
+                                </p>
+                            @endif
                         </div>
                         @endif
                         
                         @if($anuncio->celular && $anuncio->celular != 'N/A')
                         <div>
                             <p class="text-sm text-gray-600">Telefone</p>
-                            <span class="inline-flex items-center font-semibold text-primary-600 select-none" style="filter: blur(5px); user-select: none; pointer-events: none;">
-                                <i class="fas fa-phone mr-1" style="filter: blur(5px);"></i>
-                                <span style="filter: blur(5px);">{{ $anuncio->celular }}</span>
-                            </span>
-                            <p class="text-xs text-gray-500 mt-1">Candidatando-se à vaga poderá aceder aos contactos.</p>
+                            @if($anuncio->forma_de_candidatura === 'online')
+                                <span class="inline-flex items-center font-semibold text-primary-600 select-none" style="filter: blur(5px); user-select: none; pointer-events: none;">
+                                    <i class="fas fa-phone mr-1" style="filter: blur(5px);"></i>
+                                    <span style="filter: blur(5px);">{{ $anuncio->celular }}</span>
+                                </span>
+                                <p class="text-xs text-gray-500 mt-1">Candidatando-se à vaga poderá aceder aos contactos.</p>
+                            @else
+                                @php
+                                    $foneLimpo = preg_replace('/\D+/', '', $anuncio->celular);
+                                @endphp
+                                <a href="tel:{{ $foneLimpo ?: $anuncio->celular }}" class="inline-flex items-center font-semibold text-primary-600 hover:text-primary-700">
+                                    <i class="fas fa-phone mr-1"></i>
+                                    <span>{{ $anuncio->celular }}</span>
+                                </a>
+                                <p class="text-xs text-gray-500 mt-1">
+                                    Utilize este telefone para combinar a candidatura.
+                                </p>
+                            @endif
                         </div>
                         @endif
                     </div>

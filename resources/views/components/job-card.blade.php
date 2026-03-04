@@ -3,7 +3,7 @@
 <a href="{{ route('verAnuncio', $anuncio->slug ?? $anuncio->id) }}" {{ $attributes->merge(['class' => 'job-card']) }}>
     <div class="p-6">
         <!-- Company Logo -->
-        <div class="flex justify-center mb-4">
+        <div class="mb-4">
             @php
                 $logoEmpresa = null;
                 // Priorizar logotipo sobre foto_url
@@ -15,13 +15,13 @@
             @endphp
             
             @if($logoEmpresa)
-                <img src="{{ asset($logoEmpresa) }}" alt="{{ $anuncio->empresa }}" class="h-16 w-16 object-contain rounded-lg" onerror="this.onerror=null; this.style.display='none'; this.nextElementSibling.style.display='flex';">
-                <div class="h-16 w-16 bg-gradient-to-br from-primary-500 to-primary-600 rounded-lg flex items-center justify-center" style="display: none;">
-                    <span class="text-white text-xl font-bold">{{ substr($anuncio->empresa ?? 'E', 0, 1) }}</span>
+                <img src="{{ asset($logoEmpresa) }}" alt="{{ $anuncio->empresa }}" class="w-full h-32 md:h-40 object-contain rounded-2xl" onerror="this.onerror=null; this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                <div class="w-full h-32 md:h-40 bg-gradient-to-br from-primary-500 to-primary-600 rounded-2xl flex items-center justify-center" style="display: none;">
+                    <span class="text-white text-3xl font-bold">{{ substr($anuncio->empresa ?? 'E', 0, 1) }}</span>
                 </div>
             @else
-                <div class="h-16 w-16 bg-gradient-to-br from-primary-500 to-primary-600 rounded-lg flex items-center justify-center">
-                    <span class="text-white text-xl font-bold">{{ substr($anuncio->empresa ?? 'E', 0, 1) }}</span>
+                <div class="w-full h-32 md:h-40 bg-gradient-to-br from-primary-500 to-primary-600 rounded-2xl flex items-center justify-center">
+                    <span class="text-white text-3xl font-bold">{{ substr($anuncio->empresa ?? 'E', 0, 1) }}</span>
                 </div>
             @endif
         </div>
@@ -43,14 +43,15 @@
             @php
                 $locais = [];
                 foreach ($anunciosProvincias as $ap) {
-                    if($ap->anuncio_id == $anuncio->id) {
+                    if ($ap->anuncio_id == $anuncio->id) {
                         foreach ($provincias as $prov) {
-                            if($ap->provincia_id == $prov->id) {
+                            if ($ap->provincia_id == $prov->id) {
                                 $locais[] = $prov->name;
                             }
                         }
                     }
                 }
+                $locais = array_values(array_unique($locais));
                 echo count($locais) > 1 ? 'Vários locais' : ($locais[0] ?? 'Não especificado');
             @endphp
         </p>

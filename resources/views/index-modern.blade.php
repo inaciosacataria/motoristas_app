@@ -4,31 +4,9 @@
 
 @section('content')
 <!-- Hero Section -->
-<div class="bg-gradient-to-br from-primary-600 to-primary-800 text-white py-16">
+<div class="bg-gradient-to-br from-primary-600 to-primary-800 text-white py-10">
     <div class="container-custom">
         <div class="text-center max-w-3xl mx-auto">
-            <h1 class="text-4xl md:text-5xl font-bold mb-4 animate-fade-in">
-                Encontre Seu Próximo Emprego
-            </h1>
-            <p class="text-xl text-primary-100 mb-8 animate-slide-up">
-                As melhores oportunidades para motoristas profissionais em Moçambique
-            </p>
-            <div class="flex justify-center gap-4 animate-slide-up" style="animation-delay: 0.2s;">
-                <div class="flex items-center gap-2 bg-white/10 backdrop-blur-sm px-4 py-2 rounded-lg">
-                    <i class="fas fa-briefcase text-2xl"></i>
-                    <div class="text-left">
-                        <p class="text-sm text-primary-100">Vagas Ativas</p>
-                        <p class="text-2xl font-bold">{{ $anuncios->total() }}</p>
-                    </div>
-                </div>
-                <div class="flex items-center gap-2 bg-white/10 backdrop-blur-sm px-4 py-2 rounded-lg">
-                    <i class="fas fa-building text-2xl"></i>
-                    <div class="text-left">
-                        <p class="text-sm text-primary-100">Empresas</p>
-                        <p class="text-2xl font-bold">{{ $totalEmpresas ?? 0 }}</p>
-                    </div>
-                </div>
-            </div>
         </div>
     </div>
 </div>
@@ -140,7 +118,7 @@
                 <a href="{{ route('verAnuncio', $anuncio->slug ?? $anuncio->id) }}" class="job-card">
                     <div class="p-6">
                         <!-- Company Logo -->
-                        <div class="flex justify-center mb-4">
+                        <div class="mb-4">
                             @php
                                 $logoEmpresa = null;
                                 // Priorizar logotipo sobre foto_url
@@ -152,13 +130,13 @@
                             @endphp
                             
                             @if($logoEmpresa)
-                                <img src="{{ asset($logoEmpresa) }}" alt="{{ $anuncio->empresa }}" class="h-16 w-16 object-contain rounded-lg" onerror="this.onerror=null; this.style.display='none'; this.nextElementSibling.style.display='flex';">
-                                <div class="h-16 w-16 bg-gradient-to-br from-primary-500 to-primary-600 rounded-lg flex items-center justify-center" style="display: none;">
-                                    <span class="text-white text-xl font-bold">{{ substr($anuncio->empresa ?? 'E', 0, 1) }}</span>
+                                <img src="{{ asset($logoEmpresa) }}" alt="{{ $anuncio->empresa }}" class="w-full h-32 md:h-40 object-contain rounded-2xl" onerror="this.onerror=null; this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                                <div class="w-full h-32 md:h-40 bg-gradient-to-br from-primary-500 to-primary-600 rounded-2xl flex items-center justify-center" style="display: none;">
+                                    <span class="text-white text-3xl font-bold">{{ substr($anuncio->empresa ?? 'E', 0, 1) }}</span>
                                 </div>
                             @else
-                                <div class="h-16 w-16 bg-gradient-to-br from-primary-500 to-primary-600 rounded-lg flex items-center justify-center">
-                                    <span class="text-white text-xl font-bold">{{ substr($anuncio->empresa ?? 'E', 0, 1) }}</span>
+                                <div class="w-full h-32 md:h-40 bg-gradient-to-br from-primary-500 to-primary-600 rounded-2xl flex items-center justify-center">
+                                    <span class="text-white text-3xl font-bold">{{ substr($anuncio->empresa ?? 'E', 0, 1) }}</span>
                                 </div>
                             @endif
                         </div>
@@ -180,14 +158,15 @@
                             @php
                                 $locais = [];
                                 foreach ($anuncios_provincias as $ap) {
-                                    if($ap->anuncio_id == $anuncio->id) {
+                                    if ($ap->anuncio_id == $anuncio->id) {
                                         foreach ($provincias as $prov) {
-                                            if($ap->provincia_id == $prov->id) {
+                                            if ($ap->provincia_id == $prov->id) {
                                                 $locais[] = $prov->name;
                                             }
                                         }
                                     }
                                 }
+                                $locais = array_values(array_unique($locais));
                                 echo count($locais) > 1 ? 'Vários locais' : ($locais[0] ?? 'Não especificado');
                             @endphp
                         </p>
@@ -198,7 +177,7 @@
                         @endphp
                         <div class="flex items-center justify-between pt-4 border-t border-gray-100">
                             @if($ehExpirado)
-                                <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold bg-gray-100 text-gray-700">
+                                <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold bg-red-100 text-red-700">
                                     <i class="fas fa-hourglass-end mr-1"></i> Expirado
                                 </span>
                             @else

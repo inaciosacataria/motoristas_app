@@ -118,7 +118,7 @@
                         <div class="job-card bg-white rounded-xl shadow-sm hover:shadow-lg transition-all duration-300 overflow-hidden border border-gray-100 cursor-default">
                             <div class="p-6">
                                 <!-- Logo da Empresa (igual à home) -->
-                                <div class="flex justify-center mb-4">
+                                <div class="mb-4">
                                     @php
                                         $logoVaga = null;
                                         if (isset($anuncio->logotipo) && $anuncio->logotipo && $anuncio->logotipo != 'none') {
@@ -128,13 +128,13 @@
                                         }
                                     @endphp
                                     @if($logoVaga)
-                                        <img src="{{ asset($logoVaga) }}" alt="{{ $anuncio->empresa ?? 'Empresa' }}" class="h-16 w-16 object-contain rounded-lg" onerror="this.onerror=null; this.style.display='none'; this.nextElementSibling.style.display='flex';">
-                                        <div class="h-16 w-16 bg-gradient-to-br from-green-500 to-green-600 rounded-lg flex items-center justify-center" style="display: none;">
-                                            <span class="text-white text-xl font-bold">{{ substr($anuncio->empresa ?? 'E', 0, 1) }}</span>
+                                        <img src="{{ asset($logoVaga) }}" alt="{{ $anuncio->empresa ?? 'Empresa' }}" class="w-full h-32 md:h-40 object-contain rounded-2xl" onerror="this.onerror=null; this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                                        <div class="w-full h-32 md:h-40 bg-gradient-to-br from-green-500 to-green-600 rounded-2xl flex items-center justify-center" style="display: none;">
+                                            <span class="text-white text-3xl font-bold">{{ substr($anuncio->empresa ?? 'E', 0, 1) }}</span>
                                         </div>
                                     @else
-                                        <div class="h-16 w-16 bg-gradient-to-br from-green-500 to-green-600 rounded-lg flex items-center justify-center">
-                                            <span class="text-white text-xl font-bold">{{ substr($anuncio->empresa ?? 'E', 0, 1) }}</span>
+                                        <div class="w-full h-32 md:h-40 bg-gradient-to-br from-green-500 to-green-600 rounded-2xl flex items-center justify-center">
+                                            <span class="text-white text-3xl font-bold">{{ substr($anuncio->empresa ?? 'E', 0, 1) }}</span>
                                         </div>
                                     @endif
                                 </div>
@@ -165,6 +165,8 @@
                                                 }
                                             }
                                         }
+                                        $locais = array_values(array_unique($locais));
+                                        $provinciaIds = array_values(array_unique($provinciaIds));
                                     @endphp
                                     {{ count($locais) > 1 ? 'Vários locais' : ($locais[0] ?? 'Não especificado') }}
                                 </p>

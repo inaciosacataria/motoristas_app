@@ -25,7 +25,6 @@
                     <span><i class="fas fa-car mr-2"></i>{{ $candidato->categoria }}</span>
                     <span><i class="fas fa-map-marker-alt mr-2"></i>{{ $candidato->provincia }}</span>
                     <span><i class="fas fa-phone mr-2"></i>{{ $candidato->celular }}</span>
-                    <span><i class="fas fa-envelope mr-2"></i>{{ $candidato->email }}</span>
                 </div>
                 
                 <!-- Progress Bar -->
@@ -63,13 +62,6 @@
                         </div>
                     </div>
                     <div class="flex items-start gap-3">
-                        <i class="fas fa-envelope text-primary-600 mt-1"></i>
-                        <div>
-                            <p class="text-gray-600">Email</p>
-                            <p class="font-semibold text-gray-900">{{ $candidato->email }}</p>
-                        </div>
-                    </div>
-                    <div class="flex items-start gap-3">
                         <i class="fas fa-map-marker-alt text-primary-600 mt-1"></i>
                         <div>
                             <p class="text-gray-600">Localização</p>
@@ -88,17 +80,10 @@
 
             <!-- Actions -->
             <div class="card">
-                <div class="card-body space-y-2">
+                <div class="card-body">
                     <a href="/" class="btn-primary w-full">
                         <i class="fas fa-search mr-2"></i> Ver Vagas Disponíveis
                     </a>
-                    @auth
-                        @if(Auth::user()->privilegio === 'empregador')
-                            <button onclick="openModal('denunciar-modal-{{ $candidato->candidato_id }}')" class="btn-outline w-full border-red-500 text-red-600 hover:bg-red-50">
-                                <i class="fas fa-flag mr-2"></i> Reportar
-                            </button>
-                        @endif
-                    @endauth
                 </div>
             </div>
         </div>
@@ -187,6 +172,10 @@
                     @if($documentos->count() > 0)
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
                             @foreach($documentos as $doc)
+                                @php
+                                    // Campo correcto na BD é "ficheiro"; alguns registos antigos podem usar "documento"
+                                    $path = $doc->ficheiro ?? $doc->documento ?? null;
+                                @endphp
                                 <div class="flex items-center gap-3 p-3 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors">
                                     <div class="flex-shrink-0 w-10 h-10 bg-red-100 rounded-lg flex items-center justify-center">
                                         <i class="fas fa-file-pdf text-red-600"></i>
@@ -195,8 +184,8 @@
                                         <p class="font-medium text-gray-900 truncate">{{ $doc->tipo ?? 'Documento' }}</p>
                                         <p class="text-xs text-gray-500">PDF</p>
                                     </div>
-                                    @if($doc->documento)
-                                        <a href="{{ asset($doc->documento) }}" target="_blank" class="btn-ghost text-sm py-1 px-3">
+                                    @if($path)
+                                        <a href="{{ asset($path) }}" target="_blank" class="btn-ghost text-sm py-1 px-3">
                                             <i class="fas fa-download"></i>
                                         </a>
                                     @endif

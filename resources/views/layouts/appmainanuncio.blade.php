@@ -220,7 +220,7 @@
                 </div>
                 <div class="modal-body mb-4">
                     <h4 class="mb-4">Base de Dados</h4>A Base de dados de motoristas ė uma rede de mais 2600+ motoristas profissionais que actuam em diferentes empresas e organizações, incluindo motoristas em busca de emprego, as empresas e organizações afins, parceiras deste portal podem os contactar para efeitos de contratação.</p>
-                    <a href="tel:+258875474495" class="mt-4 btn btn-primary waves-effect waves-light">Contactar</a>
+                    <a href="tel:+258871220022" class="mt-4 btn btn-primary waves-effect waves-light">Contactar</a>
                 </div>
             </div><!-- /.modal-content -->
         </div><!-- /.modal-dialog -->
@@ -240,7 +240,7 @@
                     <p>Lista de motorista com Formação Complementada e aperfeçoada em condução defensiva, nos ramos de
                         transportes de mercadorias e passageiros. <br>Para ter acesso a estes dados, contacte o
                         administrador.</p>
-                    <a href="tel:+258875474495" class="mt-4 btn btn-primary waves-effect waves-light">Ligar Agora</a>
+                    <a href="tel:+258871220022" class="mt-4 btn btn-primary waves-effect waves-light">Ligar Agora</a>
                 </div>
             </div><!-- /.modal-content -->
         </div><!-- /.modal-dialog -->
@@ -259,8 +259,8 @@
                 <div class="modal-body mb-4">
                     <h4 class="mb-4">Central de Risco</h4>
                     <p>Para ter o acesso as informações constantes na central de risco, cadastre-se e contacte, +258 87
-                        12 20011 ou por email info@motoristas.co.mz</p>
-                    <a href="tel+258871220011" class="mt-4 btn btn-primary waves-effect waves-light">Ligar Agora</a>
+                        12 200 22 ou por email info@motoristas.co.mz</p>
+                    <a href="tel:+258871220022" class="mt-4 btn btn-primary waves-effect waves-light">Ligar Agora</a>
                 </div>
             </div><!-- /.modal-content -->
         </div><!-- /.modal-dialog -->

@@ -165,6 +165,7 @@ public function search(Request $request){
               ->join('users', 'anuncios.user_id', '=', 'users.id')
               ->leftJoin('empregadors', 'anuncios.user_id', '=', 'empregadors.user_id')
               ->select('anuncios.*','users.name as nome',DB::raw('COALESCE(empregadors.logotipo, users.foto_url, "none") as foto_url'), 'users.email as email','empregadors.empresa as empresa', 'empregadors.logotipo as logotipo')
+              ->orderByRaw('(anuncios.validade >= CURDATE()) DESC')
               ->orderBy('created_at', 'DESC')
               ->paginate(10);
    } else if($request->keyword!="" && $request->categoria=="null"  && $request->provincia=="null"){//keyword
@@ -175,6 +176,7 @@ public function search(Request $request){
                 ->leftJoin('empregadors', 'anuncios.user_id', '=', 'empregadors.user_id')
                 ->join('users', 'anuncios.user_id', '=', 'users.id')
                 ->select('anuncios.*','users.name as nome',DB::raw('COALESCE(empregadors.logotipo, users.foto_url, "none") as foto_url'), 'users.email as email','empregadors.empresa as empresa', 'empregadors.logotipo as logotipo')
+                ->orderByRaw('(anuncios.validade >= CURDATE()) DESC')
                 ->orderBy('created_at', 'DESC')
                 ->paginate(10);
   }  else if ($request->keyword=="" && $request->categoria!="null"  && $request->provincia!="null") { //categoria e localizacao
@@ -188,6 +190,7 @@ public function search(Request $request){
                        ->join('users', 'anuncios.user_id', '=', 'users.id')
                        ->where('provincias.id',$request->provincia)
                        ->select('anuncios.*','provincias.name as provincia',DB::raw('COALESCE(empregadors.logotipo, users.foto_url, "none") as foto_url'),'users.name as nome', 'users.email as email','empregadors.empresa as empresa', 'empregadors.logotipo as logotipo')
+                       ->orderByRaw('(anuncios.validade >= CURDATE()) DESC')
                        ->orderBy('created_at', 'DESC')
                        ->paginate(10);
 
@@ -205,6 +208,7 @@ public function search(Request $request){
                        ->join('users', 'anuncios.user_id', '=', 'users.id')
                        ->where('provincias.id',$request->provincia)
                        ->select('anuncios.*','provincias.name as provincia',DB::raw('COALESCE(empregadors.logotipo, users.foto_url, "none") as foto_url'),'users.name as nome', 'users.email as email','empregadors.empresa as empresa', 'empregadors.logotipo as logotipo')
+                       ->orderByRaw('(anuncios.validade >= CURDATE()) DESC')
                        ->orderBy('created_at', 'DESC')
                        ->paginate(10);
 
@@ -218,6 +222,7 @@ public function search(Request $request){
                  ->leftJoin('empregadors', 'anuncios.user_id', '=', 'empregadors.user_id')
                  ->join('users', 'anuncios.user_id', '=', 'users.id')
                  ->select('anuncios.*','categorias.categoria as categoria',DB::raw('COALESCE(empregadors.logotipo, users.foto_url, "none") as foto_url'),'users.name as nome', 'users.email as email','empregadors.empresa as empresa', 'empregadors.logotipo as logotipo')
+                 ->orderByRaw('(anuncios.validade >= CURDATE()) DESC')
                  ->orderBy('created_at', 'DESC')
                  ->paginate(10);
   } elseif ($request->keyword=="" && $request->categoria=="null"  && $request->provincia!="null") { // localizacao
@@ -228,6 +233,7 @@ public function search(Request $request){
                       ->join('users', 'anuncios.user_id', '=', 'users.id')
                       ->where('provincias.id',$request->provincia)
                       ->select('anuncios.*','provincias.name as provincia',DB::raw('COALESCE(empregadors.logotipo, users.foto_url, "none") as foto_url'),'users.name as nome', 'users.email as email','empregadors.empresa as empresa', 'empregadors.logotipo as logotipo')
+                      ->orderByRaw('(anuncios.validade >= CURDATE()) DESC')
                       ->orderBy('created_at', 'DESC')
                       ->paginate(10);
 

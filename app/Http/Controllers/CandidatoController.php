@@ -61,13 +61,13 @@ class CandidatoController extends Controller
         //          ->select('anuncios.*')
         //          ->get();
       //
-                if(sizeof($formacoes) < 1) {  $progressFormacao = 0; }else{  $progressFormacao = 15; }
-                if(sizeof($experiencias) < 1) { $progressExperiencia = 0; } else { $progressExperiencia = 15; }
-                if(sizeof($conhecimentos) < 1) { $progressConhecimento = 0; } else { $progressConhecimento = 15; }
-                if(sizeof($idiomas) < 1) { $progressIdioma = 0; } else { $progressIdioma = 15; }
-                if(sizeof($documentos) < 1) { $progressDocumento = 0; } else { $progressDocumento = 15; }
+        // Cálculo de progresso alinhado com perfil() e cv():
+        // 40% base (dados + contactos) + 20% por cada secção preenchida (experiência, idiomas, documentos)
+        if(sizeof($experiencias) < 1) { $progressExperiencia = 0; } else { $progressExperiencia = 20; }
+        if(sizeof($idiomas) < 1) { $progressIdioma = 0; } else { $progressIdioma = 20; }
+        if(sizeof($documentos) < 1) { $progressDocumento = 0; } else { $progressDocumento = 20; }
 
-        $progress = 25 + $progressFormacao + $progressExperiencia + $progressConhecimento + $progressIdioma + $progressDocumento;
+        $progress = 40 + $progressExperiencia + $progressIdioma + $progressDocumento;
       //
          $candidaturas = DB::table('users')
                               ->where('users.id',Auth::user()->id)
