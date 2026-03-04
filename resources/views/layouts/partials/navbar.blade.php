@@ -208,9 +208,7 @@
                 <h3 class="text-lg font-semibold text-gray-900">Central de Risco</h3>
             </div>
             <p class="text-gray-600 mb-6">
-                A Central de risco de motoristas é uma lista de motoristas que cometeram faltas graves, como desvio de carga,
-                furto de combustível, condução danosa e outras ações que lesaram o patronato. Apenas empresas e organizações
-                credíveis, parceiras da plataforma, podem cadastrar e consultar motoristas na central de risco. Para ter acesso
+               Para ter acesso
                 à Central de Risco contacte <a href="mailto:info@motoristas.co.mz" class="text-primary-600 hover:underline font-medium">info@motoristas.co.mz</a>
                 ou ligue para <a href="tel:+258871220022" class="text-primary-600 hover:underline font-medium">+258 87 12 200 22</a>.
             </p>

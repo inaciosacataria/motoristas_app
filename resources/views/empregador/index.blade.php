@@ -619,12 +619,7 @@
                         </div>
                         <div class="modal-body mb-4">
                             <h4 class="mb-4">Central de Risco de Motoristas</h4>
-                            <p>A central de risco de motoristas ė uma lista negara de motoristas, tratas de motoristas que
-                                de forma premeditada, tiveram ações desviante e criminais que lesaram o patronato, a título
-                                de exemplo, desvio ou furto de carga, furto de combustível, desvio de receitas, condução
-                                danosa, substituição de peças e acessórios, entre outras acções negativas graves e
-                                criminais. Só as empresas e organizações afins credíveis e parceiras da plataforma, podem
-                                cadastrar e consultar motoristas na central de risco.</p>
+        
                             <p>Para ter o acesso contacte, +258 87 12 200 22 ou por email info@motoristas.co.mz</p>
                             {{-- <a href="tel:+258875474495" class="mt-4 btn btn-primary waves-effect waves-light">Ligar
                                 Agora</a> --}}
