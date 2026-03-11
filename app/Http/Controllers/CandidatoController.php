@@ -22,36 +22,30 @@ class CandidatoController extends Controller
      */
      public function index()
     {
-      $candidato = DB::table('users')
-              ->where('id', Auth::user()->id)
+      // Buscar sempre o registo correspondente na tabela "candidatos"
+      $candidato = DB::table('candidatos')
+              ->where('user_id', Auth::user()->id)
               ->first();
 
-        // $candidato = DB::table('candidatos')
-        //         ->join('provincias', 'candidatos.provincia_id', '=', 'provincias.id')
-        //         ->join('users', 'candidatos.user_id', '=', 'users.id')
-        //         ->where('user_id', Auth::user()->id)
-        //         ->select('candidatos.*', 'users.name as nome', 'users.email as email', 'users.privilegio as privilegio', 'provincias.provincia as provincia')
-        //         ->first();
-      //
         $formacoes = DB::table('formacoes')
-                ->where('candidato_id', $candidato->id)
+                ->where('candidato_id', optional($candidato)->id)
                 ->get();
 
 
         $idiomas = DB::table('idiomas')
-                ->where('candidato_id', $candidato->id)
+                ->where('candidato_id', optional($candidato)->id)
                 ->get();
 
         $documentos = DB::table('documentos')
-                ->where('candidato_id', $candidato->id)
+                ->where('candidato_id', optional($candidato)->id)
                 ->get();
 
         $conhecimentos = DB::table('conhecimentos')
-                ->where('candidato_id', $candidato->id)
+                ->where('candidato_id', optional($candidato)->id)
                 ->get();
 
         $experiencias = DB::table('experiencias')
-                ->where('candidato_id', $candidato->id)
+                ->where('candidato_id', optional($candidato)->id)
                 ->get();
 
       //
