@@ -356,108 +356,130 @@
     </script>
     <script>
         $(document).ready(function() {
-            // Init separadamente para evitar incompatibilidades com selector múltiplo.
-            if ($("#descricao").length > 0) {
-                tinymce.init({
-                    selector: "textarea#descricao",
-                    theme: "modern",
-                    height: 300,
-                    plugins: [
-                        "advlist autolink link image lists charmap print preview hr anchor pagebreak spellchecker",
-                        "searchreplace wordcount visualblocks visualchars code fullscreen insertdatetime media nonbreaking",
-                        "save table contextmenu directionality emoticons template paste textcolor"
-                    ],
-                    toolbar: "insertfile undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image | print preview media fullpage | forecolor backcolor emoticons",
-                    style_formats: [{
-                            title: 'Bold text',
-                            inline: 'b'
-                        },
-                        {
-                            title: 'Red text',
-                            inline: 'span',
-                            styles: {
-                                color: '#ff0000'
-                            }
-                        },
-                        {
-                            title: 'Red header',
-                            block: 'h1',
-                            styles: {
-                                color: '#ff0000'
-                            }
-                        },
-                        {
-                            title: 'Example 1',
-                            inline: 'span',
-                            classes: 'example1'
-                        },
-                        {
-                            title: 'Example 2',
-                            inline: 'span',
-                            classes: 'example2'
-                        },
-                        {
-                            title: 'Table styles'
-                        },
-                        {
-                            title: 'Table row 1',
-                            selector: 'tr',
-                            classes: 'tablerow1'
-                        }
-                    ]
-                });
+            function initEditorIfNeeded() {
+                // TinyMCE pode demorar a carregar; só inicializa se existir o textarea e ainda não existir editor.
+                if (window.tinymce && typeof tinymce.init === 'function') {
+                    if ($("#descricao").length > 0 && !tinymce.get('descricao')) {
+                        tinymce.init({
+                            selector: "textarea#descricao",
+                            theme: "modern",
+                            height: 300,
+                            menubar: false,
+                            plugins: [
+                                "advlist autolink link image lists charmap print preview hr anchor pagebreak spellchecker",
+                                "searchreplace wordcount visualblocks visualchars code fullscreen insertdatetime media nonbreaking",
+                                "save table contextmenu directionality emoticons template paste textcolor"
+                            ],
+                            toolbar: "insertfile undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image | print preview media fullpage | forecolor backcolor emoticons",
+                            style_formats: [{
+                                    title: 'Bold text',
+                                    inline: 'b'
+                                },
+                                {
+                                    title: 'Red text',
+                                    inline: 'span',
+                                    styles: {
+                                        color: '#ff0000'
+                                    }
+                                },
+                                {
+                                    title: 'Red header',
+                                    block: 'h1',
+                                    styles: {
+                                        color: '#ff0000'
+                                    }
+                                },
+                                {
+                                    title: 'Example 1',
+                                    inline: 'span',
+                                    classes: 'example1'
+                                },
+                                {
+                                    title: 'Example 2',
+                                    inline: 'span',
+                                    classes: 'example2'
+                                },
+                                {
+                                    title: 'Table styles'
+                                },
+                                {
+                                    title: 'Table row 1',
+                                    selector: 'tr',
+                                    classes: 'tablerow1'
+                                }
+                            ]
+                        });
+                    }
+
+                    if ($("#descriptionEdit").length > 0 && !tinymce.get('descriptionEdit')) {
+                        tinymce.init({
+                            selector: "textarea#descriptionEdit",
+                            theme: "modern",
+                            height: 300,
+                            menubar: false,
+                            plugins: [
+                                "advlist autolink link image lists charmap print preview hr anchor pagebreak spellchecker",
+                                "searchreplace wordcount visualblocks visualchars code fullscreen insertdatetime media nonbreaking",
+                                "save table contextmenu directionality emoticons template paste textcolor"
+                            ],
+                            toolbar: "insertfile undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image | print preview media fullpage | forecolor backcolor emoticons",
+                            style_formats: [{
+                                    title: 'Bold text',
+                                    inline: 'b'
+                                },
+                                {
+                                    title: 'Red text',
+                                    inline: 'span',
+                                    styles: {
+                                        color: '#ff0000'
+                                    }
+                                },
+                                {
+                                    title: 'Red header',
+                                    block: 'h1',
+                                    styles: {
+                                        color: '#ff0000'
+                                    }
+                                },
+                                {
+                                    title: 'Example 1',
+                                    inline: 'span',
+                                    classes: 'example1'
+                                },
+                                {
+                                    title: 'Example 2',
+                                    inline: 'span',
+                                    classes: 'example2'
+                                },
+                                {
+                                    title: 'Table styles'
+                                },
+                                {
+                                    title: 'Table row 1',
+                                    selector: 'tr',
+                                    classes: 'tablerow1'
+                                }
+                            ]
+                        });
+                    }
+                }
             }
 
-            if ($("#descriptionEdit").length > 0) {
-                tinymce.init({
-                    selector: "textarea#descriptionEdit",
-                    theme: "modern",
-                    height: 300,
-                    plugins: [
-                        "advlist autolink link image lists charmap print preview hr anchor pagebreak spellchecker",
-                        "searchreplace wordcount visualblocks visualchars code fullscreen insertdatetime media nonbreaking",
-                        "save table contextmenu directionality emoticons template paste textcolor"
-                    ],
-                    toolbar: "insertfile undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image | print preview media fullpage | forecolor backcolor emoticons",
-                    style_formats: [{
-                            title: 'Bold text',
-                            inline: 'b'
-                        },
-                        {
-                            title: 'Red text',
-                            inline: 'span',
-                            styles: {
-                                color: '#ff0000'
-                            }
-                        },
-                        {
-                            title: 'Red header',
-                            block: 'h1',
-                            styles: {
-                                color: '#ff0000'
-                            }
-                        },
-                        {
-                            title: 'Example 1',
-                            inline: 'span',
-                            classes: 'example1'
-                        },
-                        {
-                            title: 'Example 2',
-                            inline: 'span',
-                            classes: 'example2'
-                        },
-                        {
-                            title: 'Table styles'
-                        },
-                        {
-                            title: 'Table row 1',
-                            selector: 'tr',
-                            classes: 'tablerow1'
-                        }
-                    ]
-                });
-            }
+            // Tenta logo e depois por alguns ciclos (caso o carregamento do tinymce atrase).
+            initEditorIfNeeded();
+            var tries = 0;
+            var timer = setInterval(function() {
+                tries++;
+                initEditorIfNeeded();
+                // pára após 10s.
+                if (tries >= 40) clearInterval(timer);
+            }, 250);
+
+            // Quando abrir o modal, garante que o editor está inicializado.
+            $('#anuncio, #editarAnuncio').on('shown.bs.modal', function() {
+                // dá um pequeno delay para o layout do modal estabilizar
+                setTimeout(initEditorIfNeeded, 50);
+            });
         });
     </script>
 
