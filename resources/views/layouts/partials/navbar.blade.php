@@ -130,12 +130,15 @@
                         </div>
                     </div>
                 @else
-                    <a href="{{ route('login', 'candidato') }}" class="btn-ghost text-sm">
-                        <i class="fas fa-user mr-1"></i> Sou Candidato
-                    </a>
-                    <a href="{{ route('login', 'recrutador') }}" class="btn-primary text-sm">
-                        <i class="fas fa-building mr-1"></i> Sou Empregador
-                    </a>
+                    <!-- Hide login buttons on mobile; they live in #mobile-menu -->
+                    <div class="hidden md:flex items-center space-x-3">
+                        <a href="{{ route('login', 'candidato') }}" class="btn-ghost text-sm">
+                            <i class="fas fa-user mr-1"></i> Sou Candidato
+                        </a>
+                        <a href="{{ route('login', 'recrutador') }}" class="btn-primary text-sm">
+                            <i class="fas fa-building mr-1"></i> Sou Empregador
+                        </a>
+                    </div>
                 @endauth
                 
                 <!-- Mobile menu button -->
