@@ -2,6 +2,10 @@
 
 @section('title', 'Dashboard Empregador')
 
+@push('styles')
+    <link href="https://cdn.jsdelivr.net/npm/quill@1.3.7/dist/quill.snow.css" rel="stylesheet">
+@endpush
+
 @section('content')
 <!-- Header -->
 <div class="bg-gradient-to-r from-green-600 to-green-700 text-white py-8">
@@ -305,6 +309,7 @@
                         placeholder="Descreva os requisitos, responsabilidades e benefícios da vaga..."
                         required
                     ></textarea>
+                    <div id="descricao-editor" style="height: 220px;"></div>
                 </div>
                 
                 <div class="flex gap-3 pt-4">
@@ -410,6 +415,7 @@
                         class="block w-full px-4 py-3 border border-gray-300 rounded-lg shadow-sm focus:ring-2 focus:ring-green-500 focus:border-green-500 text-lg transition duration-200"
                         required
                     ></textarea>
+                    <div id="edit-descricao-editor" style="height: 220px;"></div>
                 </div>
                 
                 <div class="flex gap-3 pt-4">
@@ -426,7 +432,81 @@
 </div>
 
 @push('scripts')
+<script src="https://cdn.jsdelivr.net/npm/quill@1.3.7/dist/quill.min.js"></script>
 <script>
+    // Quill instances (inicializa apenas quando os modais abrem, evitando problemas com elementos hidden)
+    let quillDescricao = null;
+    let quillEditDescricao = null;
+
+    function initDescricaoQuill() {
+        if (quillDescricao) return;
+        const textarea = document.getElementById('descricao');
+        const editorEl = document.getElementById('descricao-editor');
+        if (!textarea || !editorEl || !window.Quill) return;
+
+        quillDescricao = new Quill(editorEl, {
+            theme: 'snow',
+            modules: {
+                toolbar: [
+                    ['bold', 'italic', 'underline'],
+                    [{ 'list': 'ordered' }, { 'list': 'bullet' }],
+                    ['link'],
+                    ['clean']
+                ]
+            }
+        });
+
+        const initialHtml = textarea.value || '';
+        if (initialHtml.trim() !== '') {
+            quillDescricao.clipboard.dangerouslyPasteHTML(initialHtml);
+        }
+
+        textarea.style.display = 'none';
+        editorEl.style.display = 'block';
+
+        // Antes de enviar o form, copia HTML do Quill para o textarea.
+        const form = document.querySelector('#criar-vaga-modal form');
+        if (form) {
+            form.addEventListener('submit', function () {
+                document.getElementById('descricao').value = quillDescricao.root.innerHTML;
+            }, { once: true });
+        }
+    }
+
+    function initEditDescricaoQuill() {
+        if (quillEditDescricao) return;
+        const textarea = document.getElementById('edit-descricao');
+        const editorEl = document.getElementById('edit-descricao-editor');
+        if (!textarea || !editorEl || !window.Quill) return;
+
+        quillEditDescricao = new Quill(editorEl, {
+            theme: 'snow',
+            modules: {
+                toolbar: [
+                    ['bold', 'italic', 'underline'],
+                    [{ 'list': 'ordered' }, { 'list': 'bullet' }],
+                    ['link'],
+                    ['clean']
+                ]
+            }
+        });
+
+        const initialHtml = textarea.value || '';
+        if (initialHtml.trim() !== '') {
+            quillEditDescricao.clipboard.dangerouslyPasteHTML(initialHtml);
+        }
+
+        textarea.style.display = 'none';
+        editorEl.style.display = 'block';
+
+        const form = document.querySelector('#editar-vaga-modal form');
+        if (form) {
+            form.addEventListener('submit', function () {
+                document.getElementById('edit-descricao').value = quillEditDescricao.root.innerHTML;
+            }, { once: true });
+        }
+    }
+
     // Função para rastrear cliques em publicidade
     function trackAdClick(slug) {
         fetch('/smart-banner-update-clicks', {
@@ -446,6 +526,8 @@
 
     function openModal(modalId) {
         document.getElementById(modalId).classList.remove('hidden');
+        if (modalId === 'criar-vaga-modal') initDescricaoQuill();
+        if (modalId === 'editar-vaga-modal') initEditDescricaoQuill();
     }
     
     function closeModal(modalId) {
@@ -453,10 +535,17 @@
     }
     
     function editarVaga(anuncio, provinciasSelecionadas = []) {
+        // garante editor preparado antes de preencher conteúdo
+        initEditDescricaoQuill();
+
         document.getElementById('edit-anuncio-id').value = anuncio.id;
         document.getElementById('edit-titulo').value = anuncio.titulo;
         document.getElementById('edit-validade').value = anuncio.validade ? anuncio.validade.split(' ')[0] : '';
-        document.getElementById('edit-descricao').value = anuncio.descricao || '';
+        const descricaoHtml = anuncio.descricao || '';
+        document.getElementById('edit-descricao').value = descricaoHtml;
+        if (quillEditDescricao) {
+            quillEditDescricao.clipboard.dangerouslyPasteHTML(descricaoHtml);
+        }
         document.getElementById('edit-categoria_id').value = anuncio.categoria_id || '';
         document.getElementById('edit-forma_de_candidatura').value = anuncio.forma_de_candidatura || '';
         
