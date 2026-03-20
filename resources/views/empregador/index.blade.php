@@ -762,7 +762,13 @@
             var anuncio = JSON.parse(json)
             console.log(anuncio);
             $('#title').val(anuncio.titulo);
-            $('#descriptionEdit').val(anuncio.descricao);
+            var descricao = anuncio.descricao || '';
+            // If TinyMCE is initialized, update the editor content.
+            if (window.tinymce && tinymce.get('descriptionEdit')) {
+                tinymce.get('descriptionEdit').setContent(descricao);
+            } else {
+                $('#descriptionEdit').val(descricao);
+            }
             $('#anuncioIdEdit').val(anuncio.id)
             if (anuncio.forma_de_candidatura == "Portal") {
                 $('#inlineRadio1').attr('checked', 'checked');

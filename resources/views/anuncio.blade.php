@@ -5,7 +5,17 @@
         {{ $anuncio->titulo }} | {{ $anuncio->nome }}
     @endsection
     @section('image')
-        @if ($anuncio->foto_url != 'none')https://motoristas.co.mz/{{$anuncio->foto_url}} @else
+        @php
+            $logo = null;
+            if (isset($anuncio->logotipo) && $anuncio->logotipo && $anuncio->logotipo !== 'none') {
+                $logo = $anuncio->logotipo;
+            } elseif (isset($anuncio->foto_url) && $anuncio->foto_url && $anuncio->foto_url !== 'none') {
+                $logo = $anuncio->foto_url;
+            }
+        @endphp
+        @if ($logo)
+            https://motoristas.co.mz/{{ ltrim($logo, '/') }}
+        @else
             https://motoristas.co.mz/uploads/80.jpg
         @endif
     @endsection

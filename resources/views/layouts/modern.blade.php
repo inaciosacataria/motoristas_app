@@ -5,6 +5,27 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>@yield('title', 'Motoristas') - Portal de Empregos</title>
+
+    @php
+        $defaultOgImage = asset('assets/images/motoristas.png');
+        $defaultOgDescription = 'O portal de emprego e formação de motoristas';
+    @endphp
+
+    <!-- SEO / Share (OpenGraph + Twitter) -->
+    <meta name="description" content="@yield('meta_description', $defaultOgDescription)">
+
+    <meta property="og:title" content="@yield('meta_title', 'Motoristas - Portal de Empregos')">
+    <meta property="og:description" content="@yield('meta_description', $defaultOgDescription)">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="{{ url()->current() }}">
+    <meta property="og:image" content="@yield('meta_og_image', $defaultOgImage)">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="@yield('meta_title', 'Motoristas - Portal de Empregos')">
+    <meta name="twitter:description" content="@yield('meta_description', $defaultOgDescription)">
+    <meta name="twitter:image" content="@yield('meta_og_image', $defaultOgImage)">
     
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">

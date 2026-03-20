@@ -1224,6 +1224,13 @@ body {
   }
 }
 
+/* Ensure hamburger toggle appears on small screens too */
+@media (max-width: 767px) {
+  #topnav .navbar-toggle {
+    display: block !important;
+  }
+}
+
 /* ==============
     page title
 ===================*/

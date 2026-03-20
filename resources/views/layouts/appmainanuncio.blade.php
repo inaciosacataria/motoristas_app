@@ -14,7 +14,13 @@
 
 
 
+    <meta property="og:title" content="@yield('title')">
     <meta property="og:description" content="O portal de emprego e Formação de motoristas">
+    <meta property="og:url" content="{{ url()->current() }}">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="@yield('title')">
+    <meta name="twitter:description" content="O portal de emprego e Formação de motoristas">
+    <meta name="twitter:image" content="@yield('image')">
     <meta property="og:image:width" content="" />
     <meta property="og:image:height" content="100px" />
     <meta property="og:image" content="@yield('image')">

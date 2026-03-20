@@ -2,6 +2,28 @@
 
 @section('title', $anuncio->titulo)
 
+@php
+    $logoEmpresa = null;
+    // Priorizar logotipo sobre foto_url
+    if (isset($anuncio->logotipo) && $anuncio->logotipo && $anuncio->logotipo !== 'none') {
+        $logoEmpresa = $anuncio->logotipo;
+    } elseif (isset($anuncio->foto_url) && $anuncio->foto_url && $anuncio->foto_url !== 'none') {
+        $logoEmpresa = $anuncio->foto_url;
+    }
+
+    $logoShareUrl = $logoEmpresa
+        ? (\Illuminate\Support\Str::startsWith($logoEmpresa, 'http') ? $logoEmpresa : asset($logoEmpresa))
+        : asset('assets/images/motoristas.png');
+
+    $descricaoSemTags = trim(strip_tags($anuncio->descricao ?? ''));
+    if (mb_strlen($descricaoSemTags, 'UTF-8') > 160) {
+        $descricaoSemTags = mb_substr($descricaoSemTags, 0, 157, 'UTF-8') . '...';
+    }
+@endphp
+
+@section('meta_title', ($anuncio->titulo ?? 'Vaga') . ' - ' . ($anuncio->empresa ?? 'Motoristas'))
+@section('meta_description', $descricaoSemTags !== '' ? $descricaoSemTags : 'Veja a descrição da vaga.')
+@section('meta_og_image', $logoShareUrl)
 @section('content')
 <!-- Breadcrumb -->
 <div class="bg-gray-50 border-b border-gray-200">
@@ -103,7 +125,7 @@
                     </h2>
                 </div>
                 <div class="card-body prose max-w-none space-y-4">
-                    <p class="text-gray-700 leading-relaxed whitespace-pre-line">{{ $anuncio->descricao }}</p>
+                    <p class="text-gray-700 leading-relaxed">{!! $anuncio->descricao !!}</p>
 
                     @if($anuncio->forma_de_candidatura === 'online')
                         <div class="mt-2 p-4 bg-primary-50 border border-primary-100 rounded-lg text-sm text-primary-800">

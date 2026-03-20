@@ -356,11 +356,9 @@
     </script>
     <script>
         $(document).ready(function() {
-
-
-            if ($("#descricao").length > 0) {
+            if ($("textarea#descricao, textarea#descriptionEdit").length > 0) {
                 tinymce.init({
-                    selector: "textarea#descricao",
+                    selector: "textarea#descricao, textarea#descriptionEdit",
                     theme: "modern",
                     height: 300,
                     plugins: [
@@ -368,7 +366,7 @@
                         "searchreplace wordcount visualblocks visualchars code fullscreen insertdatetime media nonbreaking",
                         "save table contextmenu directionality emoticons template paste textcolor"
                     ],
-                    toolbar: "insertfile undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | l      ink image | print preview media fullpage | forecolor backcolor emoticons",
+                    toolbar: "insertfile undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image | print preview media fullpage | forecolor backcolor emoticons",
                     style_formats: [{
                             title: 'Bold text',
                             inline: 'b'
