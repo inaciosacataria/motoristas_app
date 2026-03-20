@@ -359,7 +359,7 @@
             function initEditorIfNeeded() {
                 // TinyMCE pode demorar a carregar; só inicializa se existir o textarea e ainda não existir editor.
                 if (window.tinymce && typeof tinymce.init === 'function') {
-                    if ($("#descricao").length > 0 && !tinymce.get('descricao')) {
+                    if ($("#descricao").length > 0 && !$("#descricao-editor").length && !tinymce.get('descricao')) {
                         tinymce.init({
                             selector: "textarea#descricao",
                             theme: "modern",
@@ -411,7 +411,7 @@
                         });
                     }
 
-                    if ($("#descriptionEdit").length > 0 && !tinymce.get('descriptionEdit')) {
+                    if ($("#descriptionEdit").length > 0 && !$("#descriptionEdit-editor").length && !tinymce.get('descriptionEdit')) {
                         tinymce.init({
                             selector: "textarea#descriptionEdit",
                             theme: "modern",

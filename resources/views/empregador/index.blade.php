@@ -2,6 +2,11 @@
 @section('title')
     Área do Empregador |
 @endsection
+
+@section('styles')
+    <!-- Quill (Rich Text Editor) -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/quill@1.3.7/dist/quill.snow.css">
+@endsection
 @section('content')
     <div class="wrapper">
 
@@ -168,6 +173,7 @@
                                                     <div class="col-sm-9">
                                                         <textarea id="descricao" name="descricao" class="form-control" rows="6"
                                                             placeholder="Ex: Escreve aqui a descrição do anúncio..."></textarea>
+                                                        <div id="descricao-editor" style="display:none; height: 220px;"></div>
                                                     </div>
                                                 </div>
 
@@ -279,6 +285,7 @@
                                                     <div class="col-sm-9">
                                                         <textarea id="descriptionEdit" name="descricao" class="form-control" rows="6"
                                                             placeholder="Ex: Escreve aqui a descrição do anúncio..."></textarea>
+                                                        <div id="descriptionEdit-editor" style="display:none; height: 220px;"></div>
                                                     </div>
                                                 </div>
 
@@ -756,17 +763,87 @@
 
         $("div.id_100 select").val("val2").change();
 
+        <!-- Quill JS (Rich Text Editor) -->
+        <script src="https://cdn.jsdelivr.net/npm/quill@1.3.7/dist/quill.min.js"></script>
 
+        // Rich text (Quill) instances
+        let quillDescricao = null;
+        let quillDescricaoEdit = null;
+
+        function initQuillEditor(textareaId, editorId) {
+            const textarea = document.getElementById(textareaId);
+            const editor = document.getElementById(editorId);
+            if (!textarea || !editor) return null;
+            if (!window.Quill) return null;
+
+            // Evita re-inicializar
+            if (editor.dataset.quillInitialized === '1') return editor._quill || null;
+
+            const toolbarOptions = [
+                ['bold', 'italic', 'underline'],
+                [{ 'list': 'ordered' }, { 'list': 'bullet' }],
+                ['link'],
+                ['clean']
+            ];
+
+            // Quill precisa do container visível para calcular layout.
+            editor.style.display = 'block';
+
+            const quill = new Quill(editor, {
+                theme: 'snow',
+                modules: { toolbar: toolbarOptions },
+                placeholder: textarea.getAttribute('placeholder') || ''
+            });
+
+            const initialHtml = textarea.value || '';
+            if (initialHtml.trim() !== '') {
+                // Copia HTML do textarea (que pode conter marcação vinda do admin).
+                quill.clipboard.dangerouslyPasteHTML(initialHtml);
+            }
+
+            // Esconde textarea para o utilizador.
+            textarea.style.display = 'none';
+
+            editor.dataset.quillInitialized = '1';
+            editor._quill = quill;
+            return quill;
+        }
+
+        // Init imediato (os divs do editor já existem no DOM)
+        $(document).ready(function() {
+            quillDescricao = initQuillEditor('descricao', 'descricao-editor');
+            quillDescricaoEdit = initQuillEditor('descriptionEdit', 'descriptionEdit-editor');
+
+            // Ao submeter, copia o HTML final do Quill para o textarea que vai para o backend.
+            const formCriar = document.querySelector('#anuncio form');
+            if (formCriar && quillDescricao) {
+                formCriar.addEventListener('submit', function() {
+                    document.getElementById('descricao').value = quillDescricao.root.innerHTML;
+                });
+            }
+
+            const formEditar = document.querySelector('#editarAnuncio form');
+            if (formEditar && quillDescricaoEdit) {
+                formEditar.addEventListener('submit', function() {
+                    document.getElementById('descriptionEdit').value = quillDescricaoEdit.root.innerHTML;
+                });
+            }
+        });
 
         function loadData(json) {
             var anuncio = JSON.parse(json)
             console.log(anuncio);
             $('#title').val(anuncio.titulo);
             var descricao = anuncio.descricao || '';
-            // If TinyMCE is initialized, update the editor content.
-            if (window.tinymce && tinymce.get('descriptionEdit')) {
-                tinymce.get('descriptionEdit').setContent(descricao);
+
+            // Se o Quill do editor de edição estiver pronto, carrega o HTML nele.
+            if (quillDescricaoEdit) {
+                quillDescricaoEdit.setContents([]);
+                if (descricao.trim() !== '') {
+                    quillDescricaoEdit.clipboard.dangerouslyPasteHTML(descricao);
+                }
             } else {
+                // Fallback: preenche textarea; ao inicializar o Quill ele sincroniza.
                 $('#descriptionEdit').val(descricao);
             }
             $('#anuncioIdEdit').val(anuncio.id)
